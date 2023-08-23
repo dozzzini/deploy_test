@@ -10,41 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
-import environ
 from pathlib import Path
-from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# env = environ.Env(DEBUG=(bool, True))
-# environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
-# # Quick-start development settings - unsuitable for production
-# # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-# def get_env_variable(var_name):
-#     try:
-#         return os.environ[var_name]
-#     except KeyError:
-#         error_msg = "Set the {} environment variable".format(var_name)
-#         raise ImproperlyConfigured(error_msg)
-# # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = get_env_variable("SECRET_KEY")
-# # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = env("DEBUG")
-# ALLOWED_HOSTS = ["*"]
-print("HOST", os.environ.get("DJANGO_ALLOWED_HOSTS"))
-print("SECRET", os.environ.get("DJANGO_SECRET_KEY"))
-print("DEBUG", os.environ.get("DJANGO_ALLOWED_HOSTS"))
-print("NAME", os.environ.get("DB_NAME"))
-print("USER", os.environ.get("DB_USER"))
-print("PASSWRD", os.environ.get("DB_PASSWORD"))
-print("HOST", dos.environ.get("DB_HOST"))
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG")
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")
+DEBUG = False
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
 
 # Application definition
 CUSTOM_APPS = [
@@ -103,7 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # if DEBUG:
@@ -124,17 +98,23 @@ WSGI_APPLICATION = "config.wsgi.application"
 #             "PORT": "3306",
 #         }
 #     }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": os.environ.get("DB_NAME"),
+#         "USER": os.environ.get("DB_USER"),
+#         "PASSWORD": os.environ.get("DB_PASSWORD"),
+#         "HOST": os.environ.get("DB_HOST"),
+#         "PORT": "3306",
+#     }
+# }
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get("DB_NAME"),
-        "USER": os.environ.get("DB_USER"),
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "HOST": os.environ.get("DB_HOST"),
-        "PORT": "3306",
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -189,7 +169,6 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_USE_SESSIONS = True
 CSRF_TRUSTED_ORIGINS = (
     "https://port-0-calendar-backend-ac2nll4pdsc1.sel3.cloudtype.app",
-    # "49.50.164.202",
 )
 SPECTACULAR_SETTINGS = {
     "TITLE": "투고갓강",
