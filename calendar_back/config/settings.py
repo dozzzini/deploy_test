@@ -172,6 +172,7 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_USE_SESSIONS = True
 CSRF_TRUSTED_ORIGINS = (
     "https://port-0-calendar-backend-ac2nll4pdsc1.sel3.cloudtype.app",
+    "49.50.164.202",
 )
 SPECTACULAR_SETTINGS = {
     "TITLE": "투고갓강",
