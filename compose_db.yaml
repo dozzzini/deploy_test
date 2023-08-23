@@ -3,8 +3,7 @@ version: "3.8"
 services:
   backend:
     container_name: backend
-    image: gobyungyong/calendar_back:dbtest
-    command: ["gunicorn", "--bind", "0:8000", "config.wsgi:application"]
+    image: gobyungyong/calendar_back
     env_file:
       - ./.env
     volumes:
