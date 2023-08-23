@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: gobyungyong/calendar_front
+    volumes:
+      - build_folder:/app/build
+
+volumes:
+  build_folder:

@@ -11,11 +11,6 @@ services:
     ports:
       - 8000:8000
 
-  frontend:
-    image: gobyungyong/calendar_front
-    volumes:
-      - build_folder:/app/build
-
   nginx:
     container_name: nginx
     image: gobyungyong/calendar_nginx
@@ -25,6 +20,5 @@ services:
       - build_folder:/usr/share/nginx/html
     depends_on:
       - backend
-      - frontend
 volumes:
   build_folder:
