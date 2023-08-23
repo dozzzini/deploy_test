@@ -99,24 +99,34 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-if DEBUG:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+# if DEBUG:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.sqlite3",
+#             "NAME": BASE_DIR / "db.sqlite3",
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.mysql",
+#             "NAME": os.environ.get("DB_NAME"),
+#             "USER": os.environ.get("DB_USER"),
+#             "PASSWORD": os.environ.get("DB_PASSWORD"),
+#             "HOST": os.environ.get("DB_HOST"),
+#             "PORT": "3306",
+#         }
+#     }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": os.environ.get("DB_NAME"),
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": "3306",
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": os.environ.get("DB_NAME"),
-            "USER": os.environ.get("DB_USER"),
-            "PASSWORD": os.environ.get("DB_PASSWORD"),
-            "HOST": os.environ.get("DB_HOST"),
-            "PORT": "3306",
-        }
-    }
+}
 
 
 # Password validation
@@ -172,7 +182,7 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_USE_SESSIONS = True
 CSRF_TRUSTED_ORIGINS = (
     "https://port-0-calendar-backend-ac2nll4pdsc1.sel3.cloudtype.app",
-    "49.50.164.202",
+    # "49.50.164.202",
 )
 SPECTACULAR_SETTINGS = {
     "TITLE": "투고갓강",
