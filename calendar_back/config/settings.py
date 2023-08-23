@@ -33,11 +33,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = env("DEBUG")
 # ALLOWED_HOSTS = ["*"]
+print("HOST", os.environ.get("DJANGO_ALLOWED_HOSTS"))
+print("SECRET", os.environ.get("DJANGO_SECRET_KEY"))
+print("DEBUG", os.environ.get("DJANGO_ALLOWED_HOSTS"))
+print("NAME", os.environ.get("DB_NAME"))
+print("USER", os.environ.get("DB_USER"))
+print("PASSWRD", os.environ.get("DB_PASSWORD"))
+print("HOST", dos.environ.get("DB_HOST"))
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG")
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")
 
 # Application definition
 CUSTOM_APPS = [
