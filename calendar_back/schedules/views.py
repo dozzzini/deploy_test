@@ -12,6 +12,9 @@ from comments.serializers import ScheduleCommentSerializer
 from drf_spectacular.utils import extend_schema, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 
+# from django.contrib.auth.models import User
+from users.models import User
+
 
 class Schedules(APIView):
     # permission_classes = [IsAuthenticated]
@@ -26,34 +29,87 @@ class Schedules(APIView):
             403: "허가 거부됨",  # HTTP 403 Forbidden
         },
     )
+    # def get(self, request):
+    #     try:
+    #         user = request.user
+
+    #         if user.team_set.all().exists():
+    #             teams = user.team_set.all()
+    #             user_schedules = Schedule.objects.filter(user=user)
+    #             team_schedules = Schedule.objects.filter(team__in=teams)
+    #             schedules = user_schedules.union(team_schedules)
+
+    #             schedule_serializer = serializers.ScheduleSerializer(
+    #                 schedules,
+    #                 many=True,
+    #             )
+    #             team_serializer = serializers.TeamSerializer(
+    #                 teams,
+    #                 many=True,
+    #             )
+
+    #             response_data = {
+    #                 "schedules": schedule_serializer.data,
+    #                 "teams": team_serializer.data,
+    #             }
+    #             return Response(response_data, status=status.HTTP_200_OK)
+    #         else:
+    #             user_schedules = Schedule.objects.filter(user=user)
+    #             serializer = serializers.ScheduleSerializer(
+    #                 user_schedules,
+    #                 many=True,
+    #             )
+    #             return Response(serializer.data, status=status.HTTP_200_OK)
+
+    #     except NotFound:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+    #     except PermissionDenied:
+    #         return Response(status=status.HTTP_403_FORBIDDEN)
+
     def get(self, request):
         try:
             user = request.user
+            print("1", user)
+            if user.is_authenticated:  # 사용자가 로그인한 경우
+                if user.team_set.all().exists():
+                    teams = user.team_set.all()
+                    user_schedules = Schedule.objects.filter(user=user)
+                    team_schedules = Schedule.objects.filter(team__in=teams)
+                    schedules = user_schedules.union(team_schedules)
 
-            if user.team_set.all().exists():
-                teams = user.team_set.all()
-                user_schedules = Schedule.objects.filter(user=user)
-                team_schedules = Schedule.objects.filter(team__in=teams)
-                schedules = user_schedules.union(team_schedules)
+                    schedule_serializer = serializers.ScheduleSerializer(
+                        schedules,
+                        many=True,
+                    )
+                    team_serializer = serializers.TeamSerializer(
+                        teams,
+                        many=True,
+                    )
 
-                schedule_serializer = serializers.ScheduleSerializer(
-                    schedules,
-                    many=True,
-                )
-                team_serializer = serializers.TeamSerializer(
-                    teams,
-                    many=True,
-                )
-
-                response_data = {
-                    "schedules": schedule_serializer.data,
-                    "teams": team_serializer.data,
-                }
-                return Response(response_data, status=status.HTTP_200_OK)
-            else:
-                user_schedules = Schedule.objects.filter(user=user)
+                    response_data = {
+                        "schedules": schedule_serializer.data,
+                        "teams": team_serializer.data,
+                    }
+                    return Response(response_data, status=status.HTTP_200_OK)
+                else:
+                    user_schedules = Schedule.objects.filter(user=user)
+                    serializer = serializers.ScheduleSerializer(
+                        user_schedules,
+                        many=True,
+                    )
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+            else:  # 익명 사용자인 경우
+                user = User(username="AnonymousUser")
+                print(user)
+                # user_schedules = Schedule.objects.filter(user=user)
+                # serializer = serializers.ScheduleSerializer(
+                #     user_schedules,
+                #     many=True,
+                # )
+                schedules_all = Schedule.objects.all()
+                print("test: ", schedules_all)
                 serializer = serializers.ScheduleSerializer(
-                    user_schedules,
+                    schedules_all,
                     many=True,
                 )
                 return Response(serializer.data, status=status.HTTP_200_OK)

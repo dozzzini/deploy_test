@@ -6,7 +6,6 @@ class Schedule(models.Model):
     title = models.CharField(max_length=25)
     description = models.TextField()
 
-    # color = models.CharField(max_length=20, choices = ColorChoices.choices,)
     class StateChoices(models.TextChoices):
         TODO = ("To do", "to_do")
         DOING = ("Doing", "doing")
@@ -27,8 +26,6 @@ class Schedule(models.Model):
     #     max_length=10,
     #     choices=RepeatChoices.choices,
     # )
-
-    # class ColorChoices(models.Choices):
 
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
