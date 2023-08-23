@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import CommentList from './CommentList';
 import CommentEdit from './CommentEdit';
+import { eventDetailEditApi } from '../../api';
 
 export default function Status({ selectedEvent }) {
+  // const [eventPick, setEventPick] = useState({
+  //   title: selectedEvent.title,
+  //   description: selectedEvent.location,
+  //   start: selectedEvent.start,
+  //   end: selectedEvent.end,
+  //   calendarName: selectedEvent.calendarId,
+  //   state: selectedEvent.state,
+  // });
+
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
@@ -23,6 +33,7 @@ export default function Status({ selectedEvent }) {
   const { calendarId, title, location, start, end, isAllday, state } =
     selectedEvent;
 
+  console.log(selectedEvent);
   const startDate = new Date(start);
   const endDate = new Date(end);
 
@@ -82,6 +93,3 @@ export default function Status({ selectedEvent }) {
     </div>
   );
 }
-
-// TODO : 편집/삭제 버튼 추가하기
-// TODO : <p>Calendar: {calendarId}</p> calendarId가 아니라 이름 가져오기

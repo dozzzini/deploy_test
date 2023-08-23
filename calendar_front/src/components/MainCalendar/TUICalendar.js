@@ -11,6 +11,7 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 import { theme } from './theme';
 import { addDate, addHours, subtractDate } from './utils';
 
+import moment from 'moment';
 import instance from '../../api';
 
 const today = new TZDate();
@@ -428,7 +429,6 @@ export default function TUICalendar({
   };
 
   const onBeforeCreateEvent = async (eventData) => {
-    console.log(eventData);
     const event = {
       calendarId: eventData.calendarId || '',
       id: String(eventCounter), //back에서 받아온 id로 변경하기
@@ -443,25 +443,26 @@ export default function TUICalendar({
       isPrivate: eventData.isPrivate,
     };
 
-    console.log(eventData.start);
+    const start_date = moment(eventData.start.d.d).format('YYYY-MM-DD HH:mm');
+    const end_date = moment(eventData.end.d.d).format('YYYY-MM-DD HH:mm');
     try {
+      const eventForBack = await instance.post('/api/v1/schedules/', {
+        title: eventData.title,
+        description: eventData.location,
+        state: eventData.state === 'Busy' ? 'To do' : 'Done',
+        start_date,
+        end_date,
+        // team: eventData.calendarId,   대충.......팀일때와 아닐 때를 구분하라....
+      });
+
       // const eventForBack = await instance.post('/api/v1/schedules/', {
-      //   title: eventData.title,
-      //   description: eventData.location,
-      //   state: eventData.state === 'Busy' ? 'To do' : 'Done',
-      //   start_date: eventData.start,
-      //   end_date: eventData.end,
+      //   title: 'eventData.title',
+      //   description: 'eventData.location',
+      //   state: 'To do',
+      //   start_date: '2023-01-01 03:02',
+      //   end_date: '2023-01-01 03:02',
       //   // team: eventData.calendarId,
       // });
-
-      const eventForBack = await instance.post('/api/v1/schedules/', {
-        title: 'eventData.title',
-        description: 'eventData.location',
-        state: 'To do',
-        start_date: 20230101,
-        end_date: 20230102,
-        // team: eventData.calendarId,
-      });
 
       console.log('일정 생성 API 응답', eventForBack.data);
       setEventCounter(eventCounter + 1);

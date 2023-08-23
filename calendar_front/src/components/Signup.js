@@ -34,15 +34,18 @@ const Signup = () => {
     }
   };
 
-  const [isIdAvailable, setIsIdAvailable] = useState(true);
-
   // react-hook-form을 사용하여 폼 상태와 입력을 관리합니다.
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, isSubmitted, errors },
     getValues,
+    setError, // import 추가
+    clearErrors,
   } = useForm();
+
+  // 아이디 중복 여부 상태 값
+  const [isIdAvailable, setIsIdAvailable] = useState(false);
 
   // 아이디 중복 확인 요청 함수
   const checkIdAvailability = async () => {
@@ -60,6 +63,15 @@ const Signup = () => {
       // );
       // 중복 여부에 따라 상태를 업데이트합니다.
       setIsIdAvailable(response.data.isAvailable);
+
+      if (!response.data.isAvailable) {
+        setError('id', {
+          type: 'manual',
+          message: '이미 사용 중인 아이디입니다.',
+        });
+      } else {
+        clearErrors('id');
+      }
     } catch (error) {
       console.error('중복확인 실패:', error);
     }
@@ -89,7 +101,10 @@ const Signup = () => {
                   message: '4자리 이상 입력해주세요.',
                 },
               })}
+              onBlur={checkIdAvailability} // 입력란에서 포커스가 빠져나갈 때 중복 확인 요청 함수 호출
             />
+            {errors.id && <span>{errors.id.message}</span>}
+            {isIdAvailable && <span>사용 가능한 아이디입니다.</span>}
             <div onClick={checkIdAvailability}>중복확인</div>
             {isIdAvailable === false && (
               <small role="alert">이미 사용 중인 아이디입니다.</small>

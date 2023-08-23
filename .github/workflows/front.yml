@@ -27,4 +27,4 @@ jobs:
             docker push gobyungyong/calendar_front
             cd ..
             cd ..
-            docker compose up -f compose_front.yaml
+            docker compose up -f compose_front.yaml -d
