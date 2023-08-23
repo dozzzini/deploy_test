@@ -1,0 +1,9 @@
+.git
+.gitignore
+README.md
+dockerfile
+poetry.lock
+pyproject.toml
+.env
+backup
+.venv

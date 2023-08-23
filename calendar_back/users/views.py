@@ -11,7 +11,7 @@ from .serializers import SignUpUserSerializer, UserInfoSerializer
 from .models import User
 
 
-class NewUser(APIView):
+class Signup(APIView):
     def post(self, request):
         user = SignUpUserSerializer(data=request.data)
 
@@ -22,15 +22,17 @@ class NewUser(APIView):
             )
 
         if user.is_valid():
-            User.objects.create_user(
+            user = User.objects.create_user(
                 username=request.data["username"],
                 name=request.data["name"],
                 password=request.data["password"],
                 email=request.data["email"],
             )
+            print(user)
+            login(request, user)
             return Response(status=status.HTTP_201_CREATED)
 
-        return Response("유효하지 않은 정보입니다.", status=status.HTTP_400_BAD_REQUEST)
+        raise ParseError("잘못된 요청입니다.")
 
 
 class Login(APIView):
@@ -48,21 +50,37 @@ class Login(APIView):
 
         if user:
             login(request, user)
-            return Response("login success", status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)
 
-        return Response("올바른 유저정보가 아닙니다.", status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"errors": "올바른 유저정보가 아닙니다."}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class Logout(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request):
         logout(request)
-        return Response("logout success", status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
+
+
+class CheckUsername(APIView):
+    def post(self, request):
+        username = request.data["username"]
+        if not username:
+            raise ParseError("아이디 값이 없습니다.")
+        if User.objects.filter(username=username).exists():
+            return Response(
+                {"errors": "이미 존재하는 아이디입니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response({"message": "사용가능한 아이디입니다."}, status=status.HTTP_200_OK)
 
 
 class UserInfo(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_object(self, username):
         try:
@@ -89,4 +107,16 @@ class UserInfo(APIView):
         user.set_password(request.data["password"])
         user.save()
 
-        return Response("modify success", status=status.HTTP_202_ACCEPTED)
+        return Response(status=status.HTTP_202_ACCEPTED)
+
+    def delete(self, request, username):
+        user = self.get_object(username)
+
+        if user != request.user:
+            raise PermissionDenied("권한이 없습니다.")
+
+        user.is_active = False
+        user.save()
+        logout(request)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

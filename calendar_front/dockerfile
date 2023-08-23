@@ -1,0 +1,15 @@
+FROM node
+
+WORKDIR /app
+
+COPY package.json /app
+
+RUN npm install
+
+COPY . /app
+
+ARG URL=49.50.164.202  
+
+ENV API_URL $URL
+
+CMD ["npm","run","build"]

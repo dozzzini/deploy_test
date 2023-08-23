@@ -13,29 +13,31 @@ import os
 import environ
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-env = environ.Env(DEBUG=(bool, True))
-environ.Env.read_env(
-    env_file=os.path.join(BASE_DIR, '.env')
-)
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-def get_env_variable(var_name):
-    try:
-        return os.environ[var_name]
-    except KeyError:
-        error_msg = "Set the {} environment variable".format(var_name)
-        raise ImproperlyConfigured(error_msg)
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_env_variable("SECRET_KEY")
+# env = environ.Env(DEBUG=(bool, True))
+# environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
+# # Quick-start development settings - unsuitable for production
+# # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+# def get_env_variable(var_name):
+#     try:
+#         return os.environ[var_name]
+#     except KeyError:
+#         error_msg = "Set the {} environment variable".format(var_name)
+#         raise ImproperlyConfigured(error_msg)
+# # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = get_env_variable("SECRET_KEY")
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = env("DEBUG")
+# ALLOWED_HOSTS = ["*"]
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
-
-ALLOWED_HOSTS = []
-
+DEBUG = os.environ.get("DEBUG")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 CUSTOM_APPS = [
@@ -46,6 +48,7 @@ CUSTOM_APPS = [
     "comments.apps.CommentsConfig",
     "corsheaders",
     "rest_framework",
+    "drf_spectacular",
 ]
 SYSTEM_APPS = [
     "django.contrib.admin",
@@ -55,6 +58,10 @@ SYSTEM_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
 
 INSTALLED_APPS = SYSTEM_APPS + CUSTOM_APPS
 
@@ -92,13 +99,24 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.environ.get("DB_NAME"),
+            "USER": os.environ.get("DB_USER"),
+            "PASSWORD": os.environ.get("DB_PASSWORD"),
+            "HOST": os.environ.get("DB_HOST"),
+            "PORT": "3306",
+        }
+    }
 
 
 # Password validation
@@ -125,7 +143,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
@@ -150,3 +168,14 @@ CORS_ALLOWED_ORIGINS = [
 ]
 # 요청 헤더에 인증 정보를 포함
 CORS_ALLOW_CREDENTIALS = True
+
+CSRF_USE_SESSIONS = True
+CSRF_TRUSTED_ORIGINS = (
+    "https://port-0-calendar-backend-ac2nll4pdsc1.sel3.cloudtype.app",
+)
+SPECTACULAR_SETTINGS = {
+    "TITLE": "투고갓강",
+    "DESCRIPTION": "투고갓강 API 명세",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}

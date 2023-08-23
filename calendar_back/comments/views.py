@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.exceptions import NotFound, PermissionDenied, ParseError
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -10,31 +10,27 @@ from .models import Comment
 
 
 class NewComment(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = CommentSerializer(data=request.data)
-
         try:
-            schedule = Schedule.objects.get(id=request.data.get("schedule"))
+            schedule = Schedule.objects.get(id=request.data.get("schedule_id"))
         except Schedule.DoesNotExist:
             raise NotFound("해당하는 일정이 없습니다.")
 
         if serializer.is_valid():
-            newSchedule = serializer.save(author=request.user, schedule=schedule)
+            new_comment = serializer.save(author=request.user, schedule=schedule)
             return Response(
-                CommentSerializer(newSchedule).data,
+                CommentSerializer(new_comment).data,
                 status=status.HTTP_201_CREATED,
             )
 
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+        raise ParseError("잘못된 요청입니다.")
 
 
-class DeleteComment(APIView):
-    permission_classes = [IsAuthenticated]
+class Comments(APIView):
+    # permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -45,8 +41,30 @@ class DeleteComment(APIView):
     def delete(self, request, comment_id):
         comment = self.get_object(comment_id)
 
-        if comment.author != request.user:  # 추후 teamleader 추가 시 권한추가
+        if (comment.author != request.user) and (
+            comment.schedule.team.team_leader != request.user
+        ):
             raise PermissionDenied("삭제권한이 없습니다.")
 
         comment.delete()
-        return Response("delete success", status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def put(self, request, comment_id):
+        comment = self.get_object(comment_id)
+
+        serializer = CommentSerializer(
+            comment,
+            data=request.data,
+            partial=True,
+        )
+
+        if (comment.author != request.user) and (
+            comment.schedule.team.team_leader != request.user
+        ):
+            raise PermissionDenied("수정권한이 없습니다.")
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+
+        raise ParseError("잘못된 요청입니다.")

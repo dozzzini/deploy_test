@@ -187,3 +187,6 @@ thumb
 sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/react,django
+*.pem
+docker 배포용 env
+docker.txt
