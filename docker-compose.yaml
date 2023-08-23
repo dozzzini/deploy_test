@@ -6,6 +6,8 @@ services:
     image: gobyungyong/calendar_back
     env_file:
       - ./.env
+    volumes:
+      - /calendar_back:/app
     ports:
       - 8000:8000
 
