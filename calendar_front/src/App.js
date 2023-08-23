@@ -13,7 +13,7 @@ import { Reset } from 'styled-reset';
 import Landing from './screens/Landing';
 
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   return (
     <Router>
