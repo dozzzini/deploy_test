@@ -10,20 +10,36 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import environ
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+def get_env_variable(var_name):
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(var_name)
+        raise ImproperlyConfigured(error_msg)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-try:
-    ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
-except:
+DEBUG = get_env_variable("DEBUG")
+if DEBUG:
     ALLOWED_HOSTS = ["*"]
-
+else:
+    try:
+        ALLOWED_HOSTS = get_env_variable("DJANGO_ALLOWED_HOSTS").split(",")
+    except:
+        print("allowed host env checked?")
 
 # Application definition
 CUSTOM_APPS = [
@@ -84,41 +100,43 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-# if DEBUG:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.sqlite3",
-#             "NAME": BASE_DIR / "db.sqlite3",
-#         }
-#     }
-# else:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.mysql",
-#             "NAME": os.environ.get("DB_NAME"),
-#             "USER": os.environ.get("DB_USER"),
-#             "PASSWORD": os.environ.get("DB_PASSWORD"),
-#             "HOST": os.environ.get("DB_HOST"),
-#             "PORT": "3306",
-#         }
-#     }
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+    print("run with sqlite")
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": get_env_variable("DB_NAME"),
+            "USER": get_env_variable("DB_USER"),
+            "PASSWORD": get_env_variable("DB_PASSWORD"),
+            "HOST": get_env_variable("DB_HOST"),
+            "PORT": "3306",
+        }
+    }
+    print("run with mysql")
 
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.mysql",
-#         "NAME": os.environ.get("DB_NAME"),
-#         "USER": os.environ.get("DB_USER"),
-#         "PASSWORD": os.environ.get("DB_PASSWORD"),
-#         "HOST": os.environ.get("DB_HOST"),
+#         "NAME": get_env_variable("DB_NAME"),
+#         "USER": get_env_variable("DB_USER"),
+#         "PASSWORD": get_env_variable("DB_PASSWORD"),
+#         "HOST": get_env_variable("DB_HOST"),
 #         "PORT": "3306",
 #     }
 # }
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
