@@ -1,0 +1,27 @@
+name: deploy
+
+on:
+  push:
+    paths:
+      - 'Gobyungyong/calendar_test/calendar_front/**'
+  pull_request:
+    paths:
+      - 'Gobyungyong/calendar_test/calendar_front/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH-deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.REMOTE_IP}}
+          username: ${{secrets.SSH_ID}}
+          password: ${{secrets.REMOTE_SSH_KEY}}
+          port: ${{secrets.REMOTE_SSH_PORT}}
+          script: |
+            cd calendar_test
+            git pull origin main
+            cd calendar_front
+            docker rmi gobyungyong/calendar_front
+            docker build -t gobyungyong/calendar_front .
+            docker push gobyungyong/calendar_front
