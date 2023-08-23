@@ -7,7 +7,7 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./calendar_back:/app
+      - ./calendar_test/calendar_back:/app
     ports:
       - 8000:8000
 
