@@ -19,8 +19,13 @@ jobs:
           password: ${{secrets.REMOTE_SSH_KEY}}
           port: ${{secrets.REMOTE_SSH_PORT}}
           script: |
+            docker compose -f compose_back.yaml down
+            docker rmi gobyungyong/calendar_back
             cd calendar_test
             git pull origin main
+            cd calendar_back
+            docker build --build-arg DJANGO_SECRET_KEY='django' --build-arg DJANGO_ALLOWED_HOSTS="*," --build-arg DB_NAME='123' --build-arg DB_USER='123' --build-arg DB_PASSWORD='123' --build-arg DB_HOST='12545' --build-arg DEBUG='False' -t gobyungyong/calendar_back .
+            docker push gobyungyong/calendar_back
             cd ..
-            docker compose -f compose_back.yaml down
+            cd ..
             docker compose -f compose_back.yaml up

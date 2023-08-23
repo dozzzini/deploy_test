@@ -24,6 +24,8 @@ ENV DB_HOST $DB_HOST
 
 
 # cloud DB 이미 migrate
-RUN python manage.py migrate
+# RUN python manage.py migrate
 
-CMD ["gunicorn", "--bind", "0:8000", "config.wsgi:application"]
+# CMD ["gunicorn", "--bind", "0:8000", "config.wsgi:application"]
+
+CMD ["/bin/sh", "/app/command.sh"]  

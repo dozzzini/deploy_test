@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: backend
+    image: gobyungyong/calendar_back:dbtest
+    command: ["gunicorn", "--bind", "0:8000", "config.wsgi:application"]
+    env_file:
+      - ./.env
+    volumes:
+      - ./calendar_test/calendar_back:/app
+    ports:
+      - 8000:8000
+
+  nginx:
+    container_name: nginx
+    image: gobyungyong/calendar_nginx
+    ports:
+      - 80:80
+    volumes:
+      - build_folder:/usr/share/nginx/html
+    depends_on:
+      - backend
+volumes:
+  build_folder:
