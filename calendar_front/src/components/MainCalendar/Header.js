@@ -105,7 +105,6 @@ function Header({ data, initialCalendars, initialEvents }) {
   const [searchResults, setSearchResults] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
   const setIsLogin = useSetRecoilState(loggedIn);
-  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -149,7 +148,6 @@ function Header({ data, initialCalendars, initialEvents }) {
     localStorage.clear();
     closeModal();
     setIsLogin(false);
-    navigate('/login', { replace: true });
   };
 
   return (
