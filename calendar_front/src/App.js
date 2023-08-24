@@ -16,16 +16,16 @@ import { logedIn } from './recoilState';
 
 function App() {
   const [isLogin, setIsLogin] = useRecoilState(logedIn);
+  const session = Cookies.get('sessionid');
 
   useEffect(() => {
-    const session = Cookies.get('sessionid');
     if (session) {
       setIsLogin(true);
       return;
     } else {
       return;
     }
-  }, []);
+  }, [session]);
 
   return (
     <Router>
