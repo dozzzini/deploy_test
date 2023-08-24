@@ -35,7 +35,6 @@ function LoginSignup() {
 
   const onSignUpSubmit = async (data) => {
     try {
-      Cookies.delete('sessionid');
       const response = await signupApi({
         username: data.id,
         name: data.name,
