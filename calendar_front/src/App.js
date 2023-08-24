@@ -12,14 +12,14 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Landing from './screens/Landing';
 import { logedIn } from './recoilState';
-import { getCookie } from './cookie';
 
 function App() {
   const [isLogin, setIsLogin] = useRecoilState(logedIn);
 
   useEffect(() => {
-    const access_token = getCookie('access_token');
-    const refresh_token = getCookie('refresh_token');
+    const access_token = localStorage.getItem('access_token');
+    const refresh_token = localStorage.getItem('refresh_token');
+
     if (access_token && refresh_token) {
       setIsLogin(true);
       return;

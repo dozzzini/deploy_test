@@ -1,18 +1,22 @@
 import axios from 'axios';
-import { getCookie, setCookie } from './cookie';
 
 const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
   baseURL: process.env.API_URL, //장고 서버 주소
+  // baseURL: 'http://localhost:8000', //로컬
   withCredentials: true, // 쿠키를 포함시키기 위한 설정 추가
 });
 
 // request interceptor
 instance.interceptors.request.use((config) => {
-  const access_token = getCookie('access_token');
-  config.headers['Authorization'] = `Bearer ${access_token}`;
+  const access_token = localStorage.getItem('access_token');
+  if (access_token) {
+    config.headers['Authorization'] = `Bearer ${access_token}`;
+  } else {
+    return config;
+  }
   return config;
 });
 
@@ -24,8 +28,8 @@ instance.interceptors.response.use(
   async (error) => {
     if (error.response.status === 401 && !refresh) {
       refresh = true;
-      const refresh_token = getCookie('refresh_token');
-      const response = await axios.post(
+      const refresh_token = localStorage.getItem('refresh_token');
+      const response = await instance.post(
         '/api/v1/token/refresh/',
         {
           refresh: refresh_token,
@@ -37,11 +41,8 @@ instance.interceptors.response.use(
       );
 
       if (response.status === 200) {
-        axios.defaults.headers.common['Authorization'] = `Bearer 
+        axios.defaults.headers.common['Authorization'] = `Bearer
        ${response.data['access']}`;
-
-        setCookie('access_token', response.data.access);
-        setCookie('refresh_token', response.data.refresh);
 
         return axios(error.config);
       }

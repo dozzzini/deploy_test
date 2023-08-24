@@ -5,7 +5,6 @@ import { useSetRecoilState } from 'recoil';
 import classes from './LoginSignup.module.css';
 import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
 import { logedIn } from '../recoilState';
-import { setCookie, getCookie } from '../cookie';
 
 function LoginSignup() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -39,10 +38,10 @@ function LoginSignup() {
         password: data.password,
         email: data.email,
       });
+      localStorage.setItem('access_token', response.data.access);
+      localStorage.setItem('refresh_token', response.data.refresh);
 
       setIsLogin(true);
-
-      console.log(response.data);
     } catch (error) {
       console.error('회원가입 실패:', error);
     }
@@ -55,15 +54,10 @@ function LoginSignup() {
         password: data.password,
       });
 
-      setCookie('access_token', response.data.access);
-      setCookie('refresh_token', response.data.refresh);
+      localStorage.setItem('access_token', response.data.access);
+      localStorage.setItem('refresh_token', response.data.refresh);
+
       setIsLogin(true);
-
-      console.log(response.data);
-
-      // if (response.status === 200) {
-      //   navigate('/', { replace: true });
-      // }
     } catch (error) {
       console.error('로그인 실패:', error);
     }
@@ -71,7 +65,6 @@ function LoginSignup() {
 
   const checkIdAvailability = async () => {
     const id = getValues('id');
-
     // 아이디 중복 확인을 위한 서버 요청을 보냅니다.
     try {
       const response = await checkIdAvailabilityApi({ username: id });
@@ -90,8 +83,6 @@ function LoginSignup() {
     } catch (error) {
       console.error('중복확인 실패:', error);
     }
-
-    console.log(id);
   };
 
   return (
