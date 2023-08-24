@@ -87,6 +87,7 @@ function LoginSignup() {
           message: '이미 사용 중인 아이디입니다.',
         });
       }
+      console.log('중복확인 성공:', response.status);
     } catch (error) {
       console.error('중복확인 실패:', error);
     }
@@ -107,11 +108,11 @@ function LoginSignup() {
             onSubmit={handleSubmit(onSignUpSubmit)}
             className={classes.login_form}
           >
-            <h1>Create Account</h1>
+            <h1>회원 가입</h1>
             <input
               id="id"
               type="text"
-              // placeholder="아이디"
+              placeholder="아이디"
               aria-invalid={
                 isSubmitted ? (errors.id ? 'true' : 'false') : undefined
               }
@@ -129,13 +130,13 @@ function LoginSignup() {
             {/* {isIdAvailable || (
               <small role="alert">이미 사용 중인 아이디입니다.</small>
             )} */}
-            <div onClick={checkIdAvailability}>중복확인</div>
+
             {/* {' '} */}
-            {errors.id && <div role="alert">{errors.id.message}</div>}
 
             <input
               id="password"
               type="password"
+              placeholder="비밀번호"
               aria-invalid={
                 isSubmitted ? (errors.password ? 'true' : 'false') : undefined
               }
@@ -155,6 +156,7 @@ function LoginSignup() {
             <input
               id="passwordConfirm"
               type="password"
+              placeholder="비밀번호 확인"
               aria-invalid={
                 isSubmitted
                   ? errors.passwordConfirm
@@ -183,6 +185,24 @@ function LoginSignup() {
             )}
 
             <input
+              id="name"
+              type="text"
+              placeholder="이름"
+              aria-invalid={
+                isSubmitted ? (errors.name ? 'true' : 'false') : undefined
+              }
+              {...register('name', {
+                required: '이름은 필수 입력입니다.',
+                minLength: {
+                  value: 2,
+                  message: '2자리 이상 입력해주세요.',
+                },
+              })}
+            />
+
+            {errors.name && <div role="alert">{errors.name.message}</div>}
+
+            <input
               id="email"
               type="text"
               placeholder="test@email.com"
@@ -198,22 +218,6 @@ function LoginSignup() {
 
             {errors.email && <div role="alert">{errors.email.message}</div>}
 
-            <input
-              id="name"
-              type="text"
-              aria-invalid={
-                isSubmitted ? (errors.name ? 'true' : 'false') : undefined
-              }
-              {...register('name', {
-                required: '이름은 필수 입력입니다.',
-                minLength: {
-                  value: 2,
-                  message: '2자리 이상 입력해주세요.',
-                },
-              })}
-            />
-
-            {errors.name && <div role="alert">{errors.name.message}</div>}
             <button className={classes.form_btn}>Sign Up</button>
           </form>
         </div>
@@ -224,7 +228,7 @@ function LoginSignup() {
             onSubmit={handleLoginSubmit(onLogInSubmit)}
             className={classes.login_form}
           >
-            <h1>Sign In</h1>
+            <h1>로그인</h1>
             <input
               type="text"
               placeholder="아이디"
@@ -267,29 +271,27 @@ function LoginSignup() {
             {loginErrors.password && (
               <small role="alert">{loginErrors.password.message}</small>
             )}
-            <button className={classes.form_btn}>Sign In</button>
+            <button className={classes.form_btn}>Login</button>
           </form>
         </div>
 
         <div className={classes.overlay_container}>
           <div className={classes.overlay_left}>
-            <h1>Welcome Back</h1>
-            <p className={classes.p}>
-              To keep connected with us please login with your personal info
-            </p>
+            <p className={classes.p}>이미 회원가입하셨나요?</p>
+            <h1>로그인하고 기존 일정을 관리해보세요!</h1>
             <button
               id="signIn"
               onClick={clickHandler}
               className={classes.overlay_btn}
             >
-              Sign In
+              Login
             </button>
           </div>
           <div className={classes.overlay_right}>
-            <h1>Hello, Friend</h1>
             <p className={classes.p}>
-              Enter your personal details and start journey with us
+              나의 달력 너의 달력에 오신 것을 환영합니다!
             </p>
+            <h1>회원가입하고 일정을 효율적으로 관리해보세요.</h1>
             <button
               id="signUp"
               onClick={clickHandler}
