@@ -94,15 +94,18 @@ function LoginSignup() {
   };
 
   return (
-    <div className={classes.wrapper}>
+    <div className={classes.wrapper_login}>
       <div
-        className={`${classes.container} ${
+        className={`${classes.container_login} ${
           isSignUp ? classes.right_panel_active : null
         }`}
       >
         {/* SIGNUP */}
         <div className={classes.sign_up_container}>
-          <form onSubmit={handleSubmit(onSignUpSubmit)}>
+          <form
+            onSubmit={handleSubmit(onSignUpSubmit)}
+            className={classes.login_form}
+          >
             <h1>Create Account</h1>
             <input
               id="id"
@@ -216,7 +219,10 @@ function LoginSignup() {
 
         {/* LOGIN */}
         <div className={classes.sign_In_container}>
-          <form onSubmit={handleLoginSubmit(onLogInSubmit)}>
+          <form
+            onSubmit={handleLoginSubmit(onLogInSubmit)}
+            className={classes.login_form}
+          >
             <h1>Sign In</h1>
             <input
               type="text"
@@ -267,7 +273,7 @@ function LoginSignup() {
         <div className={classes.overlay_container}>
           <div className={classes.overlay_left}>
             <h1>Welcome Back</h1>
-            <p>
+            <p className={classes.p}>
               To keep connected with us please login with your personal info
             </p>
             <button
@@ -280,7 +286,9 @@ function LoginSignup() {
           </div>
           <div className={classes.overlay_right}>
             <h1>Hello, Friend</h1>
-            <p>Enter your personal details and start journey with us</p>
+            <p className={classes.p}>
+              Enter your personal details and start journey with us
+            </p>
             <button
               id="signUp"
               onClick={clickHandler}

@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 import Cookies from 'js-cookie';
 
 import routes from './routes';
-import { GlobalStyle } from './screens/LoginStyles';
+import { GlobalStyle } from './GlobalStyles';
 import Layout from './screens/Layout';
 import Welcome from './screens/Welcome';
 import LoginSignup from './screens/LoginSignup';
@@ -16,16 +16,22 @@ import { logedIn } from './recoilState';
 
 function App() {
   const [isLogin, setIsLogin] = useRecoilState(logedIn);
-  const session = Cookies.get('sessionid');
+
+  const getSession = () => {
+    const session = Cookies.get('sessionid');
+    return session;
+  };
 
   useEffect(() => {
+    const session = getSession();
+    console.log('sessionid', session);
     if (session) {
       setIsLogin(true);
       return;
     } else {
       return;
     }
-  }, [session]);
+  }, []);
 
   return (
     <Router>

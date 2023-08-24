@@ -1,12 +1,4 @@
-* {
-  box-sizing: border-box;
-}
-body {
-  font-family: 'Montserrat', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-.wrapper {
+.wrapper_login {
   width: 100%;
   height: 100vh;
   display: flex;
@@ -15,7 +7,7 @@ body {
   background: #ebecf0;
   overflow: hidden;
 }
-.container {
+.container_login {
   border-radius: 10px;
   box-shadow:
     -5px -5px 10px #fff,
@@ -25,7 +17,7 @@ body {
   min-height: 480px;
   overflow: hidden;
 }
-form {
+.login_form {
   background: #ebecf0;
   display: flex;
   flex-direction: column;
@@ -34,7 +26,7 @@ form {
   justify-content: center;
   align-items: center;
 }
-form input {
+.login_form input {
   background: #eee;
   padding: 16px;
   margin: 8px 0;
@@ -46,7 +38,8 @@ form input {
     inset 7px 2px 10px #babebc,
     inset -5px -5px 12px #fff;
 }
-button {
+.form_btn,
+.overlay_btn {
   border-radius: 20px;
   border: none;
   outline: none;
@@ -120,20 +113,20 @@ button {
   color: #fff;
   transition: all 0.5s;
 }
-.container.right_panel_active .sign_In_container {
+.container_login.right_panel_active .sign_In_container {
   transform: translateX(100%);
   opacity: 0;
 }
-.container.right_panel_active .sign_up_container {
+.container_login.right_panel_active .sign_up_container {
   transform: translateX(100%);
   opacity: 1;
   z-index: 2;
 }
-.container.right_panel_active .overlay_right {
+.container_login.right_panel_active .overlay_right {
   transform: translateX(-100%);
   opacity: 0;
 }
-.container.right_panel_active .overlay_left {
+.container_login.right_panel_active .overlay_left {
   transform: translateX(-100%);
   opacity: 1;
   z-index: 2;
@@ -141,24 +134,19 @@ button {
 .social_links {
   margin: 20px 0;
 }
-form h1 {
+.login_form h1 {
   font-weight: bold;
   margin: 0;
   color: #000;
 }
 
-p {
+.p {
   font-size: 16px;
   font-weight: bold;
   letter-spacing: 0.5px;
   margin: 20px 0 30px;
 }
-span {
-  font-size: 12px;
-  color: #000;
-  letter-spacing: 0.5px;
-  margin-bottom: 10px;
-}
+
 .social_links div {
   width: 40px;
   height: 40px;
