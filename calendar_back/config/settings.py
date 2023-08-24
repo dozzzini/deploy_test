@@ -173,11 +173,12 @@ AUTH_USER_MODEL = "users.User"
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
+    "http://49.50.164.202",
 ]
 # 요청 헤더에 인증 정보를 포함
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_USE_SESSIONS = True
+# CSRF_USE_SESSIONS = True
 CSRF_TRUSTED_ORIGINS = ("http://49.50.164.202",)
 SPECTACULAR_SETTINGS = {
     "TITLE": "투고갓강",
