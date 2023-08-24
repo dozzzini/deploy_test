@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import { LuSettings, LuBell } from 'react-icons/lu';
 import SearchInfo from './SearchInfo';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { scheduleSearchApi } from '../../api';
 
 const HeaderContainer = styled.div`
@@ -93,7 +93,7 @@ function Header({ data, initialCalendars, initialEvents }) {
   const [searchIsOpen, setSearchIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [isLuSettingsModalOpen, setIsLuSettingsModalOpen] = useState(false);
+  const [activeModal, setActiveModal] = useState(null);
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -115,8 +115,13 @@ function Header({ data, initialCalendars, initialEvents }) {
       setSearchResults([]);
     }
   };
-  const handleLuSettingsClick = () => {
-    setIsLuSettingsModalOpen(true);
+
+  const openModal = (modalType) => {
+    setActiveModal(modalType);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
   };
 
   return (
@@ -139,19 +144,25 @@ function Header({ data, initialCalendars, initialEvents }) {
         />
       ) : null}
       <IconBox>
-        <LuBell></LuBell>
-        <LuSettings onClick={handleLuSettingsClick}></LuSettings>{' '}
+        <LuBell onClick={() => openModal('LuBell')}></LuBell>
+        <LuSettings onClick={() => openModal('LuSettings')}></LuSettings>{' '}
       </IconBox>
-      {isLuSettingsModalOpen && (
+      {activeModal === 'LuBell' && (
         <Modal>
           <Content>
-            <CloseIcon onClick={() => setIsLuSettingsModalOpen(false)}>
-              &times;
-            </CloseIcon>
-            <p>모달 안에 어떤 내용 넣을 건데!!! </p>
+            <CloseIcon onClick={closeModal}>&times;</CloseIcon>
+            <p>LuBell 모달 내용</p>
           </Content>
         </Modal>
       )}
+      {activeModal === 'LuSettings' && (
+        <Modal>
+          <Content>
+            <CloseIcon onClick={closeModal}>&times;</CloseIcon>
+            <p>LuSettings 모달 내용</p>
+          </Content>
+        </Modal>
+      )}{' '}
     </HeaderContainer>
   );
 }
