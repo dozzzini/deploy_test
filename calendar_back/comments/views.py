@@ -10,7 +10,7 @@ from .models import Comment
 
 
 class NewComment(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = CommentSerializer(data=request.data)
@@ -25,12 +25,12 @@ class NewComment(APIView):
                 CommentSerializer(new_comment).data,
                 status=status.HTTP_201_CREATED,
             )
-
-        raise ParseError("잘못된 요청입니다.")
+        else:
+            return Response(serializer.errors)
 
 
 class Comments(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -64,7 +64,9 @@ class Comments(APIView):
             raise PermissionDenied("수정권한이 없습니다.")
 
         if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_200_OK)
-
-        raise ParseError("잘못된 요청입니다.")
+            updated_data = serializer.save()
+            return Response(
+                CommentSerializer(updated_data).data, status=status.HTTP_200_OK
+            )
+        else:
+            return Response(serializer.errors)

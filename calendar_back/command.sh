@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # migrate 실행
+python manage.py makemigrations
 python manage.py migrate
 
 # 원하는 추가 명령 실행

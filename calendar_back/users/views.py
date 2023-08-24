@@ -1,11 +1,10 @@
-from django.contrib.auth import login, logout, authenticate
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import ParseError, NotFound, PermissionDenied
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .serializers import SignUpUserSerializer, UserInfoSerializer
 from .models import User
@@ -28,41 +27,40 @@ class Signup(APIView):
                 password=request.data["password"],
                 email=request.data["email"],
             )
-            print(user)
-            login(request, user)
-            return Response(status=status.HTTP_201_CREATED)
 
-        raise ParseError("잘못된 요청입니다.")
+            token = TokenObtainPairSerializer.get_token(user)
+            refresh_token = str(token)
+            access_token = str(token.access_token)
 
+            response = Response(
+                {
+                    "user": SignUpUserSerializer(user).data,
+                    "access_token": access_token,
+                    "refresh_token": refresh_token,
+                },
+                status=status.HTTP_201_CREATED,
+            )
 
-class Login(APIView):
-    def post(self, request):
-        username = request.data["username"]
-        password = request.data["password"]
+            response.set_cookie("access_token", access_token, httponly=True)
+            response.set_cookie("refresh_token", refresh_token, httponly=True)
 
-        if not (username and password):
-            raise ParseError("아이디 또는 비밀번호가 없습니다.")
+            return response
 
-        user = authenticate(  # 성공 시 user instance 반환 아닐 시 None 반환
-            username=username,
-            password=password,
-        )
-
-        if user:
-            login(request, user)
-            return Response(status=status.HTTP_200_OK)
-
-        return Response(
-            {"errors": "올바른 유저정보가 아닙니다."}, status=status.HTTP_400_BAD_REQUEST
-        )
+        else:
+            return Response(user.errors)
 
 
 class Logout(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        logout(request)
-        return Response(status=status.HTTP_200_OK)
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class CheckUsername(APIView):
@@ -80,7 +78,7 @@ class CheckUsername(APIView):
 
 
 class UserInfo(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self, username):
         try:
@@ -105,18 +103,25 @@ class UserInfo(APIView):
             raise PermissionDenied("비밀번호 변경 권한이 없습니다.")
 
         user.set_password(request.data["password"])
-        user.save()
+        updated_user = user.save()
 
-        return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(
+            UserInfoSerializer(updated_user).data, status=status.HTTP_202_ACCEPTED
+        )
 
     def delete(self, request, username):
         user = self.get_object(username)
 
         if user != request.user:
             raise PermissionDenied("권한이 없습니다.")
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         user.is_active = False
         user.save()
-        logout(request)
 
         return Response(status=status.HTTP_204_NO_CONTENT)

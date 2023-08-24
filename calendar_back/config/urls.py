@@ -10,6 +10,7 @@ from drf_spectacular.views import (
     SpectacularYAMLAPIView,
     SpectacularRedocView,
 )
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -18,6 +19,7 @@ urlpatterns = [
     path("api/v1/schedules/", include("schedules.urls")),
     path("api/v1/teams/", include("teams.urls")),
     path("api/v1/users/", include("users.urls")),
+    path("api/v1/token/refresh/", TokenRefreshView.as_view()),
 ]
 
 if settings.DEBUG:
