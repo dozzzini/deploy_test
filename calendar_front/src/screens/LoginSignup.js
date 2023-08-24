@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import Cookies from 'js-cookie';
 
 import classes from './LoginSignup.module.css';
 import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
@@ -34,6 +35,7 @@ function LoginSignup() {
 
   const onSignUpSubmit = async (data) => {
     try {
+      Cookies.delete('sessionid');
       const response = await signupApi({
         username: data.id,
         name: data.name,
