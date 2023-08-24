@@ -1,17 +1,57 @@
 import axios from 'axios';
-import { getCookie } from './cookie';
-
-let access_token = getCookie('access_token');
-let refresh_token = getCookie('refresh_token');
+import { getCookie, setCookie } from './cookie';
 
 const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${access_token}`,
   },
   baseURL: process.env.API_URL, //장고 서버 주소
   withCredentials: true, // 쿠키를 포함시키기 위한 설정 추가
 });
+
+// request interceptor
+instance.interceptors.request.use((config) => {
+  const access_token = getCookie('access_token');
+  config.headers['Authorization'] = `Bearer ${access_token}`;
+  return config;
+});
+
+// response interceptor
+let refresh = false;
+
+instance.interceptors.response.use(
+  (resp) => resp,
+  async (error) => {
+    if (error.response.status === 401 && !refresh) {
+      refresh = true;
+      const refresh_token = getCookie('refresh_token');
+      const response = await axios.post(
+        '/api/v1/token/refresh/',
+        {
+          refresh: refresh_token,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        },
+      );
+
+      if (response.status === 200) {
+        axios.defaults.headers.common['Authorization'] = `Bearer 
+       ${response.data['access']}`;
+
+        setCookie('access_token', response.data.access);
+        setCookie('refresh_token', response.data.refresh);
+
+        return axios(error.config);
+      }
+    }
+
+    refresh = false;
+
+    return error;
+  },
+);
 
 export default instance;
 
