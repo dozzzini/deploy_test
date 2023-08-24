@@ -168,7 +168,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 # 요청 헤더에 인증 정보를 포함
-# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True
 
 # CSRF_USE_SESSIONS = True
 # ---
@@ -179,9 +179,11 @@ CORS_ALLOWED_ORIGINS = [
 # CSRF_COOKIE_SECURE = False
 
 # ---
-# CSRF_TRUSTED_ORIGINS = [
-#     "http://49.50.164.202",
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    "http://49.50.164.202",
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+]
 SPECTACULAR_SETTINGS = {
     "TITLE": "투고갓강",
     "DESCRIPTION": "투고갓강 API 명세",
@@ -213,7 +215,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=100),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,

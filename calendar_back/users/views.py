@@ -32,7 +32,19 @@ class Signup(APIView):
             refresh_token = str(token)
             access_token = str(token.access_token)
 
-            response = Response(
+            # response = Response(
+            #     {
+            #         "user": SignUpUserSerializer(user).data,
+            #         "access_token": access_token,
+            #         "refresh_token": refresh_token,
+            #     },
+            #     status=status.HTTP_201_CREATED,
+            # )
+
+            # response.set_cookie("access_token", access_token, httponly=True)
+            # response.set_cookie("refresh_token", refresh_token, httponly=True)
+
+            return Response(
                 {
                     "user": SignUpUserSerializer(user).data,
                     "access_token": access_token,
@@ -41,26 +53,8 @@ class Signup(APIView):
                 status=status.HTTP_201_CREATED,
             )
 
-            response.set_cookie("access_token", access_token, httponly=True)
-            response.set_cookie("refresh_token", refresh_token, httponly=True)
-
-            return response
-
         else:
             return Response(user.errors)
-
-
-class Logout(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class CheckUsername(APIView):
@@ -115,7 +109,7 @@ class UserInfo(APIView):
         if user != request.user:
             raise PermissionDenied("권한이 없습니다.")
         try:
-            refresh_token = request.data["refresh_token"]
+            refresh_token = request.data["refresh"]
             token = RefreshToken(refresh_token)
             token.blacklist()
         except Exception:
