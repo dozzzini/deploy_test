@@ -4,10 +4,10 @@ import Cookies from 'js-cookie';
 let csrftoken = Cookies.get('csrftoken');
 
 const instance = axios.create({
-  // headers: {
-  //   'Content-Type': 'application/json',
-  //   'X-CSRFToken': csrftoken,
-  // },
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': csrftoken,
+  },
   baseURL: process.env.API_URL, //장고 서버 주소
   withCredentials: true, // 쿠키를 포함시키기 위한 설정 추가
 });
