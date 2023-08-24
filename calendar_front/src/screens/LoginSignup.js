@@ -86,6 +86,7 @@ function LoginSignup() {
           type: 'manual',
           message: '이미 사용 중인 아이디입니다.',
         });
+        setIsIdAvailable(false);
       }
       console.log('중복확인 성공:', response.status);
     } catch (error) {
@@ -125,13 +126,19 @@ function LoginSignup() {
               })}
               onBlur={checkIdAvailability} // 입력란에서 포커스가 빠져나갈 때 중복 확인 요청 함수 호출
             />
-            {errors.id && <span>{errors.id.message}</span>}
-            {isIdAvailable && <span>사용 가능한 아이디입니다.</span>}
-            {/* {isIdAvailable || (
-              <small role="alert">이미 사용 중인 아이디입니다.</small>
-            )} */}
-
-            {/* {' '} */}
+            {errors.id && (
+              <span className={classes.error_message}>{errors.id.message}</span>
+            )}
+            {isIdAvailable && (
+              <span className={classes.success_message}>
+                사용 가능한 아이디입니다.
+              </span>
+            )}
+            {!isIdAvailable || (
+              <span role="alert" className={classes.error_message}>
+                이미 사용 중인 아이디입니다.
+              </span>
+            )}
 
             <input
               id="password"
@@ -150,7 +157,9 @@ function LoginSignup() {
             />
 
             {errors.password && (
-              <div role="alert">{errors.password.message}</div>
+              <div role="alert" className={classes.error_message}>
+                {errors.password.message}
+              </div>
             )}
 
             <input
@@ -181,7 +190,9 @@ function LoginSignup() {
             />
 
             {errors.passwordConfirm && (
-              <div role="alert">{errors.passwordConfirm.message}</div>
+              <div role="alert" className={classes.error_message}>
+                {errors.passwordConfirm.message}
+              </div>
             )}
 
             <input
@@ -200,7 +211,11 @@ function LoginSignup() {
               })}
             />
 
-            {errors.name && <div role="alert">{errors.name.message}</div>}
+            {errors.name && (
+              <div role="alert" className={classes.error_message}>
+                {errors.name.message}
+              </div>
+            )}
 
             <input
               id="email"
@@ -216,7 +231,11 @@ function LoginSignup() {
               })}
             />
 
-            {errors.email && <div role="alert">{errors.email.message}</div>}
+            {errors.email && (
+              <div role="alert" className={classes.error_message}>
+                {errors.email.message}
+              </div>
+            )}
 
             <button className={classes.form_btn}>Sign Up</button>
           </form>
@@ -248,7 +267,9 @@ function LoginSignup() {
               })}
             />
             {loginErrors.id && (
-              <small role="alert">{loginErrors.id.message}</small>
+              <small role="alert" className={classes.error_message}>
+                {loginErrors.id.message}
+              </small>
             )}
             <input
               type="password"
@@ -269,7 +290,9 @@ function LoginSignup() {
               })}
             />
             {loginErrors.password && (
-              <small role="alert">{loginErrors.password.message}</small>
+              <small role="alert" className={classes.error_message}>
+                {loginErrors.password.message}
+              </small>
             )}
             <button className={classes.form_btn}>Login</button>
           </form>
