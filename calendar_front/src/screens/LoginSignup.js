@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-
 import classes from './LoginSignup.module.css';
 import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
-import { logedIn } from '../recoilState';
+import { loggedIn } from '../recoilState';
 
 function LoginSignup() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isIdAvailable, setIsIdAvailable] = useState();
-  const setIsLogin = useSetRecoilState(logedIn);
+  const setIsLogin = useSetRecoilState(loggedIn);
 
   const clickHandler = () => {
     setIsSignUp((prev) => !prev);

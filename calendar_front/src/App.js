@@ -11,22 +11,21 @@ import LoginSignup from './screens/LoginSignup';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Landing from './screens/Landing';
-import { logedIn } from './recoilState';
+import { loggedIn } from './recoilState';
 
 function App() {
-  const [isLogin, setIsLogin] = useRecoilState(logedIn);
-
+  const [isLogin, setIsLogin] = useRecoilState(loggedIn);
   useEffect(() => {
     const access_token = localStorage.getItem('access_token');
     const refresh_token = localStorage.getItem('refresh_token');
-
+    console.log(isLogin);
     if (access_token && refresh_token) {
       setIsLogin(true);
       return;
     } else {
       return;
     }
-  }, []);
+  }, [isLogin]);
 
   return (
     <Router>

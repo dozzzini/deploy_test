@@ -2,7 +2,11 @@ import { styled } from 'styled-components';
 import { LuSettings, LuBell } from 'react-icons/lu';
 import SearchInfo from './SearchInfo';
 import React, { useState } from 'react';
-import { scheduleSearchApi, logoutApi } from '../../api';
+import { useNavigate } from 'react-router';
+
+import { scheduleSearchApi } from '../../api';
+import { useSetRecoilState } from 'recoil';
+import { loggedIn } from '../../recoilState';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -100,7 +104,8 @@ function Header({ data, initialCalendars, initialEvents }) {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const setIsLogin = useSetRecoilState(loggedIn);
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -132,14 +137,19 @@ function Header({ data, initialCalendars, initialEvents }) {
   };
 
   const handleLogout = () => {
-    logoutApi()
-      .then(() => {
-        setIsLoggedIn(false);
-        closeModal();
-      })
-      .catch((error) => {
-        console.error('로그아웃 오류:', error);
-      });
+    // logoutApi({ refresh: localStorage.getItem('refresh_token') })
+    //   .then((res) => {
+    //     localStorage.clear();
+    //     setIsLogin(false);
+    //     closeModal();
+    //   })
+    //   .catch((error) => {
+    //     console.error('로그아웃 오류:', error);
+    //   });
+    localStorage.clear();
+    closeModal();
+    setIsLogin(false);
+    navigate('/login', { replace: true });
   };
 
   return (

@@ -4,8 +4,8 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  baseURL: process.env.API_URL, //장고 서버 주소
-  // baseURL: 'http://localhost:8000', //로컬
+  // baseURL: process.env.API_URL, //장고 서버 주소
+  baseURL: 'http://localhost:8000', //로컬
   withCredentials: true, // 쿠키를 포함시키기 위한 설정 추가
 });
 
@@ -41,10 +41,12 @@ instance.interceptors.response.use(
       );
 
       if (response.status === 200) {
-        axios.defaults.headers.common['Authorization'] = `Bearer
+        error.config.headers['Authorization'] = `Bearer
        ${response.data['access']}`;
-
-        return axios(error.config);
+        localStorage.setItem('access_token', response.data.access);
+        localStorage.setItem('refresh_token', response.data.refresh);
+        // return instance(error.config);
+        return instance(error.config);
       }
     }
 
@@ -91,9 +93,4 @@ export const eventDetailEditApi = (data) => {
 // 일정명 검색
 export const scheduleSearchApi = (data) => {
   return instance.post(`/api/v1/schedules/search/`, data);
-};
-
-//로그아웃 API
-export const logoutApi = (data) => {
-  return instance.post(`/api/v1/users/logout/`, data);
 };
