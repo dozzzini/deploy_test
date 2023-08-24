@@ -33,6 +33,7 @@ def get_env_variable(var_name):
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
 DEBUG = get_env_variable("DEBUG")
+
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
@@ -120,23 +121,6 @@ else:
         }
     }
     print("run with mysql")
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": get_env_variable("DB_NAME"),
-#         "USER": get_env_variable("DB_USER"),
-#         "PASSWORD": get_env_variable("DB_PASSWORD"),
-#         "HOST": get_env_variable("DB_HOST"),
-#         "PORT": "3306",
-#     }
-# }
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
