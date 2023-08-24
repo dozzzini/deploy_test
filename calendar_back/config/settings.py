@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 import environ
+import datetime
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
 
@@ -52,6 +53,7 @@ CUSTOM_APPS = [
     "corsheaders",
     "rest_framework",
     "drf_spectacular",
+    "rest_framework_simplejwt",
 ]
 SYSTEM_APPS = [
     "django.contrib.admin",
@@ -61,15 +63,6 @@ SYSTEM_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
-REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-    ],
-}
 
 INSTALLED_APPS = SYSTEM_APPS + CUSTOM_APPS
 
@@ -173,24 +166,22 @@ AUTH_USER_MODEL = "users.User"
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
-    "http://49.50.164.202:80",
-    "http://49.50.164.202:8000",
 ]
 # 요청 헤더에 인증 정보를 포함
 # CORS_ALLOW_CREDENTIALS = True
 
-CSRF_USE_SESSIONS = True
+# CSRF_USE_SESSIONS = True
 # ---
-SESSION_COOKIE_HTTPONLY = False
-CSRF_COOKIE_HTTPONLY = False
-SESSION_COOKIE_SECURE = False
-AUTH_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = False
+# SESSION_COOKIE_HTTPONLY = False
+# CSRF_COOKIE_HTTPONLY = False
+# SESSION_COOKIE_SECURE = False
+# AUTH_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = False
 
 # ---
-CSRF_TRUSTED_ORIGINS = [
-    "http://49.50.164.202",
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     "http://49.50.164.202",
+# ]
 SPECTACULAR_SETTINGS = {
     "TITLE": "투고갓강",
     "DESCRIPTION": "투고갓강 API 명세",
@@ -200,15 +191,31 @@ SPECTACULAR_SETTINGS = {
 # CSRF_COOKIE_NAME = "csrftoken"
 
 
-CORS_ALLOW_HEADERS = [
-    "accept",
-    "accept-encoding",
-    "authorization",
-    "content-type",
-    "dnt",
-    "origin",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-    "Set-Cookie",
-]
+# CORS_ALLOW_HEADERS = [
+#     "accept",
+#     "accept-encoding",
+#     "authorization",
+#     "content-type",
+#     "dnt",
+#     "origin",
+#     "user-agent",
+#     "x-csrftoken",
+#     "x-requested-with",
+#     "Set-Cookie",
+# ]
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=100),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "SIGNING_KEY": get_env_variable("JWT_SECRET_KEY"),
+}

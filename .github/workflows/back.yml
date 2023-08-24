@@ -24,7 +24,8 @@ jobs:
             cd calendar_test
             git pull origin main
             cd calendar_back
-            docker build --build-arg DJANGO_SECRET_KEY='django' --build-arg DJANGO_ALLOWED_HOSTS="*," --build-arg DB_NAME='123' --build-arg DB_USER='123' --build-arg DB_PASSWORD='123' --build-arg DB_HOST='12545' --build-arg DEBUG='False' -t gobyungyong/calendar_back .
+            # docker build --build-arg DJANGO_SECRET_KEY='django' --build-arg DJANGO_ALLOWED_HOSTS="*," --build-arg DB_NAME='123' --build-arg DB_USER='123' --build-arg DB_PASSWORD='123' --build-arg DB_HOST='12545' --build-arg DEBUG='False' -t gobyungyong/calendar_back .
+            docker build --build-arg JWT_SECRET_KEY="#lv2_i1dxue0h*=0yfylh@36$!b4=_#ou=wyjinwooisnotfreedjango-insecure-td9e*n+g8k024^"  --build-arg DJANGO_SECRET_KEY='django-insecure-td9e*n+g8k024^#lv2_i1dxue0h*=0yfylh@36$!b4=_#ou=wyjinwooisnotfree' --build-arg DJANGO_ALLOWED_HOSTS="*," --build-arg DB_NAME='calendar' --build-arg DB_USER='calendar' --build-arg DB_PASSWORD='calendardb!@21' --build-arg DB_HOST='db-i7ttc.pub-cdb.ntruss.com' --build-arg DEBUG='False' -t gobyungyong/calendar_back .
             docker push gobyungyong/calendar_back
             cd ..
             cd ..

@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ParseError, NotFound, PermissionDenied
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 from .serializers import SignUpUserSerializer, UserInfoSerializer
@@ -35,34 +36,38 @@ class Signup(APIView):
         raise ParseError("잘못된 요청입니다.")
 
 
-class Login(APIView):
-    def post(self, request):
-        username = request.data["username"]
-        password = request.data["password"]
+# class Login(APIView):
+#     def post(self, request):
+#         username = request.data["username"]
+#         password = request.data["password"]
 
-        if not (username and password):
-            raise ParseError("아이디 또는 비밀번호가 없습니다.")
+#         if not (username and password):
+#             raise ParseError("아이디 또는 비밀번호가 없습니다.")
 
-        user = authenticate(  # 성공 시 user instance 반환 아닐 시 None 반환
-            username=username,
-            password=password,
-        )
+#         user = authenticate(  # 성공 시 user instance 반환 아닐 시 None 반환
+#             username=username,
+#             password=password,
+#         )
 
-        if user:
-            login(request, user)
-            return Response(status=status.HTTP_200_OK)
-
-        return Response(
-            {"errors": "올바른 유저정보가 아닙니다."}, status=status.HTTP_400_BAD_REQUEST
-        )
+#         if user:
+#             login(request, user)
+#             return Response(status=status.HTTP_200_OK)
 
 
+#         return Response(
+#             {"errors": "올바른 유저정보가 아닙니다."}, status=status.HTTP_400_BAD_REQUEST
+#         )
 class Logout(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        logout(request)
-        return Response(status=status.HTTP_200_OK)
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class CheckUsername(APIView):
