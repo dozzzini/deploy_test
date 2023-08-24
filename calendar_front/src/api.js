@@ -5,7 +5,7 @@ let csrftoken = Cookies.get('csrftoken');
 
 const instance = axios.create({
   headers: {
-    'Content-Type': 'application/json',
+    // 'Content-Type': 'application/json',
     'X-CSRFToken': csrftoken,
   },
   baseURL: process.env.API_URL, //장고 서버 주소
