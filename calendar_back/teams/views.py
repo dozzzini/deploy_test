@@ -10,18 +10,19 @@ from .models import Team
 
 
 class NewTeam(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(team_leader=request.user)
-            return Response(status=status.HTTP_201_CREATED)
-        raise ParseError("잘못된 요청입니다.")
+            team = serializer.save(team_leader=request.user)
+            return Response(TeamSerializer(team).data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors)
 
 
 class Teams(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_team(self, team_id):
         try:
@@ -61,10 +62,13 @@ class Teams(APIView):
             raise PermissionDenied("팀 정보수정은 팀장만 가능합니다.")
 
         if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_200_OK)
+            updated_team = serializer.save()
+            return Response(
+                TeamSerializer(updated_team).data, status=status.HTTP_200_OK
+            )
 
-        raise ParseError("잘못된 요청입니다.")
+        else:
+            return Response(serializer.errors)
 
     def delete(self, request, team_id):
         team = self.get_team(team_id)
