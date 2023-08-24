@@ -5,7 +5,7 @@ import { useSetRecoilState } from 'recoil';
 
 import classes from './LoginSignup.module.css';
 import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
-import { logedIn } from './recoilState';
+import { logedIn } from '../recoilState';
 
 function LoginSignup() {
   const [isSignUp, setIsSignUp] = useState(false);
