@@ -43,3 +43,8 @@ export const eventDetailEditApi = (data) => {
 export const scheduleSearchApi = (data) => {
   return instance.post(`/api/v1/schedules/search/`, data);
 };
+
+//로그아웃 API
+export const logoutApi = (data) => {
+  return instance.post(`/api/v1/users/logout/`, data);
+};

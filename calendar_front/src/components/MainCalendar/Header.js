@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import { LuSettings, LuBell } from 'react-icons/lu';
 import SearchInfo from './SearchInfo';
 import React, { useState } from 'react';
-import { scheduleSearchApi } from '../../api';
+import { scheduleSearchApi, logoutApi } from '../../api';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -45,7 +45,6 @@ const Button = styled.button`
   width: 50px;
 `;
 const IconBox = styled.div`
-  border: 1px solid black;
   display: flex;
   justify-content: end;
   opacity: 0.6;
@@ -57,15 +56,15 @@ const Modal = styled.div`
   display: none;
   position: absolute; /* fixed 대신 absolute로 변경 */
   z-index: 1000; /* 다른 컨텐츠 위에 나타나도록 더 높은 z-index 설정 */
-  left: 72%;
-  top: 20%;
+  margin-top: 165px;
+  margin-left: 800px;
   transform: translate(-50%, -50%); /* 중앙에 정렬 */
-  background-color: #fff;
+  background-color: white;
   width: 200px;
-  height: 100px;
+  height: 50px;
   max-width: 500px; /* 모달 최대 너비 조정 */
   padding: 20px;
-  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
   max-height: 80%; /* 모달 최대 높이 조정 */
   overflow: auto; /* 내용이 넘칠 경우 스크롤 표시 */
@@ -79,13 +78,20 @@ const Content = styled.div`
   width: 100%;
 `;
 
+const Logout = styled.button`
+  margin-top: 20px;
+  font-size: 12px;
+  border: none;
+  background-color: white;
+  margin-left: 70px;
+`;
 const CloseIcon = styled.span`
   color: #aaa;
   font-size: 20px;
   font-weight: bold;
   position: absolute;
-  top: 10px;
-  right: 15px;
+  top: 1px;
+  right: 3px;
   cursor: pointer;
 `;
 
@@ -94,6 +100,7 @@ function Header({ data, initialCalendars, initialEvents }) {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -122,6 +129,17 @@ function Header({ data, initialCalendars, initialEvents }) {
 
   const closeModal = () => {
     setActiveModal(null);
+  };
+
+  const handleLogout = () => {
+    logoutApi()
+      .then(() => {
+        setIsLoggedIn(false);
+        closeModal();
+      })
+      .catch((error) => {
+        console.error('로그아웃 오류:', error);
+      });
   };
 
   return (
@@ -159,7 +177,7 @@ function Header({ data, initialCalendars, initialEvents }) {
         <Modal>
           <Content>
             <CloseIcon onClick={closeModal}>&times;</CloseIcon>
-            <p>LuSettings 모달 내용</p>
+            <Logout onClick={handleLogout}>로그아웃</Logout>
           </Content>
         </Modal>
       )}{' '}
