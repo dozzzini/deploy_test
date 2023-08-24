@@ -7,7 +7,7 @@ import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
 
 function LoginSignup() {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [isIdAvailable, setIsIdAvailable] = useState(false);
+  const [isIdAvailable, setIsIdAvailable] = useState();
   const navigate = useNavigate();
 
   const clickHandler = () => {
@@ -17,45 +17,32 @@ function LoginSignup() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, isSubmitted, errors },
+    formState: { isSubmitted, errors },
     getValues,
-    setError, // import 추가
+    setError,
     clearErrors,
   } = useForm();
 
   const {
     register: loginRegister,
     handleSubmit: handleLoginSubmit,
-    formState: {
-      isSubmitting: isLoginSubmitting,
-      isSubmitted: isLoginSubmitted,
-      errors: loginErrors,
-    },
+    formState: { isSubmitted: isLoginSubmitted, errors: loginErrors },
   } = useForm();
 
   const onSignUpSubmit = async (data) => {
     try {
-      // signupApi 함수 사용하여 회원가입 요청 보내기
       const response = await signupApi({
         username: data.id,
         name: data.name,
         password: data.password,
         email: data.email,
       });
-      // const response = await axios.post(
-      //   'https://port-0-calendar-backend-ac2nll4pdsc1.sel3.cloudtype.app/api/v1/users/signup/',
-      //   {
-      //     username: data.id,
-      //     name: data.name,
-      //     password: data.password,
-      //     email: data.email,
-      //   },
-      // );
+
       console.log(response.data);
-      // 회원가입 성공 시 홈 화면으로 이동
-      if (response.status === 201) {
-        navigate('/', { replace: true });
-      }
+
+      // if (response.status === 201) {
+      //   navigate('/', { replace: true });
+      // }
     } catch (error) {
       console.error('회원가입 실패:', error);
     }
@@ -70,9 +57,9 @@ function LoginSignup() {
 
       console.log(response.data);
 
-      if (response.status === 200) {
-        navigate('/', { replace: true });
-      }
+      // if (response.status === 200) {
+      //   navigate('/', { replace: true });
+      // }
     } catch (error) {
       console.error('로그인 실패:', error);
     }
@@ -84,15 +71,15 @@ function LoginSignup() {
     // 아이디 중복 확인을 위한 서버 요청을 보냅니다.
     try {
       const response = await checkIdAvailabilityApi({ username: id });
-      setIsIdAvailable(response.data.isAvailable);
 
-      if (!response.data.isAvailable) {
+      if (response.status === 200) {
+        setIsIdAvailable(true);
+        clearErrors('id');
+      } else {
         setError('id', {
           type: 'manual',
           message: '이미 사용 중인 아이디입니다.',
         });
-      } else {
-        clearErrors('id');
       }
     } catch (error) {
       console.error('중복확인 실패:', error);
@@ -130,10 +117,10 @@ function LoginSignup() {
             />
             {errors.id && <span>{errors.id.message}</span>}
             {isIdAvailable && <span>사용 가능한 아이디입니다.</span>}
-            <div onClick={checkIdAvailability}>중복확인</div>
-            {isIdAvailable === false && (
+            {/* {isIdAvailable || (
               <small role="alert">이미 사용 중인 아이디입니다.</small>
-            )}
+            )} */}
+            <div onClick={checkIdAvailability}>중복확인</div>
             {/* {' '} */}
             {errors.id && <div role="alert">{errors.id.message}</div>}
 
