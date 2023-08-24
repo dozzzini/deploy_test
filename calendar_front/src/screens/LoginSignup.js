@@ -9,7 +9,6 @@ import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
 import { logedIn } from '../recoilState';
 
 function LoginSignup() {
-  let csrftoken = Cookies.get('csrftoken');
   const [isSignUp, setIsSignUp] = useState(false);
   const [isIdAvailable, setIsIdAvailable] = useState();
   const navigate = useNavigate();

@@ -63,12 +63,12 @@ SYSTEM_APPS = [
 ]
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    # "DEFAULT_PERMISSION_CLASSES": [
-    #     "rest_framework.permissions.IsAuthenticated",
-    # ],
-    # "DEFAULT_AUTHENTICATION_CLASSES": [
-    #     "rest_framework.authentication.SessionAuthentication",
-    # ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+    ],
 }
 
 INSTALLED_APPS = SYSTEM_APPS + CUSTOM_APPS
@@ -78,7 +78,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -179,7 +179,7 @@ CORS_ALLOWED_ORIGINS = [
 # 요청 헤더에 인증 정보를 포함
 CORS_ALLOW_CREDENTIALS = True
 
-# CSRF_USE_SESSIONS = True
+CSRF_USE_SESSIONS = True
 CSRF_TRUSTED_ORIGINS = ("http://49.50.164.202",)
 SPECTACULAR_SETTINGS = {
     "TITLE": "투고갓강",
@@ -187,4 +187,4 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
-# CSRF_COOKIE_NAME = "csrftoken"
+CSRF_COOKIE_NAME = "csrftoken"
