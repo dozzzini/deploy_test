@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 
 import classes from './LoginSignup.module.css';
 import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
+import { logedIn } from './recoilState';
 
 function LoginSignup() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isIdAvailable, setIsIdAvailable] = useState();
   const navigate = useNavigate();
+  const setIsLogin = useSetRecoilState(logedIn);
 
   const clickHandler = () => {
     setIsSignUp((prev) => !prev);
@@ -37,6 +40,7 @@ function LoginSignup() {
         password: data.password,
         email: data.email,
       });
+      setIsLogin(true);
 
       console.log(response.data);
 
@@ -54,6 +58,7 @@ function LoginSignup() {
         username: data.id,
         password: data.password,
       });
+      setIsLogin(true);
 
       console.log(response.data);
 
