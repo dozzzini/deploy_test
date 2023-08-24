@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-// let csrftoken = Cookies.get('csrftoken');
+let csrftoken = Cookies.get('csrftoken');
 
 const instance = axios.create({
   headers: {
