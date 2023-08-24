@@ -194,3 +194,16 @@ SPECTACULAR_SETTINGS = {
 }
 CSRF_COOKIE_NAME = "csrftoken"
 # CSRF_COOKIE_DOMAIN=".localhost"
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "Set-Cookie",
+]
