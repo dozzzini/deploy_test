@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { Reset } from 'styled-reset';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import Cookies from 'js-cookie';
 
 import routes from './routes';
 import { GlobalStyle } from './GlobalStyles';
@@ -13,19 +12,15 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Landing from './screens/Landing';
 import { logedIn } from './recoilState';
+import { getCookie } from './cookie';
 
 function App() {
   const [isLogin, setIsLogin] = useRecoilState(logedIn);
 
-  const getSession = () => {
-    const session = Cookies.get('sessionid');
-    return session;
-  };
-
   useEffect(() => {
-    const session = getSession();
-    console.log('sessionid', session);
-    if (session) {
+    const access_token = getCookie('access_token');
+    const refresh_token = getCookie('refresh_token');
+    if (access_token && refresh_token) {
       setIsLogin(true);
       return;
     } else {

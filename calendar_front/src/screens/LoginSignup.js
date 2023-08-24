@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import Cookies from 'js-cookie';
 
 import classes from './LoginSignup.module.css';
 import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
 import { logedIn } from '../recoilState';
+import { setCookie, getCookie } from '../cookie';
 
 function LoginSignup() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isIdAvailable, setIsIdAvailable] = useState();
-  const navigate = useNavigate();
   const setIsLogin = useSetRecoilState(logedIn);
 
   const clickHandler = () => {
@@ -41,13 +39,10 @@ function LoginSignup() {
         password: data.password,
         email: data.email,
       });
+
       setIsLogin(true);
 
       console.log(response.data);
-
-      // if (response.status === 201) {
-      //   navigate('/', { replace: true });
-      // }
     } catch (error) {
       console.error('회원가입 실패:', error);
     }
@@ -59,6 +54,9 @@ function LoginSignup() {
         username: data.id,
         password: data.password,
       });
+
+      setCookie('access_token', response.data.access);
+      setCookie('refresh_token', response.data.refresh);
       setIsLogin(true);
 
       console.log(response.data);
