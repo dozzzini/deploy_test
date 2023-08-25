@@ -1,31 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { RecoilRoot, useRecoilState } from 'recoil';
-import { eventState } from '../recoilState';
+import { useRecoilState } from 'recoil';
+import { eventState, loggedIn } from '../recoilState';
+import { useNavigate } from 'react-router';
 
 import RightBar from '../components/RightBar/RightBar';
 import TUICalendar from '../components/MainCalendar/TUICalendar';
 
 function Layout() {
+  const [isLogin, setIsLogin] = useRecoilState(loggedIn);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log('layout', isLogin);
+    if (!isLogin) {
+      navigate('/login', { replace: true });
+    }
+  }, []);
+
   const [events, setEvents] = useRecoilState(eventState);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   return (
-    <RecoilRoot>
-      <Container>
-        <Wrapper>
-          <CalendarWrapper>
-            <TUICalendar
-              events={events}
-              setEvents={setEvents}
-              view="month"
-              setSelectedEvent={setSelectedEvent}
-            />
-          </CalendarWrapper>
-          <RightBar selectedEvent={selectedEvent} />
-        </Wrapper>
-      </Container>
-    </RecoilRoot>
+    <Container>
+      <Wrapper>
+        <CalendarWrapper>
+          <TUICalendar
+            events={events}
+            setEvents={setEvents}
+            view="month"
+            setSelectedEvent={setSelectedEvent}
+          />
+        </CalendarWrapper>
+        <RightBar selectedEvent={selectedEvent} />
+      </Wrapper>
+    </Container>
   );
 }
 
