@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
+import Header from './Header';
 import TeamAddModal from './TeamAddModal';
 import Calendar from '@toast-ui/react-calendar';
 import { TZDate } from '@toast-ui/calendar';
@@ -18,15 +19,15 @@ import instance from '../../api';
 const today = new TZDate();
 const viewModeOptions = [
   {
-    title: 'MONTHLY',
+    title: 'Monthly',
     value: 'month',
   },
   {
-    title: 'WEEKLY',
+    title: 'Weekly',
     value: 'week',
   },
   {
-    title: 'DAILY',
+    title: 'Daily',
     value: 'day',
   },
 ];
@@ -39,7 +40,7 @@ const ShowMenuBar = styled.div`
   display: flex;
   flex-direction: column;
   border-right: 1px solid rgb(235, 237, 239);
-  width: 8vw;
+  width: 15vw;
 `;
 const ShowMenuBarHeader = styled.div`
   height: 3vh;
@@ -97,21 +98,25 @@ const CalendarBox = styled.div`
   height: 100%;
 `;
 const CalendarHeader = styled.div`
-  width: 100%;
-  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 10%;
+  font-size: 25px;
+  font-weight: 100;
   color: grey;
+  padding-left: 10px;
 `;
 const DateControlBox = styled.div`
-  width: 100%;
+  width: 28%;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 `;
-const DateBox = styled.div`
-  margin-top: 20px;
-  width: 100%;
+const DateViewSelectBOx = styled.div`
+  width: 72%;
   display: flex;
-  justify-content: center;
+  justify-content: end;
 `;
 const PrevBtn = styled.button`
   border-radius: 50px;
@@ -133,13 +138,7 @@ const PrevBtn = styled.button`
     opacity: 0.5;
   }
 `;
-const NumberBox = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 250px;
-  font-size: 18px;
-  font-weight: 900;
-`;
+const DATEBox = styled.div``;
 const NextBtn = styled.button`
   border-radius: 50px;
   box-shadow:
@@ -159,18 +158,15 @@ const NextBtn = styled.button`
     opacity: 0.5;
   }
 `;
-
-const ClickBox = styled.div`
-  width: 100%;
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-`;
 const TodayBtn = styled.button`
-  border: none;
+  border-radius: 50px;
+  box-shadow:
+    -1px -1px 10px rgba(180, 180, 180, 0.1),
+    1px 1px 10px rgba(180, 180, 180, 0.1);
   background-color: rgb(254, 250, 250);
   outline: none;
   cursor: pointer;
+  border: none;
   font-size: 14px;
   color: grey;
   &&:hover {
@@ -534,53 +530,50 @@ export default function TUICalendar({
         <CalendarBox>
           <CalendarHeader>
             <DateControlBox>
-              <DateBox>
+              <div>
                 <PrevBtn
                   type="button"
                   className="btn btn-default btn-sm move-day"
                   data-action="move-prev"
                   onClick={onClickNavi}
                 >
-                  ◀️
+                  Prev
                 </PrevBtn>
+              </div>
 
-                <NumberBox>
-                  <span className="render-range">{selectedDateRangeText}</span>
-                </NumberBox>
-
+              <DATEBox>
+                <span className="render-range">{selectedDateRangeText}</span>
+              </DATEBox>
+              <div>
                 <NextBtn
                   type="button"
                   className="btn btn-default btn-sm move-day"
                   data-action="move-next"
                   onClick={onClickNavi}
                 >
-                  ▶️
+                  Next
                 </NextBtn>
-              </DateBox>
-              <ClickBox>
-                <DateViewSelectBox>
-                  {viewModeOptions.map((option, index) => (
-                    <button
-                      key={index}
-                      onClick={() =>
-                        onChangeSelect({ target: { value: option.value } })
-                      }
-                      className={selectedView === option.value ? 'active' : ''}
-                    >
-                      {option.title}
-                    </button>
-                  ))}
-                  <TodayBtn
-                    type="button"
-                    className="btn btn-default btn-sm move-today"
-                    data-action="move-today"
-                    onClick={onClickNavi}
-                  >
-                    TODAY
-                  </TodayBtn>
-                </DateViewSelectBox>
-              </ClickBox>
+              </div>
+              <div>
+                <TodayBtn
+                  type="button"
+                  className="btn btn-default btn-sm move-today"
+                  data-action="move-today"
+                  onClick={onClickNavi}
+                >
+                  Today
+                </TodayBtn>
+              </div>
             </DateControlBox>
+            <DateViewSelectBOx>
+              <select onChange={onChangeSelect} value={selectedView}>
+                {viewModeOptions.map((option, index) => (
+                  <option value={option.value} key={index}>
+                    {option.title}
+                  </option>
+                ))}
+              </select>
+            </DateViewSelectBOx>
           </CalendarHeader>
           <Calendar
             height="77vh"
