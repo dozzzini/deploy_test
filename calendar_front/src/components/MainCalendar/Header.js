@@ -1,11 +1,11 @@
 import { styled } from 'styled-components';
 import { LuSettings, LuBell } from 'react-icons/lu';
 import SearchInfo from './SearchInfo';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { scheduleSearchApi } from '../../api';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { loggedIn } from '../../recoilState';
 
 const HeaderContainer = styled.div`
@@ -104,7 +104,20 @@ function Header({ data, initialCalendars, initialEvents }) {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
-  const setIsLogin = useSetRecoilState(loggedIn);
+  const [isLogin, setIsLogin] = useRecoilState(loggedIn);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const access_token = localStorage.getItem('access_token');
+    const refresh_token = localStorage.getItem('refresh_token');
+    console.log(isLogin);
+    if (access_token && refresh_token) {
+      setIsLogin(true);
+      return;
+    } else {
+      return;
+    }
+  }, [isLogin]);
 
   const handleInputChange = (event) => {
     const value = event.target.value;

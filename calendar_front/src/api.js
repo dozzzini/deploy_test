@@ -4,8 +4,8 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  baseURL: process.env.API_URL, //장고 서버 주소
-  // baseURL: 'http://localhost:8000', //로컬
+  // baseURL: process.env.API_URL, //장고 서버 주소
+  baseURL: 'http://localhost:8000', //로컬
   withCredentials: true, // 쿠키를 포함시키기 위한 설정 추가
 });
 
@@ -48,6 +48,12 @@ instance.interceptors.response.use(
         // return instance(error.config);
         return instance(error.config);
       }
+      // refresh 만료됐을 때 로그아웃 => 로컬스토리지 클리어,상태변화
+      // 로그아웃 함수 여기저기 쓸거같으면 따로 빼자
+      // if (response.status === 400) {
+      // localStorage.clear()
+      //   return;
+      // }
     }
 
     refresh = false;
