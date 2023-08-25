@@ -26,7 +26,8 @@ export default function ColorPicker({ onSelectColor }) {
       color={hex}
       onChange={(color) => {
         setHex(color.hex);
-        onSelectColor(color.hex); // 선택한 색상을 객체 형태로 전달
+        onSelectColor(color.hex);
+        console.log(color.hex, '컬러'); // 선택한 색상을 객체 형태로 전달
       }}
     />
   );
