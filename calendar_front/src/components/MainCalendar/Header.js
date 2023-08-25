@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import { LuSettings, LuBell } from 'react-icons/lu';
 import SearchInfo from './SearchInfo';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { scheduleSearchApi } from '../../api';
@@ -98,6 +98,7 @@ function Header({ data, initialCalendars, initialEvents }) {
   const [searchResults, setSearchResults] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
   const setIsLogin = useSetRecoilState(loggedIn);
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -141,6 +142,7 @@ function Header({ data, initialCalendars, initialEvents }) {
     localStorage.clear();
     closeModal();
     setIsLogin(false);
+    navigate('/login', { replace: true });
   };
 
   return (

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router';
+
 import classes from './LoginSignup.module.css';
 import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
 import { loggedIn } from '../recoilState';
@@ -8,7 +10,14 @@ import { loggedIn } from '../recoilState';
 function LoginSignup() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isIdAvailable, setIsIdAvailable] = useState(0);
-  const setIsLogin = useSetRecoilState(loggedIn);
+  const [isLogin, setIsLogin] = useRecoilState(loggedIn);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLogin) {
+      navigate('/calendar', { replace: true });
+    }
+  }, []);
 
   const clickHandler = () => {
     setIsSignUp((prev) => !prev);
@@ -41,6 +50,8 @@ function LoginSignup() {
       localStorage.setItem('refresh_token', response.data.refresh_token);
 
       setIsLogin(true);
+
+      navigate('/calendar', { replace: true });
     } catch (error) {
       console.error('회원가입 실패:', error);
     }
@@ -57,6 +68,8 @@ function LoginSignup() {
       localStorage.setItem('refresh_token', response.data.refresh);
 
       setIsLogin(true);
+
+      navigate('/calendar', { replace: true });
     } catch (error) {
       console.error('로그인 실패:', error);
     }

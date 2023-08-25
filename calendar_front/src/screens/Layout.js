@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { styled } from 'styled-components';
-import { RecoilRoot, useRecoilState } from 'recoil';
-import { eventState } from '../recoilState';
 import { getScheduleListApi } from '../api';
+import React, { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { eventState, loggedIn } from '../recoilState';
+import { useNavigate } from 'react-router';
 
 import RightBar from '../components/RightBar/RightBar';
 import TUICalendar from '../components/MainCalendar/TUICalendar';
@@ -31,8 +32,15 @@ function Layout() {
   const [events, setEvents] = useRecoilState(eventState);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [schedules, setSchedules] = useState([]);
+  const [isLogin, setIsLogin] = useRecoilState(loggedIn);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('layout', isLogin);
+    if (!isLogin) {
+      navigate('/login', { replace: true });
+    }
+
     getScheduleListApi()
       .then((response) => {
         console.log(response.data, 'dldldl');
@@ -66,6 +74,18 @@ function Layout() {
         </Wrapper>
       </Container>
     </RecoilRoot>
+    <Container>
+      <Wrapper>
+        <TUICalendar
+          schedules={schedules}
+          events={events}
+          setEvents={setEvents}
+          view="month"
+          setSelectedEvent={setSelectedEvent}
+        />
+        <RightBar selectedEvent={selectedEvent} />
+      </Wrapper>
+    </Container>
   );
 }
 

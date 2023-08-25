@@ -1,8 +1,8 @@
 const routes = {
-  layout: '/',
+  layout: '/calendar',
   welcome: '/welcome',
   mypage: '/mypage/:username',
-  landing: '/landing',
+  landing: '/',
   signup: '/signup',
   login: '/login',
 };
