@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { eventState } from '../recoilState';
 
 import RightBar from '../components/RightBar/RightBar';
 import TUICalendar from '../components/MainCalendar/TUICalendar';
+import { getScheduleListApi } from '../api';
 
 function Layout() {
   const [events, setEvents] = useRecoilState(eventState);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [schedules, setSchedules] = useState([]);
+
+  useEffect(() => {
+    getScheduleListApi()
+      .then((response) => {
+        console.log(response.data, 'dldldl');
+        setSchedules(response.data);
+      })
+      .catch((error) => {
+        console.error('스케줄 가져오기 실패:', error);
+      });
+  }, []);
+
+  console.log(schedules);
 
   return (
     <RecoilRoot>
@@ -16,6 +31,7 @@ function Layout() {
         <Wrapper>
           <CalendarWrapper>
             <TUICalendar
+              schedules={schedules}
               events={events}
               setEvents={setEvents}
               view="month"
