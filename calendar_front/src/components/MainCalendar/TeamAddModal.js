@@ -5,24 +5,22 @@ import { useForm } from 'react-hook-form';
 import { createTeamApi } from '../../api';
 
 const TeamAddContainer = styled.div`
+  padding-top: 200px;
   width: 100%;
-  height: 36%;
+  height: 30px;
   display: flex;
   flex-direction: column;
   justify-content: end;
   align-items: center;
 `;
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  height: 30px;
+`;
 const TeamAddBtn = styled.button`
-  font-size: 22px;
+  font-size: 30px;
   font-weight: 100;
   color: grey;
-  border-radius: 50px;
   background-color: rgb(254, 250, 250);
-  box-shadow:
-    -4px -4px 13px rgba(242, 242, 242, 1),
-    4px 4px 13px rgba(242, 242, 242, 1);
-  outline: none;
   cursor: pointer;
   border: none;
   &&:hover {
@@ -68,7 +66,12 @@ const TMForm = styled.form`
   height: 78%;
   justify-content: space-between;
   padding-bottom: 14px;
+  h2 {
+    font-size: 15px;
+    text-align: center;
+  }
 `;
+
 const TAMinput = styled.input`
   width: 98%;
   padding: 3px 0 3px 10px;
@@ -149,9 +152,7 @@ function TeamAddModal() {
   return (
     <TeamAddContainer>
       <Wrapper>
-        <TeamAddBtn onClick={() => setTeamAddModalIsOpen(true)}>
-          ADD TEAM
-        </TeamAddBtn>
+        <TeamAddBtn onClick={() => setTeamAddModalIsOpen(true)}>+</TeamAddBtn>
       </Wrapper>
       {teamAddModalIsOpen && (
         <TAddModal>
@@ -160,7 +161,7 @@ function TeamAddModal() {
               <h2>ADD CALENDAR</h2>
               <TAMinput
                 type="text"
-                placeholder="teamname"
+                placeholder="팀명을 입력해주세요."
                 value={teamname}
                 {...register('teamname', {
                   required: '팀 이름을 입력해주세요',
@@ -176,7 +177,7 @@ function TeamAddModal() {
                   onChange={(e) => setNickname(e.target.value)}
                 />
               </div> */}
-              select team color
+              SELECT TEAM COLOR
               <ColorPicker onSelectColor={setSelectedColor} />
               <BtnColumn>
                 <ATMbutton
