@@ -48,6 +48,12 @@ instance.interceptors.response.use(
         // return instance(error.config);
         return instance(error.config);
       }
+      // refresh 만료됐을 때 로그아웃 => 로컬스토리지 클리어,상태변화
+      // 로그아웃 함수 여기저기 쓸거같으면 따로 빼자
+      // if (response.status === 400) {
+      // localStorage.clear()
+      //   return;
+      // }
     }
 
     refresh = false;
