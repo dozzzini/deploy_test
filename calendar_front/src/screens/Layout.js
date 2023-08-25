@@ -54,20 +54,18 @@ function Layout() {
   console.log(schedules);
 
   return (
-    <RecoilRoot>
-      <Container>
-        <Wrapper>
-          <TUICalendar
-            schedules={schedules}
-            events={events}
-            setEvents={setEvents}
-            view="month"
-            setSelectedEvent={setSelectedEvent}
-          />
-          <RightBar selectedEvent={selectedEvent} />
-        </Wrapper>
-      </Container>
-    </RecoilRoot>
+    <Container>
+      <Wrapper>
+        <TUICalendar
+          schedules={schedules}
+          events={events}
+          setEvents={setEvents}
+          view="month"
+          setSelectedEvent={setSelectedEvent}
+        />
+        <RightBar selectedEvent={selectedEvent} />
+      </Wrapper>
+    </Container>
   );
 }
 
