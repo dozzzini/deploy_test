@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { scheduleSearchApi } from '../../api';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { loggedIn } from '../../recoilState';
 
 const HeaderContainer = styled.div`
@@ -97,20 +97,8 @@ function Header({ data, initialCalendars, initialEvents }) {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
-  const [isLogin, setIsLogin] = useRecoilState(loggedIn);
+  const setIsLogin = useSetRecoilState(loggedIn);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const access_token = localStorage.getItem('access_token');
-    const refresh_token = localStorage.getItem('refresh_token');
-    console.log(isLogin);
-    if (access_token && refresh_token) {
-      setIsLogin(true);
-      return;
-    } else {
-      return;
-    }
-  }, [isLogin]);
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -154,6 +142,7 @@ function Header({ data, initialCalendars, initialEvents }) {
     localStorage.clear();
     closeModal();
     setIsLogin(false);
+    navigate('/login', { replace: true });
   };
 
   return (
