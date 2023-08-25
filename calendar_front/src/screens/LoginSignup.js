@@ -7,7 +7,7 @@ import { loggedIn } from '../recoilState';
 
 function LoginSignup() {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [isIdAvailable, setIsIdAvailable] = useState();
+  const [isIdAvailable, setIsIdAvailable] = useState(0);
   const setIsLogin = useSetRecoilState(loggedIn);
 
   const clickHandler = () => {
@@ -37,8 +37,8 @@ function LoginSignup() {
         password: data.password,
         email: data.email,
       });
-      localStorage.setItem('access_token', response.data.access);
-      localStorage.setItem('refresh_token', response.data.refresh);
+      localStorage.setItem('access_token', response.data.access_token);
+      localStorage.setItem('refresh_token', response.data.refresh_token);
 
       setIsLogin(true);
     } catch (error) {
@@ -69,14 +69,10 @@ function LoginSignup() {
       const response = await checkIdAvailabilityApi({ username: id });
 
       if (response.status === 200) {
-        setIsIdAvailable(true);
+        setIsIdAvailable(1);
         clearErrors('id');
       } else {
-        setError('id', {
-          type: 'manual',
-          message: '이미 사용 중인 아이디입니다.',
-        });
-        setIsIdAvailable(false);
+        setIsIdAvailable(-1);
       }
       console.log('중복확인 성공:', response.status);
     } catch (error) {
@@ -114,18 +110,18 @@ function LoginSignup() {
               })}
               onBlur={checkIdAvailability} // 입력란에서 포커스가 빠져나갈 때 중복 확인 요청 함수 호출
             />
-            {errors.id && (
-              <span className={classes.error_message}>{errors.id.message}</span>
-            )}
-            {isIdAvailable && (
+            {isIdAvailable === 1 && (
               <span className={classes.success_message}>
                 사용 가능한 아이디입니다.
               </span>
             )}
-            {!isIdAvailable || (
+            {!(isIdAvailable === -1) || (
               <span role="alert" className={classes.error_message}>
                 이미 사용 중인 아이디입니다.
               </span>
+            )}
+            {errors.id && (
+              <span className={classes.error_message}>{errors.id.message}</span>
             )}
 
             <input

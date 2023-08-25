@@ -4,8 +4,8 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  baseURL: process.env.API_URL, //장고 서버 주소
-  // baseURL: 'http://localhost:8000', //로컬
+  // baseURL: process.env.API_URL, //장고 서버 주소
+  baseURL: 'http://localhost:8000', //로컬
   withCredentials: true, // 쿠키를 포함시키기 위한 설정 추가
 });
 
@@ -73,9 +73,21 @@ export const checkIdAvailabilityApi = (data) => {
   return instance.post('/api/v1/users/idcheck/', data);
 };
 
+// 스케줄 목록 조회 API 함수
+export const getScheduleListApi = () => {
+  return instance.get('/api/v1/schedules/');
+};
+
 // 팀 생성 API 함수
 export const createTeamApi = (data) => {
   return instance.post('/api/v1/teams/', data);
+};
+
+// 팀 생성 시 팀장의 닉네임 생성 API 함수
+export const nicknameCreateApi = (data) => {
+  return instance.post(`/api/v1/nicknames/${data.team_id}/`, {
+    nickname: data.nickname,
+  });
 };
 
 // 팀 생성 시 닉네임 중복 확인 API 함수

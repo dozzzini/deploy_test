@@ -192,95 +192,112 @@ const DateViewSelectBox = styled.div`
   }
 `;
 
-const initialCalendars = [
-  {
-    id: '0',
-    name: 'MY',
-    backgroundColor: 'red',
-    borderColor: 'red',
-    dragBackgroundColor: 'red',
-  },
-  {
-    id: '1',
-    name: 'team2',
-    backgroundColor: '#00a9ff',
-    borderColor: '#00a9ff',
-    dragBackgroundColor: '#00a9ff',
-  },
-  {
-    id: '2',
-    name: 'team3',
-    backgroundColor: '#e678f5',
-    borderColor: '#e678f5',
-    dragBackgroundColor: '#e678f5',
-  },
-  {
-    id: '3',
-    name: 'team4',
-    backgroundColor: '#f5a078',
-    borderColor: '#f5a0785',
-    dragBackgroundColor: '#f5a078',
-  },
-  {
-    id: '4',
-    name: 'team5',
-    backgroundColor: '#f5e478',
-    borderColor: '#f5e478',
-    dragBackgroundColor: '#f5e478',
-  },
-];
-
-const initialEvents = [
-  {
-    id: '1',
-    calendarId: '0',
-    title: 'TOAST UI Calendar Study',
-    category: 'time',
-    start: today,
-    end: addHours(today, 3),
-  },
-  {
-    id: '2',
-    calendarId: '1',
-    title: 'Practice',
-    category: 'milestone',
-    start: addDate(today, 1),
-    end: addDate(today, 1),
-    isReadOnly: true,
-  },
-  {
-    id: '3',
-    calendarId: '2',
-    title: 'FE Workshop',
-    category: 'allday',
-    start: subtractDate(today, 2),
-    end: subtractDate(today, 1),
-    isReadOnly: true,
-  },
-  {
-    id: '4',
-    calendarId: '3',
-    title: 'Report',
-    category: 'time',
-    start: today,
-    end: addHours(today, 1),
-  },
-  {
-    id: '5',
-    calendarId: '3',
-    title: '낮잠',
-    category: 'time',
-    start: today,
-    end: addHours(today, 1),
-  },
-];
+// const initialCalendars = [
+//   {
+//     id: '0',
+//     name: 'MY',
+//     backgroundColor: 'red',
+//     borderColor: 'red',
+//     dragBackgroundColor: 'red',
+//   },
+//   {
+//     id: '1',
+//     name: 'team2',
+//     backgroundColor: '#00a9ff',
+//     borderColor: '#00a9ff',
+//     dragBackgroundColor: '#00a9ff',
+//   },
+//   {
+//     id: '2',
+//     name: 'team3',
+//     backgroundColor: '#e678f5',
+//     borderColor: '#e678f5',
+//     dragBackgroundColor: '#e678f5',
+//   },
+//   {
+//     id: '3',
+//     name: 'team4',
+//     backgroundColor: '#f5a078',
+//     borderColor: '#f5a0785',
+//     dragBackgroundColor: '#f5a078',
+//   },
+//   {
+//     id: '4',
+//     name: 'team5',
+//     backgroundColor: '#f5e478',
+//     borderColor: '#f5e478',
+//     dragBackgroundColor: '#f5e478',
+//   },
+// ];
+// const initialEvents = [
+//   {
+//     id: '1',
+//     calendarId: '0',
+//     title: 'TOAST UI Calendar Study',
+//     category: 'time',
+//     start: today,
+//     end: addHours(today, 3),
+//   },
+//   {
+//     id: '2',
+//     calendarId: '1',
+//     title: 'Practice',
+//     category: 'milestone',
+//     start: addDate(today, 1),
+//     end: addDate(today, 1),
+//     isReadOnly: true,
+//   },
+//   {
+//     id: '3',
+//     calendarId: '2',
+//     title: 'FE Workshop',
+//     category: 'allday',
+//     start: subtractDate(today, 2),
+//     end: subtractDate(today, 1),
+//     isReadOnly: true,
+//   },
+//   {
+//     id: '4',
+//     calendarId: '3',
+//     title: 'Report',
+//     category: 'time',
+//     start: today,
+//     end: addHours(today, 1),
+//   },
+//   {
+//     id: '5',
+//     calendarId: '3',
+//     title: '낮잠',
+//     category: 'time',
+//     start: today,
+//     end: addHours(today, 1),
+//   },
+// ];
 
 export default function TUICalendar({
+  schedules,
   view,
   events,
   setEvents,
   setSelectedEvent,
 }) {
+  const initialCalendars = schedules?.map((schedule) => ({
+    id: schedule?.team.id,
+    name: schedule?.team.teamname,
+    backgroundColor: schedule?.team.color,
+    borderColor: schedule?.team.color,
+    dragBackgroundColor: schedule?.team.color,
+    isChecked: true,
+  }));
+
+  const initialEvents = schedules?.map((schedule) => ({
+    id: schedule.id,
+    calendarId: schedule.team.id,
+    title: schedule.title,
+    start: new TZDate(schedule.start_date),
+    end: new TZDate(schedule.end_date),
+  }));
+
   const [selectedCalendars, setSelectedCalendars] = useState(
     initialCalendars.map((calendar) => ({
       ...calendar,
@@ -297,7 +314,7 @@ export default function TUICalendar({
   const calendarRef = useRef(null);
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
   const [selectedView, setSelectedView] = useState(view);
-  const [eventCounter, setEventCounter] = useState(5);
+  // const [eventCounter, setEventCounter] = useState(5);
 
   const getCalInstance = useCallback(
     () => calendarRef.current?.getInstance?.(),
@@ -447,20 +464,6 @@ export default function TUICalendar({
   };
 
   const onBeforeCreateEvent = async (eventData) => {
-    const event = {
-      calendarId: eventData.calendarId || '',
-      id: String(eventCounter), //back에서 받아온 id로 변경하기
-      title: eventData.title,
-      isAllday: eventData.isAllday,
-      start: eventData.start,
-      end: eventData.end,
-      category: eventData.isAllday ? 'allday' : 'time',
-      dueDateClass: '',
-      location: eventData.location,
-      state: eventData.state,
-      isPrivate: eventData.isPrivate,
-    };
-
     const start_date = moment(eventData.start.d.d).format('YYYY-MM-DD HH:mm');
     const end_date = moment(eventData.end.d.d).format('YYYY-MM-DD HH:mm');
     try {
@@ -470,26 +473,30 @@ export default function TUICalendar({
         state: eventData.state === 'Busy' ? 'To do' : 'Done',
         start_date,
         end_date,
-        // team: eventData.calendarId,   대충.......팀일때와 아닐 때를 구분하라....
+        team: eventData.calendarId,
       });
 
-      // const eventForBack = await instance.post('/api/v1/schedules/', {
-      //   title: 'eventData.title',
-      //   description: 'eventData.location',
-      //   state: 'To do',
-      //   start_date: '2023-01-01 03:02',
-      //   end_date: '2023-01-01 03:02',
-      //   // team: eventData.calendarId,
-      // });
-
+      const event = {
+        calendarId: eventData.calendarId || '',
+        id: eventForBack.id,
+        title: eventData.title,
+        isAllday: eventData.isAllday,
+        start: eventData.start,
+        end: eventData.end,
+        category: eventData.isAllday ? 'allday' : 'time',
+        dueDateClass: '',
+        location: eventData.location,
+        state: eventData.state,
+        isPrivate: eventData.isPrivate,
+      };
       console.log('일정 생성 API 응답', eventForBack.data);
-      setEventCounter(eventCounter + 1);
+
+      getCalInstance().createEvents([event]);
       setEvents([...events, event]);
       setSelectedEvent(event);
     } catch (error) {
       console.log('일정 생성 API 요청 실패', error);
     }
-    getCalInstance().createEvents([event]);
   };
 
   return (
@@ -517,6 +524,11 @@ export default function TUICalendar({
         <TeamAddModal />
       </ShowMenuBar>
       <MIDContainer>
+        {/* <Header
+          data={initialEvents}
+          initialCalendars={initialCalendars}
+          initialEvents={initialEvents}
+        /> */}
         <CalendarBox>
           <CalendarHeader>
             <DateControlBox>

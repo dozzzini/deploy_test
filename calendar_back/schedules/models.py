@@ -4,7 +4,8 @@ from django.db import models
 # Create your models here.
 class Schedule(models.Model):
     title = models.CharField(max_length=25)
-    description = models.TextField()
+    description = models.TextField(null=True,
+        blank=True)
 
     class StateChoices(models.TextChoices):
         TODO = ("To do", "to_do")
