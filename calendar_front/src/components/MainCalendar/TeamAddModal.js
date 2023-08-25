@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import ColorPicker from './ColorPicker';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { createTeamApi } from '../../api';
+import { createTeamApi, nicknameCreateApi } from '../../api';
 
 const TeamAddContainer = styled.div`
   width: 100%;
@@ -116,78 +116,103 @@ function TeamAddModal() {
   } = useForm();
   const [teamAddModalIsOpen, setTeamAddModalIsOpen] = useState(false);
   const [teamname, setTeamname] = useState('');
-  // const [nickname, setNickname] = useState('');
+  const [nickname, setNickname] = useState('');
   const [selectedColor, setSelectedColor] = useState('#F44E3B');
+  const [isTeamCreated, setIsTeamCreated] = useState();
+
+  const toggleModal = () => {
+    setTeamAddModalIsOpen(!teamAddModalIsOpen);
+  };
 
   const handleFormSubmit = async (data) => {
-    console.log('dkdkdkdk', selectedColor);
-    console.log('Data:', data);
-    if (!data.teamname.trim()) {
-      setTeamAddModalIsOpen(true);
-      return;
+    if (!isTeamCreated) {
+      try {
+        const response = await createTeamApi({
+          teamname: teamname,
+          color: selectedColor,
+        });
+        console.log('팀 생성 성공:', response.data);
+        setIsTeamCreated(true);
+        setTeamname(data.teamname); // 팀명 저장
+      } catch (error) {
+        console.error('팀 생성 실패:', error);
+        setIsTeamCreated(true);
+      }
     }
-
-    try {
-      const response = await createTeamApi({
-        teamname: data.teamname,
-        color: selectedColor,
-      });
-      console.log('팀 생성 성공:', response.data);
-    } catch (error) {
-      console.error('팀 생성 실패:', error);
-    }
-
-    console.log('팀 이름:', teamname);
-    // console.log('별명:', nickname);
-    console.log('선택한 색상:', selectedColor);
-
-    setTeamAddModalIsOpen(false);
     setTeamname('');
-    // setNickname('');
+  };
+
+  const handleNicknameCheck = async () => {
+    if (nickname.trim() !== '') {
+      try {
+        const nicknameResponse = await nicknameCreateApi({
+          nickname,
+        });
+        console.log('닉네임 생성 성공:', nicknameResponse.data);
+        setTeamAddModalIsOpen(false);
+      } catch (error) {
+        console.error('닉네임 생성 실패:', error);
+      }
+    }
   };
 
   return (
     <TeamAddContainer>
       <Wrapper>
-        <TeamAddBtn onClick={() => setTeamAddModalIsOpen(true)}>
-          ADD TEAM
-        </TeamAddBtn>
+        <TeamAddBtn onClick={toggleModal}>ADD TEAM</TeamAddBtn>
       </Wrapper>
       {teamAddModalIsOpen && (
         <TAddModal>
           <TModalWrapper>
-            <TMForm onSubmit={handleSubmit(handleFormSubmit)}>
-              <h2>ADD CALENDAR</h2>
-              <TAMinput
-                type="text"
-                placeholder="teamname"
-                value={teamname}
-                {...register('teamname', {
-                  required: '팀 이름을 입력해주세요',
-                })}
-                onChange={(e) => setTeamname(e.target.value)}
-              />
-              {errors.teamname && <p>{errors.teamname.message}</p>}
-              {/* <div>
-                <TAMinput
-                  type="text"
-                  placeholder="nickname"
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
-                />
-              </div> */}
-              select team color
-              <ColorPicker onSelectColor={setSelectedColor} />
-              <BtnColumn>
-                <ATMbutton
-                  type="button"
-                  onClick={() => setTeamAddModalIsOpen(false)}
-                >
-                  cancel
-                </ATMbutton>
-                <ATMbutton type="submit">make new calendar!</ATMbutton>
-              </BtnColumn>
-            </TMForm>
+            {isTeamCreated ? (
+              <TMForm onSubmit={handleSubmit(handleNicknameCheck)}>
+                <>
+                  <h2>팀 "{teamname}" 닉네임 설정</h2>
+                  <TAMinput
+                    type="text"
+                    placeholder="nickname"
+                    value={nickname}
+                    onChange={(e) => setNickname(e.target.value)}
+                  />
+                  <BtnColumn>
+                    <ATMbutton
+                      type="button"
+                      onClick={() => setTeamAddModalIsOpen(false)}
+                    >
+                      cancel
+                    </ATMbutton>
+                    <ATMbutton type="submit">완료</ATMbutton>
+                  </BtnColumn>
+                </>
+              </TMForm>
+            ) : (
+              <TMForm onSubmit={handleSubmit(handleFormSubmit)}>
+                <>
+                  <h2>ADD CALENDAR</h2>
+                  <TAMinput
+                    type="text"
+                    placeholder="teamname"
+                    value={teamname}
+                    onChange={(e) => setTeamname(e.target.value)}
+                    // {...register('teamname', {
+                    //   required: '팀명을 입력해주세요',
+                    // })}
+                  />
+                  {errors.teamname && <p>{errors.teamname.message}</p>}
+                  select team color
+                  <ColorPicker onSelectColor={setSelectedColor} />
+                  <BtnColumn>
+                    <ATMbutton
+                      type="button"
+                      onClick={() => setTeamAddModalIsOpen(false)}
+                    >
+                      cancel
+                    </ATMbutton>
+                    <ATMbutton type="submit">팀 생성</ATMbutton>
+                  </BtnColumn>
+                </>
+              </TMForm>
+            )}
           </TModalWrapper>
         </TAddModal>
       )}
