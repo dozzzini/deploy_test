@@ -36,7 +36,7 @@ function Layout() {
     getScheduleListApi()
       .then((response) => {
         console.log(response.data, 'dldldl');
-        setSchedules(response.data);
+        setSchedules(response.data.schedules);
       })
       .catch((error) => {
         console.error('스케줄 가져오기 실패:', error);
@@ -44,13 +44,19 @@ function Layout() {
   }, []);
 
   console.log(schedules);
+  // schedules가 배열인지 확인하고, 아니면 빈 배열로 대체합니다.
+  const validSchedules = Array.isArray(schedules) ? schedules : [];
 
+  if (schedules.length === 0) {
+    // Handle the case when schedules is not an array
+    return <div>Loading or Error Message</div>;
+  }
   return (
     <RecoilRoot>
       <Container>
         <Wrapper>
           <TUICalendar
-            schedules={schedules}
+            schedules={validSchedules}
             events={events}
             setEvents={setEvents}
             view="month"
