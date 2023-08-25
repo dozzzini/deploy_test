@@ -79,6 +79,11 @@ export const checkIdAvailabilityApi = (data) => {
   return instance.post('/api/v1/users/idcheck/', data);
 };
 
+// 스케줄 목록 조회 API 함수
+export const getScheduleListApi = () => {
+  return instance.get('/api/v1/schedules/');
+};
+
 // 팀 생성 API 함수
 export const createTeamApi = (data) => {
   return instance.post('/api/v1/teams/', data);

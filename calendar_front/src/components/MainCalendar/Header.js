@@ -9,11 +9,12 @@ import { useRecoilState } from 'recoil';
 import { loggedIn } from '../../recoilState';
 
 const HeaderContainer = styled.div`
+  border: 3px solid green;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 3vh;
-  border-bottom: 1px solid rgb(235, 237, 239);
+  height: 30vh;
+  // border-bottom: 1px solid rgb(235, 237, 239);
   padding: 8px 0;
 `;
 
@@ -22,7 +23,6 @@ const Form = styled.form`
 `;
 
 const SearchBox = styled.input`
-  margin-left: 350px;
   padding: 3px 0 3px 10px;
   border: none;
   outline: none;
@@ -30,7 +30,7 @@ const SearchBox = styled.input`
   background-color: white;
   box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.1);
   transition: 300ms ease-in-out;
-  width: 300px;
+  width: 10vw;
   &&:focus {
     background-color: rgb(249, 249, 249);
     border: 1px;
@@ -41,13 +41,6 @@ const SearchBox = styled.input`
   }
 `;
 
-const Button = styled.button`
-  border: none;
-  outline: none;
-  background-color: white;
-  margin-left: 5px;
-  width: 50px;
-`;
 const IconBox = styled.div`
   display: flex;
   justify-content: end;
@@ -172,7 +165,6 @@ function Header({ data, initialCalendars, initialEvents }) {
           onChange={handleInputChange}
           placeholder="search"
         />
-        <Button type="submit">검색</Button>
       </Form>
       {searchIsOpen ? (
         <SearchInfo
