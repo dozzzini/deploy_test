@@ -12,7 +12,7 @@ from nicknames.serializers import AddNicknameSerializer
 
 
 class NewTeam(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_team(self, team_id):
         try:
@@ -32,11 +32,7 @@ class NewTeam(APIView):
 
         nickname_serializer = AddNicknameSerializer(data=request.data["nickname"])
 
-        if Nickname.objects.filter(
-            team=team,
-            nickname=request.data["nickname"],
-        ).exists():
-            raise ValidationError("중복된 닉네임입니다.")
+        
 
         if nickname_serializer.is_valid():
             nickname = nickname_serializer.save(
