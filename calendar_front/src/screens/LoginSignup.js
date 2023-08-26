@@ -48,6 +48,7 @@ function LoginSignup() {
       });
       localStorage.setItem('access_token', response.data.access_token);
       localStorage.setItem('refresh_token', response.data.refresh_token);
+      //회원탈퇴 api 연결하면 localStorage.clear 로 access_token 날리기
 
       setIsLogin(true);
 
