@@ -3,6 +3,7 @@ import ColorPicker from './ColorPicker';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createTeamApi, nicknameCreateApi } from '../../api';
+import { LuX } from 'react-icons/lu';
 
 const TeamAddContainer = styled.div`
   padding-top: 200px;
@@ -32,6 +33,7 @@ const TeamAddBtn = styled.button`
     opacity: 0.5;
   }
 `;
+const CloseBtn = styled.button``;
 const TAddModal = styled.div`
   position: fixed;
   top: 0;
@@ -128,15 +130,17 @@ function TeamAddModal() {
   };
 
   const handleFormSubmit = async (data) => {
+    // console.log(data);
+    // console.log(selectedColor);
     if (!isTeamCreated) {
       try {
         const response = await createTeamApi({
-          teamname: teamname,
+          teamname: data.teamname,
           color: selectedColor,
         });
-        console.log('팀 생성 성공:', response.data);
+        console.log('팀 생성 성공:', response.data.color);
         setIsTeamCreated(true);
-        setTeamname(data.teamname); // 팀명 저장
+        setTeamname(data.teamname);
       } catch (error) {
         console.error('팀 생성 실패:', error);
         setIsTeamCreated(true);
@@ -170,19 +174,19 @@ function TeamAddModal() {
             {isTeamCreated ? (
               <TMForm onSubmit={handleSubmit(handleNicknameCheck)}>
                 <>
-                  <h2>팀 "{teamname}" 닉네임 설정</h2>
+                  <h2>팀 {teamname} 닉네임 설정</h2>
                   <TAMinput
                     type="text"
                     placeholder="nickname"
-                    value={nickname}
-                    onChange={(e) => setNickname(e.target.value)}
+                    // value={nickname}
+                    // onChange={(e) => setNickname(e.target.value)}
                   />
                   <BtnColumn>
                     <ATMbutton
                       type="button"
                       onClick={() => setTeamAddModalIsOpen(false)}
                     >
-                      cancel
+                      <LuX />
                     </ATMbutton>
                     <ATMbutton type="submit">완료</ATMbutton>
                   </BtnColumn>
@@ -195,11 +199,11 @@ function TeamAddModal() {
                   <TAMinput
                     type="text"
                     placeholder="teamname"
-                    value={teamname}
-                    onChange={(e) => setTeamname(e.target.value)}
-                    // {...register('teamname', {
-                    //   required: '팀명을 입력해주세요',
-                    // })}
+                    // value={teamname}
+                    // onChange={(e) => setTeamname(e.target.value)}
+                    {...register('teamname', {
+                      required: '팀명을 입력해주세요',
+                    })}
                   />
                   {errors.teamname && <p>{errors.teamname.message}</p>}
                   select team color
@@ -209,7 +213,7 @@ function TeamAddModal() {
                       type="button"
                       onClick={() => setTeamAddModalIsOpen(false)}
                     >
-                      cancel
+                      <LuX />
                     </ATMbutton>
                     <ATMbutton type="submit">팀 생성</ATMbutton>
                   </BtnColumn>
