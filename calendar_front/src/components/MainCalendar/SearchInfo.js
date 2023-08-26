@@ -2,28 +2,30 @@ import React, { useRef } from 'react';
 import { styled } from 'styled-components';
 
 const Overlay = styled.div`
+  border: 1px solid black;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0);
-  z-index: 1000;
+  // z-index: 1000;
 `;
 
 const SearchInfoContainer = styled.div`
-  position: absolute;
-  display: flex;
-  border: none;
-  left: 34.7vw;
-  top: 10vh;
+  border: 1px solid red;
+
+  position: fixed;
+  // display: flex;
+  right: 0;
+  top: 0;
   border-radius: 6px;
-  width: 30.1vw;
+  width: 10vw;
   background-color: rgb(249, 249, 249);
   box-shadow:
     -3px -3px 8px rgba(235, 245, 235, 1),
     3px 3px 8px rgba(10, 50, 70, 0.3);
-  z-index: 1005;
+  // z-index: 1005;
 `;
 
 const Wrapper = styled.li`
