@@ -1,7 +1,7 @@
 import { getScheduleListApi } from '../api';
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { RecoilRoot, useRecoilState } from 'recoil';
 import { eventState, loggedIn } from '../recoilState';
 import { useNavigate } from 'react-router';
 
@@ -57,7 +57,7 @@ function Layout() {
 
   if (schedules.length === 0) {
     // Handle the case when schedules is not an array
-    return <div>Loading or Error Message</div>;
+    return <div>Loading or Error 1Message</div>;
   }
   return (
     <RecoilRoot>
@@ -74,18 +74,6 @@ function Layout() {
         </Wrapper>
       </Container>
     </RecoilRoot>
-    <Container>
-      <Wrapper>
-        <TUICalendar
-          schedules={schedules}
-          events={events}
-          setEvents={setEvents}
-          view="month"
-          setSelectedEvent={setSelectedEvent}
-        />
-        <RightBar selectedEvent={selectedEvent} />
-      </Wrapper>
-    </Container>
   );
 }
 
