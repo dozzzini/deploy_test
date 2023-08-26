@@ -8,37 +8,60 @@ import {
 } from 'react-icons/md';
 
 const CommentItem = styled.div`
-  padding: 7px;
+  /* border: 3px solid palegreen; */
+
+  width: 100%;
+  height: auto;
+  margin-top: 40px;
+`;
+
+const MemoBox = styled.div`
+  text-align: center;
+  font-weight: 900;
 `;
 
 const CommentAuthor = styled.div`
+  /* border: 5px solid purple; */
   font-size: 12px;
-  color: black;
-`;
-
-const CommentDate = styled.span`
-  font-size: 5px;
+  color: grey;
 `;
 
 const CommentBox = styled.div`
+  /* border: 5px solid yellow; */
+
   display: flex;
-  align-items: end;
+  flex-direction: column;
 `;
 
 const CommentContent = styled.div`
-  width: 70%;
+  /* border: 5px solid red; */
+
+  width: 100%;
+  height: auto;
   background-color: #e2e2e2;
   color: black;
-  border-radius: 5px;
   padding: 7px;
-  margin-top: 3px;
-  margin-right: 3px;
+  margin-top: 5px;
   word-wrap: break-word;
+`;
+const CommentDate = styled.span`
+  /* border: 5px solid blue; */
+
+  font-size: 5px;
 `;
 
 const CommentBtnGroup = styled.div`
+  border: 5px solid black;
   display: flex;
-  // 원하는 스타일 적용
+`;
+
+const CommentEditButton = styled.button`
+  border: none;
+  background-color: transparent;
+`;
+const CommentDeleteButton = styled.button`
+  border: none;
+  background-color: transparent;
 `;
 
 const CommentList = ({ comment, removeComment, editComment }) => {
@@ -60,6 +83,7 @@ const CommentList = ({ comment, removeComment, editComment }) => {
 
   return (
     <CommentItem>
+      <MemoBox>📝MEMO📝</MemoBox>
       <CommentAuthor>{comment.author}</CommentAuthor>
       <CommentBox>
         {editMode ? (
@@ -78,17 +102,17 @@ const CommentList = ({ comment, removeComment, editComment }) => {
               hour: '2-digit',
               minute: '2-digit',
               hour12: true,
-            })}
+            })}{' '}
+          <CommentBtnGroup>
+            <CommentEditButton onClick={handleEdit}>
+              <MdOutlineEdit />
+            </CommentEditButton>
+            <CommentDeleteButton onClick={handleDelete}>
+              <MdOutlineDelete />
+            </CommentDeleteButton>
+          </CommentBtnGroup>
         </CommentDate>
       </CommentBox>
-      <CommentBtnGroup>
-        <button onClick={handleEdit}>
-          <MdOutlineEdit />
-        </button>
-        <button onClick={handleDelete}>
-          <MdOutlineDelete />
-        </button>
-      </CommentBtnGroup>
     </CommentItem>
   );
 };

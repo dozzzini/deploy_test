@@ -2,6 +2,39 @@ import React, { useState, useEffect } from 'react';
 import CommentList from './CommentList';
 import CommentEdit from './CommentEdit';
 import { eventDetailEditApi } from '../../api';
+import { styled } from 'styled-components';
+
+const StatusContent = styled.div`
+  width: 100%;
+  height: 200px;
+  margin-top: 50px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: grey;
+  text-align: center;
+`;
+
+const ScheduleDetailBox = styled.div`
+  border: 2px solid black;
+  width: 100%;
+  height: 400px;
+  margin-top: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: normal;
+  color: grey;
+`;
+
+const ScheduleDetailTitle = styled.div`
+  text-align: center;
+  color: grey;
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 20px;
+`;
 
 export default function Status({ selectedEvent }) {
   // const [eventPick, setEventPick] = useState({
@@ -27,7 +60,7 @@ export default function Status({ selectedEvent }) {
   };
 
   if (!selectedEvent) {
-    return <div>대충 Todo, Done 필터 들어갈 곳</div>;
+    return <StatusContent>이날의 일정이 없습니다.</StatusContent>;
   }
 
   const { calendarId, title, location, start, end, isAllday, state } =
@@ -64,16 +97,17 @@ export default function Status({ selectedEvent }) {
   };
 
   return (
-    <div>
-      <h3>일정 상세 정보</h3>
-      <p>Calendar: {calendarId}</p>
-      <p>제목: {title}</p>
-      <p>세부 내용: {location}</p>
+    <ScheduleDetailBox>
+      <ScheduleDetailTitle>📌일정 상세 정보📌</ScheduleDetailTitle>
+      <p>🔶{calendarId}</p>
+      <p>🔶{title}</p>
+      <p>🔶세부 내용 {location}</p>
       <p>
-        시간: {startTime} ~ {endTime}
+        ⏰시작일시: {startTime} <br />
+        ⏰종료일시: {endTime}
       </p>
       <p>{isAllday ? '하루종일' : ''}</p>
-      <p>{state === 'Free' ? 'Done' : 'Todo'}</p>
+      <p>✔️{state === 'Free' ? 'Done' : 'Todo'}</p>
 
       {comments.map((comment) => (
         <CommentList
@@ -90,6 +124,6 @@ export default function Status({ selectedEvent }) {
       />
       <button>편집</button>
       <button>삭제</button>
-    </div>
+    </ScheduleDetailBox>
   );
 }

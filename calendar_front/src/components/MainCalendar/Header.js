@@ -9,28 +9,23 @@ import { useSetRecoilState } from 'recoil';
 import { loggedIn } from '../../recoilState';
 
 const HeaderContainer = styled.div`
-  border: 3px solid green;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 30vh;
-  // border-bottom: 1px solid rgb(235, 237, 239);
-  padding: 8px 0;
+  padding: 10px;
+  margin-top: 20px;
 `;
 
 const Form = styled.form`
   width: 100%;
 `;
 
+//검색어 입력하는 곳
 const SearchBox = styled.input`
-  padding: 3px 0 3px 10px;
+  margin-bottom: 10px;
   border: none;
-  outline: none;
   border-radius: 6px;
   background-color: white;
   box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.1);
   transition: 300ms ease-in-out;
-  width: 10vw;
+  width: 100%;
   &&:focus {
     background-color: rgb(249, 249, 249);
     border: 1px;
@@ -41,30 +36,29 @@ const SearchBox = styled.input`
   }
 `;
 
+// LuBell, LuSettings를 감싸고 있는 div
 const IconBox = styled.div`
+  padding-right: 3px;
   display: flex;
   justify-content: end;
   opacity: 0.6;
-  width: 15vw;
-  padding-right: 0.6vw;
+  width: 100%;
 `;
 
+//설정 눌렀을 때 나오는 모달창
 const Modal = styled.div`
-  display: none;
   position: absolute; /* fixed 대신 absolute로 변경 */
   z-index: 1000; /* 다른 컨텐츠 위에 나타나도록 더 높은 z-index 설정 */
-  margin-top: 165px;
-  margin-left: 800px;
+  // margin-top: 100px;
   transform: translate(-50%, -50%); /* 중앙에 정렬 */
   background-color: white;
   width: 200px;
-  height: 50px;
-  max-width: 500px; /* 모달 최대 너비 조정 */
-  padding: 20px;
+  height: 100px;
+  // padding: 20px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-  max-height: 80%; /* 모달 최대 높이 조정 */
-  overflow: auto; /* 내용이 넘칠 경우 스크롤 표시 */
+  max-width: 200px; /* 모달 최대 너비 조정 */
+  max-height: 100px; /* 모달 최대 높이 조정 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,15 +76,15 @@ const Logout = styled.button`
   background-color: white;
   margin-left: 70px;
 `;
-const CloseIcon = styled.span`
-  color: #aaa;
-  font-size: 20px;
-  font-weight: bold;
-  position: absolute;
-  top: 1px;
-  right: 3px;
-  cursor: pointer;
-`;
+// const CloseIcon = styled.span`
+//   color: #aaa;
+//   font-size: 20px;
+//   font-weight: bold;
+//   position: absolute;
+//   top: 1px;
+//   right: 3px;
+//   cursor: pointer;
+// `;
 
 function Header({ data, initialCalendars, initialEvents }) {
   const [searchIsOpen, setSearchIsOpen] = useState(false);
@@ -168,7 +162,7 @@ function Header({ data, initialCalendars, initialEvents }) {
       {activeModal === 'LuBell' && (
         <Modal>
           <Content>
-            <CloseIcon onClick={closeModal}>&times;</CloseIcon>
+            {/* <CloseIcon onClick={closeModal}>&times;</CloseIcon> */}
             <p>LuBell 모달 내용</p>
           </Content>
         </Modal>
@@ -176,7 +170,7 @@ function Header({ data, initialCalendars, initialEvents }) {
       {activeModal === 'LuSettings' && (
         <Modal>
           <Content>
-            <CloseIcon onClick={closeModal}>&times;</CloseIcon>
+            {/* <CloseIcon onClick={closeModal}>&times;</CloseIcon> */}
             <Logout onClick={handleLogout}>로그아웃</Logout>
           </Content>
         </Modal>
