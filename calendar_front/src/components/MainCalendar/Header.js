@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { LuSettings, LuBell } from 'react-icons/lu';
+import { LuSettings } from 'react-icons/lu';
 import SearchInfo from './SearchInfo';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
@@ -76,15 +76,6 @@ const Logout = styled.button`
   background-color: white;
   margin-left: 70px;
 `;
-// const CloseIcon = styled.span`
-//   color: #aaa;
-//   font-size: 20px;
-//   font-weight: bold;
-//   position: absolute;
-//   top: 1px;
-//   right: 3px;
-//   cursor: pointer;
-// `;
 
 function Header({ data, initialCalendars, initialEvents }) {
   const [searchIsOpen, setSearchIsOpen] = useState(false);
@@ -158,17 +149,8 @@ function Header({ data, initialCalendars, initialEvents }) {
         />
       ) : null}
       <IconBox>
-        <LuBell onClick={() => openModal('LuBell')}></LuBell>
         <LuSettings onClick={() => openModal('LuSettings')}></LuSettings>{' '}
       </IconBox>
-      {activeModal === 'LuBell' && (
-        <Modal>
-          <Content>
-            {/* <CloseIcon onClick={closeModal}>&times;</CloseIcon> */}
-            <p>LuBell 모달 내용</p>
-          </Content>
-        </Modal>
-      )}
       {activeModal === 'LuSettings' && (
         <Modal>
           <Content>
