@@ -9,8 +9,8 @@ import { useSetRecoilState } from 'recoil';
 import { loggedIn } from '../../recoilState';
 
 const HeaderContainer = styled.div`
+  width: 100%;
   padding: 10px;
-  margin-top: 20px;
 `;
 
 const Form = styled.form`
@@ -19,7 +19,9 @@ const Form = styled.form`
 
 //검색어 입력하는 곳
 const SearchBox = styled.input`
-  margin-bottom: 10px;
+  margin-top: 45px;
+  font-size: 11px;
+  text-align: center;
   border: none;
   border-radius: 6px;
   background-color: white;
@@ -27,8 +29,6 @@ const SearchBox = styled.input`
   transition: 300ms ease-in-out;
   width: 100%;
   &&:focus {
-    background-color: rgb(249, 249, 249);
-    border: 1px;
     outline: none;
     box-shadow:
       -3px -3px 8px rgba(235, 245, 235, 1),
@@ -132,6 +132,17 @@ function Header({ data, initialCalendars, initialEvents }) {
 
   return (
     <HeaderContainer>
+      <IconBox>
+        <LuSettings onClick={() => openModal('LuSettings')}></LuSettings>{' '}
+      </IconBox>
+      {activeModal === 'LuSettings' && (
+        <Modal>
+          <Content>
+            {/* <CloseIcon onClick={closeModal}>&times;</CloseIcon> */}
+            <Logout onClick={handleLogout}>로그아웃</Logout>
+          </Content>
+        </Modal>
+      )}{' '}
       <Form onSubmit={handleSearch}>
         <SearchBox
           type="text"
@@ -148,17 +159,6 @@ function Header({ data, initialCalendars, initialEvents }) {
           initialEvents={initialEvents}
         />
       ) : null}
-      <IconBox>
-        <LuSettings onClick={() => openModal('LuSettings')}></LuSettings>{' '}
-      </IconBox>
-      {activeModal === 'LuSettings' && (
-        <Modal>
-          <Content>
-            {/* <CloseIcon onClick={closeModal}>&times;</CloseIcon> */}
-            <Logout onClick={handleLogout}>로그아웃</Logout>
-          </Content>
-        </Modal>
-      )}{' '}
     </HeaderContainer>
   );
 }

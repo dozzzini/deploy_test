@@ -7,7 +7,9 @@ const CommentEdit = ({ schedule, author, addComment }) => {
   const inputRef = React.useRef(null);
 
   const inputStyle = {
-    border: '1px solid blue',
+    // border: '1px solid blue',
+    border: 'none',
+    outline: 'none',
     fontSize: '12px',
     width: '100%',
     marginTop: '30px',
@@ -29,13 +31,6 @@ const CommentEdit = ({ schedule, author, addComment }) => {
 
     setDescription('');
   };
-
-  // const CommentInputBox = styled.input`
-  //   border: 1px solid blue;
-  //   font-size: 12px;
-  //   width: 100%;
-  //   margin-top: 30px;
-  // `;
 
   return (
     <form onSubmit={handleSubmit}>

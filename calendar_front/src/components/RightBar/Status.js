@@ -5,35 +5,55 @@ import { eventDetailEditApi } from '../../api';
 import { styled } from 'styled-components';
 
 const StatusContent = styled.div`
-  width: 100%;
-  height: 200px;
-  margin-top: 50px;
-  padding: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  color: grey;
+  white-space: nowrap;
   text-align: center;
+  width: 100%;
+  color: grey;
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 200px;
 `;
 
 const ScheduleDetailBox = styled.div`
-  border: 2px solid black;
+  /* border: 2px solid black; */
   width: 100%;
-  height: 400px;
-  margin-top: 20px;
+  height: auto;
+  margin-top: 15px;
   padding-left: 5px;
   padding-right: 5px;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
-  line-height: normal;
-  color: grey;
+  line-height: 2;
 `;
 
 const ScheduleDetailTitle = styled.div`
+  white-space: nowrap;
   text-align: center;
+  width: 100%;
   color: grey;
   font-size: 13px;
   font-weight: 900;
-  margin-bottom: 20px;
+`;
+const ButtonBox = styled.div`
+  margin-top: -5px;
+
+  display: flex;
+  justify-content: end;
+  margin-bottom: 10px;
+`;
+const ScheduleEditBtn = styled.button`
+  transform: scale(0.6);
+  background-color: transparent;
+  border: none;
+  margin-right: -20px;
+  color: grey;
+`;
+const ScheduleDeleteBtn = styled.button`
+  transform: scale(0.6);
+  background-color: transparent;
+  border: none;
+  color: grey;
+  margin-right: -10px;
 `;
 
 export default function Status({ selectedEvent }) {
@@ -60,7 +80,7 @@ export default function Status({ selectedEvent }) {
   };
 
   if (!selectedEvent) {
-    return <StatusContent>이날의 일정이 없습니다.</StatusContent>;
+    return <StatusContent>일정 없음</StatusContent>;
   }
 
   const { calendarId, title, location, start, end, isAllday, state } =
@@ -98,16 +118,22 @@ export default function Status({ selectedEvent }) {
 
   return (
     <ScheduleDetailBox>
-      <ScheduleDetailTitle>📌일정 상세 정보📌</ScheduleDetailTitle>
-      <p>🔶{calendarId}</p>
-      <p>🔶{title}</p>
-      <p>🔶세부 내용 {location}</p>
+      <ScheduleDetailTitle>📌일정 상세 정보📌 </ScheduleDetailTitle>
+      <ButtonBox>
+        <ScheduleEditBtn>편집</ScheduleEditBtn>
+        <ScheduleDeleteBtn>삭제</ScheduleDeleteBtn>
+      </ButtonBox>
+      <p>♦️ {calendarId}</p>
+      <p>♦️ {title}</p>
+      <p>♦️ {location}</p>
       <p>
-        ⏰시작일시: {startTime} <br />
-        ⏰종료일시: {endTime}
+        ⏰시작일시⏰
+        <br /> {startTime} <br />
+        ⏰종료일시⏰
+        <br /> {endTime}
       </p>
       <p>{isAllday ? '하루종일' : ''}</p>
-      <p>✔️{state === 'Free' ? 'Done' : 'Todo'}</p>
+      <p>✔️{state === 'Free' ? 'Done' : 'Todo'}✔️</p>
 
       {comments.map((comment) => (
         <CommentList
@@ -122,8 +148,6 @@ export default function Status({ selectedEvent }) {
         author="nickname"
         addComment={addComment}
       />
-      <button>편집</button>
-      <button>삭제</button>
     </ScheduleDetailBox>
   );
 }
