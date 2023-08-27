@@ -37,7 +37,7 @@ function Layout() {
 
   useEffect(() => {
     console.log('layout', isLogin);
-    if (!isLogin) {
+    if (isLogin) {
       navigate('/login', { replace: true });
     }
 

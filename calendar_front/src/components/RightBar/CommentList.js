@@ -7,8 +7,11 @@ import {
   MdOutlineDelete, // 삭제 아이콘
 } from 'react-icons/md';
 
+const CommentDetailBox = styled.div`
+  border: 3px solid red;
+`;
 const CommentItem = styled.div`
-  /* border: 3px solid palegreen; */
+  border: 3px solid palegreen;
 
   width: 100%;
   height: auto;
@@ -82,38 +85,41 @@ const CommentList = ({ comment, removeComment, editComment }) => {
   };
 
   return (
-    <CommentItem>
+    <CommentDetailBox>
       <MemoBox>📝MEMO📝</MemoBox>
-      <CommentAuthor>{comment.author}</CommentAuthor>
-      <CommentBox>
-        {editMode ? (
-          <input
-            type="text"
-            value={editedComment}
-            onChange={(e) => setEditedComment(e.target.value)}
-          />
-        ) : (
-          <CommentContent>{comment.description}</CommentContent>
-        )}
-        <CommentDate>
-          {new Date(comment.createdTime).toISOString().slice(0, 10) +
-            ' ' +
-            new Date(comment.createdTime).toLocaleString('ko-KR', {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: true,
-            })}{' '}
-          <CommentBtnGroup>
-            <CommentEditButton onClick={handleEdit}>
-              <MdOutlineEdit />
-            </CommentEditButton>
-            <CommentDeleteButton onClick={handleDelete}>
-              <MdOutlineDelete />
-            </CommentDeleteButton>
-          </CommentBtnGroup>
-        </CommentDate>
-      </CommentBox>
-    </CommentItem>
+
+      <CommentItem>
+        <CommentAuthor>{comment.author}</CommentAuthor>
+        <CommentBox>
+          {editMode ? (
+            <input
+              type="text"
+              value={editedComment}
+              onChange={(e) => setEditedComment(e.target.value)}
+            />
+          ) : (
+            <CommentContent>{comment.description}</CommentContent>
+          )}
+          <CommentDate>
+            {new Date(comment.createdTime).toISOString().slice(0, 10) +
+              ' ' +
+              new Date(comment.createdTime).toLocaleString('ko-KR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+              })}{' '}
+            <CommentBtnGroup>
+              <CommentEditButton onClick={handleEdit}>
+                <MdOutlineEdit />
+              </CommentEditButton>
+              <CommentDeleteButton onClick={handleDelete}>
+                <MdOutlineDelete />
+              </CommentDeleteButton>
+            </CommentBtnGroup>
+          </CommentDate>
+        </CommentBox>
+      </CommentItem>
+    </CommentDetailBox>
   );
 };
 
