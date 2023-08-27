@@ -8,63 +8,74 @@ import {
 } from 'react-icons/md';
 
 const CommentDetailBox = styled.div`
-  border: 3px solid red;
+  /* border: 3px solid pink; */
+  margin-top: 10px;
 `;
 const CommentItem = styled.div`
-  border: 3px solid palegreen;
+  /* border: 2px solid palegreen; */
 
   width: 100%;
   height: auto;
-  margin-top: 40px;
 `;
 
-const MemoBox = styled.div`
-  text-align: center;
-  font-weight: 900;
-`;
+// const MemoBox = styled.div`
+//   /* border: 1px solid darkblue; */
+
+//   text-align: center;
+//   font-weight: 900;
+// `;
 
 const CommentAuthor = styled.div`
-  /* border: 5px solid purple; */
-  font-size: 12px;
-  color: grey;
+  /* border: 1px solid purple; */
+  font-size: 10px;
+  color: black;
 `;
 
 const CommentBox = styled.div`
-  /* border: 5px solid yellow; */
+  /* border: 3px solid yellow; */
 
+  border-bottom: 1px solid rgb(235, 237, 239);
   display: flex;
-  flex-direction: column;
 `;
 
 const CommentContent = styled.div`
-  /* border: 5px solid red; */
+  /* border: 1px solid red; */
 
-  width: 100%;
+  width: 70%;
   height: auto;
-  background-color: #e2e2e2;
+  background-color: transparent;
   color: black;
-  padding: 7px;
-  margin-top: 5px;
   word-wrap: break-word;
+  font-size: 10px;
 `;
-const CommentDate = styled.span`
-  /* border: 5px solid blue; */
 
+const CommentDate = styled.div`
+  /* border: 1px solid blue; */
+  width: 100%;
   font-size: 5px;
+  white-space: nowrap;
+  font-weight: 100;
 `;
 
 const CommentBtnGroup = styled.div`
-  border: 5px solid black;
+  /* border: 1px solid black; */
+
   display: flex;
+  justify-content: end;
+  width: 30%;
 `;
 
 const CommentEditButton = styled.button`
   border: none;
+  transform: scale(0.8);
   background-color: transparent;
+  padding-inline: unset;
 `;
 const CommentDeleteButton = styled.button`
   border: none;
+  transform: scale(0.8);
   background-color: transparent;
+  padding-inline: unset;
 `;
 
 const CommentList = ({ comment, removeComment, editComment }) => {
@@ -86,10 +97,20 @@ const CommentList = ({ comment, removeComment, editComment }) => {
 
   return (
     <CommentDetailBox>
-      <MemoBox>📝MEMO📝</MemoBox>
+      {/* <MemoBox>MEMO</MemoBox> */}
 
       <CommentItem>
-        <CommentAuthor>{comment.author}</CommentAuthor>
+        <CommentAuthor>{comment.author} </CommentAuthor>
+        <CommentDate>
+          {new Date(comment.createdTime).toISOString().slice(0, 10) +
+            ' ' +
+            new Date(comment.createdTime).toLocaleString('ko-KR', {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true,
+            })}{' '}
+        </CommentDate>
+
         <CommentBox>
           {editMode ? (
             <input
@@ -98,25 +119,16 @@ const CommentList = ({ comment, removeComment, editComment }) => {
               onChange={(e) => setEditedComment(e.target.value)}
             />
           ) : (
-            <CommentContent>{comment.description}</CommentContent>
-          )}
-          <CommentDate>
-            {new Date(comment.createdTime).toISOString().slice(0, 10) +
-              ' ' +
-              new Date(comment.createdTime).toLocaleString('ko-KR', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true,
-              })}{' '}
-            <CommentBtnGroup>
-              <CommentEditButton onClick={handleEdit}>
-                <MdOutlineEdit />
-              </CommentEditButton>
-              <CommentDeleteButton onClick={handleDelete}>
-                <MdOutlineDelete />
-              </CommentDeleteButton>
-            </CommentBtnGroup>
-          </CommentDate>
+            <CommentContent>{comment.description} </CommentContent>
+          )}{' '}
+          <CommentBtnGroup>
+            <CommentEditButton onClick={handleEdit}>
+              <MdOutlineEdit />
+            </CommentEditButton>
+            <CommentDeleteButton onClick={handleDelete}>
+              <MdOutlineDelete />
+            </CommentDeleteButton>
+          </CommentBtnGroup>
         </CommentBox>
       </CommentItem>
     </CommentDetailBox>
