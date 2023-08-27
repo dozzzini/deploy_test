@@ -47,9 +47,7 @@ class Team(models.Model):
         # default=ColorChoices.COLOR_3,
     )
 
-    members = models.ManyToManyField(
-        "users.User",
-    )
+    members = models.ManyToManyField("users.User", null=True)
     team_leader = models.ForeignKey(
         "users.User",
         on_delete=models.SET_NULL,

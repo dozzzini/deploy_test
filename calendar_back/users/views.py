@@ -8,6 +8,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .serializers import SignUpUserSerializer, UserInfoSerializer
 from .models import User
+from teams.serializers import TeamSerializer
+from teams.models import Team
 
 
 class Signup(APIView):
@@ -28,6 +30,14 @@ class Signup(APIView):
                 email=request.data["email"],
             )
 
+            team = Team.objects.create(
+                teamname="My",
+                color="#FF5722",
+                team_leader=user,
+            )
+
+            team.members.add(user)
+
             token = TokenObtainPairSerializer.get_token(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
@@ -47,6 +57,7 @@ class Signup(APIView):
             return Response(
                 {
                     "user": SignUpUserSerializer(user).data,
+                    "team": TeamSerializer(team).data,
                     "access_token": access_token,
                     "refresh_token": refresh_token,
                 },

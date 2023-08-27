@@ -97,7 +97,9 @@ class Schedules(APIView):
                         user_schedules,
                         many=True,
                     )
-                    return Response(serializer.data, status=status.HTTP_200_OK)
+                    return Response(
+                        {"schedules": serializer.data}, status=status.HTTP_200_OK
+                    )
             else:  # 익명 사용자인 경우
                 user = User(username="AnonymousUser")
                 print(user)
@@ -159,36 +161,9 @@ class Schedules(APIView):
         serializer = serializers.ScheduleSerializer(
             data=request.data,
         )
-        # if serializer.is_valid():
-        #     schedule = serializer.save(
-        #         user=request.user,
-        #         team=team,
-        #     )
-        #     team_data = TeamSerializer(team).data
-
-        #     response_data = {
-        #         "schedule": serializers.ScheduleSerializer(schedule).data,
-        #         "team": team_data,
-        #     }
-
-        #     return Response(
-        #         response_data,
-        #         status=status.HTTP_201_CREATED,
-        #     )
-        # else:
-        #     return Response(
-        #         serializer.errors,
-        #         status=status.HTTP_400_BAD_REQUEST,
-        #     )
-
-        # start for testing
-        from users.models import User
-
-        user = User.objects.get(id=1)
-
         if serializer.is_valid():
             schedule = serializer.save(
-                user=user,
+                user=request.user,
                 team=team,
             )
             team_data = TeamSerializer(team).data
@@ -207,7 +182,6 @@ class Schedules(APIView):
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        # end for testing
 
 
 class ScheduleDetails(APIView):

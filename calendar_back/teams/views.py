@@ -2,12 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
+from rest_framework.exceptions import NotFound, PermissionDenied
 
 from .serializers import TeamSerializer
 from users.models import User
 from .models import Team
-from nicknames.models import Nickname
 from nicknames.serializers import AddNicknameSerializer
 
 
