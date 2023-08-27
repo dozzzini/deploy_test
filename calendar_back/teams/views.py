@@ -21,18 +21,14 @@ class NewTeam(APIView):
             raise NotFound("존재하지 않는 팀입니다.")
 
     def post(self, request):
-        print("request data", request.data)
-        print("request team", request.data["team"])
-        print("request data", request.data["nickname"])
         team_serializer = TeamSerializer(data=request.data["team"])
         if team_serializer.is_valid():
             team = team_serializer.save(team_leader=request.user)
+            team.members.add(request.user)
         else:
             return Response(team_serializer.errors)
 
         nickname_serializer = AddNicknameSerializer(data=request.data["nickname"])
-
-        
 
         if nickname_serializer.is_valid():
             nickname = nickname_serializer.save(

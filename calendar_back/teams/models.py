@@ -49,7 +49,6 @@ class Team(models.Model):
 
     members = models.ManyToManyField(
         "users.User",
-        null=True,
     )
     team_leader = models.ForeignKey(
         "users.User",
