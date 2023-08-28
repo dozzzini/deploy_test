@@ -122,4 +122,4 @@ class AddMembers(APIView):
         
         team.members.add(request.user.id)
 
-        return Response('success')
+        return Response(TeamSerializer(team).data,status=status.HTTP_202_ACCEPTED)
