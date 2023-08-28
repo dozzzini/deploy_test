@@ -3,9 +3,8 @@ import { LuSettings } from 'react-icons/lu';
 import SearchInfo from './SearchInfo';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-
+import { deleteAccountApi, updateUserInfoApi } from '../../api';
 import { scheduleSearchApi, logoutApi } from '../../api';
-
 const HeaderContainer = styled.div`
   width: 100%;
   padding: 10px;
@@ -52,9 +51,9 @@ const Modal = styled.div`
   right: 10%;
   background-color: white;
   width: 200px;
+  border-radius: 10px;
   height: 100px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   max-width: 200px; /* 모달 최대 너비 조정 */
   max-height: 100px; /* 모달 최대 높이 조정 */
 `;
@@ -63,9 +62,19 @@ const Content = styled.div`
   background-color: none;
   width: 100%;
 `;
-
-const Logout = styled.button`
-  margin-top: 20px;
+const UserInfoContent = styled.div`
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  background-color: white;
+  border-radius: 10px;
+  width: 200px;
+  height: 200px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  max-width: 200px; /* 모달 최대 너비 조정 */
+`;
+const OptionBtn = styled.button`
+  margin-top: 10px;
   font-size: 12px;
   border: none;
   background-color: white;
@@ -88,9 +97,11 @@ const Overlay = styled.div`
 `;
 function Header({ schedules }) {
   const [searchIsOpen, setSearchIsOpen] = useState(false);
+  const [UserInfoIsOpen, setUserInfoIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
+
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
@@ -114,6 +125,13 @@ function Header({ schedules }) {
   const closeModal = () => {
     setActiveModal(null);
   };
+  const openUserInfo = () => {
+    setUserInfoIsOpen(true);
+  };
+  const closeUserInfo = () => {
+    setUserInfoIsOpen(false);
+    setActiveModal(null);
+  };
 
   const handleLogout = () => {
     logoutApi({ refresh_token: localStorage.getItem('refresh_token') })
@@ -129,6 +147,7 @@ function Header({ schedules }) {
   const handleOverlayClick = () => {
     setSearchIsOpen(false);
   };
+
   return (
     <HeaderContainer>
       <IconBox>
@@ -138,8 +157,23 @@ function Header({ schedules }) {
         <Modal>
           <Content>
             <CloseIcon onClick={closeModal}>&times;</CloseIcon>
-            <Logout onClick={handleLogout}>로그아웃</Logout>
+            <OptionBtn onClick={handleLogout}>로그아웃</OptionBtn>
+            <OptionBtn onClick={openUserInfo}>회원정보수정</OptionBtn>
           </Content>
+          {UserInfoIsOpen && (
+            <UserInfoContent>
+              <CloseIcon onClick={closeUserInfo}>&times;</CloseIcon>
+              <form>
+                {/* <input placeholder="email@email.com"></input>
+                <input placeholder="name"></input> */}
+                <input type="password" placeholder="new password" />
+                <input type="password" placeholder="confirm new password" />
+                <button onClick={''}>비밀번호 변경</button>
+                <br />
+                <button onClick={''}>회원탈퇴</button>
+              </form>
+            </UserInfoContent>
+          )}
         </Modal>
       )}
       <Form>
