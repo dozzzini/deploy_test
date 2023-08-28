@@ -2,7 +2,7 @@ import { getScheduleListApi } from '../api';
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { RecoilRoot, useRecoilState } from 'recoil';
-import { eventState, loggedIn } from '../recoilState';
+import { eventState } from '../recoilState';
 import { useNavigate } from 'react-router';
 
 import RightBar from '../components/RightBar/RightBar';
@@ -32,13 +32,14 @@ function Layout() {
   const [events, setEvents] = useRecoilState(eventState);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [schedules, setSchedules] = useState([]);
-  const [isLogin, setIsLogin] = useRecoilState(loggedIn);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('layout', isLogin);
-    if (!isLogin) {
+    const access_token = localStorage.getItem('access_token');
+    const refresh_token = localStorage.getItem('refresh_token');
+
+    if (!(access_token && refresh_token)) {
       navigate('/login', { replace: true });
     }
 
@@ -50,6 +51,10 @@ function Layout() {
       })
       .catch((error) => {
         console.error('스케줄 가져오기 실패:', error);
+        if (!(access_token && refresh_token)) {
+          console.log('거의 다 했다');
+          navigate('/login', { replace: true });
+        }
       });
   }, []);
 

@@ -216,10 +216,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(seconds=15),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(seconds=20),
-    # "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=15),
-    # "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "SIGNING_KEY": get_env_variable("JWT_SECRET_KEY"),
