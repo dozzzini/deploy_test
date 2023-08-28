@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import { MdOutlineInsertComment } from 'react-icons/md';
+// import { MdOutlineInsertComment } from 'react-icons/md';
+import { styled } from 'styled-components';
 
 const CommentEdit = ({ schedule, author, addComment }) => {
   const [description, setDescription] = useState('');
   const inputRef = React.useRef(null);
+
+  const inputStyle = {
+    // border: '1px solid blue',
+    border: 'none',
+    outline: 'none',
+    fontSize: '12px',
+    width: '100%',
+    marginTop: '30px',
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,15 +35,16 @@ const CommentEdit = ({ schedule, author, addComment }) => {
   return (
     <form onSubmit={handleSubmit}>
       <input
+        style={inputStyle}
         ref={inputRef}
         type="text"
-        placeholder="내용을 입력하세요"
+        placeholder="댓글을 입력하세요"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <button type="submit">
+      {/* <button type="submit">
         <MdOutlineInsertComment />
-      </button>
+      </button> */}
     </form>
   );
 };
