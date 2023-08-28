@@ -33,38 +33,49 @@ const CalendarContainer = styled.div`
   height: 90vh;
 `;
 const ShowMenuBar = styled.div`
+  border-right: 1px solid rgb(235, 237, 239);
+
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgb(235, 237, 239);
   width: 8vw;
 `;
-const ShowMenuBarHeader = styled.div`
-  height: 3vh;
-  color: grey;
-  text-align: center;
-  font-weight: 100;
-  font-size: 22px;
-  padding: 8px;
-  // border-bottom: 1px solid rgb(235, 237, 239);
-  margin-bottom: 22px;
-`;
+// const ShowMenuBarHeader = styled.div`
+//   border: 1px solid red;
 
+//   height: 3vh;
+//   color: grey;
+//   text-align: center;
+//   font-weight: 100;
+//   font-size: 22px;
+//   padding: 8px;
+//   // border-bottom: 1px solid rgb(235, 237, 239);
+//   margin-bottom: 22px;
+// `;
+
+const TeamBox = styled.div`
+  overflow-y: auto;
+  height: 450px;
+`;
 const TeamList = styled.label`
+  /* border: 3px solid black; */
+
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-weight: 100;
   text-align: center;
-  font-size: 20px;
-  padding: 2px;
+  font-size: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `;
+
 const Input = styled.input`
   opacity: 1;
   -webkit-appearance: none;
   cursor: pointer;
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   box-shadow:
     -10px -10px 10px rgba(255, 255, 255, 0.8),
     10px 10px 10px rgba(0, 0, 70, 0.18);
@@ -82,6 +93,8 @@ const Input = styled.input`
     background-color: ${(props) => props.bgColor};
   }
 `;
+
+const CalendarName = styled.div``;
 const MIDContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -433,26 +446,29 @@ export default function TUICalendar({
   return (
     <CalendarContainer>
       <ShowMenuBar>
-        <ShowMenuBarHeader></ShowMenuBarHeader>
-        {selectedCalendars.map((calendar) => (
-          <TeamList key={calendar.id}>
-            <Input
-              type="checkbox"
-              checked={calendar.isChecked}
-              bgColor={calendar.backgroundColor} //
-              onChange={() => {
-                const updatedCalendars = selectedCalendars.map((item) =>
-                  item.id === calendar.id
-                    ? { ...item, isChecked: !item.isChecked }
-                    : item,
-                );
-                setSelectedCalendars(updatedCalendars);
-              }}
-            />
-            {calendar.name}
-          </TeamList>
-        ))}
-        <TeamAddModal />
+        {' '}
+        <TeamBox>
+          {/* <ShowMenuBarHeader></ShowMenuBarHeader> */}
+          {selectedCalendars.map((calendar) => (
+            <TeamList key={calendar.id}>
+              <Input
+                type="checkbox"
+                checked={calendar.isChecked}
+                bgColor={calendar.backgroundColor} //
+                onChange={() => {
+                  const updatedCalendars = selectedCalendars.map((item) =>
+                    item.id === calendar.id
+                      ? { ...item, isChecked: !item.isChecked }
+                      : item,
+                  );
+                  setSelectedCalendars(updatedCalendars);
+                }}
+              />
+              <CalendarName>{calendar.name}</CalendarName>
+            </TeamList>
+          ))}
+          <TeamAddModal />{' '}
+        </TeamBox>
       </ShowMenuBar>
       <MIDContainer>
         <CalendarBox>

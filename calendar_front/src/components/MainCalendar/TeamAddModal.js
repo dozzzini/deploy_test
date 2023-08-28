@@ -6,9 +6,8 @@ import { createTeamApi } from '../../api';
 import { LuX } from 'react-icons/lu';
 
 const TeamListContainer = styled.div`
-  overflow-y: scroll;
-  height: 100%;
-  width: 100%;
+  /* border: 1px solid blue; */
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,9 +15,18 @@ const TeamListContainer = styled.div`
 `;
 
 const TeamListWrapper = styled.div`
-  height: 90%;
+  /* border: 1px solid red; */
 `;
-const TeamBtnWrapper = styled.div``;
+
+const TeamBtnWrapper = styled.div`
+  /* border: 1px solid greenyellow; */
+
+  width: 100%;
+  margin-top: 600px;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+`;
 
 const TeamAddBtn = styled.button`
   font-size: 30px;
@@ -106,9 +114,9 @@ const ATMbuttonbox = styled.div`
 
 const ATMbutton = styled.button`
   margin-top: 20px;
-  width: 48%;
-  font-size: 21px;
-  font-weight: 100;
+  width: 30%;
+  font-size: 15px;
+  /* font-weight: 100; */
   color: grey;
   border-radius: 15px;
   background-color: rgb(254, 250, 250);
@@ -119,8 +127,8 @@ const ATMbutton = styled.button`
   cursor: pointer;
   border: none;
   &&:hover {
-    transform: translateY(1px);
-    box-shadow: none;
+    /* transform: translateY(1px); */
+    /* box-shadow: none; */
     color: black;
   }
   &&:active {
