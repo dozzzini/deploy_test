@@ -42,6 +42,9 @@ class GetComments(APIView):
         schedule = self.get_schedule(schedule_id)
         comments = schedule.comments.all()
 
+        if not (schedule.team.members.filter(id=request.user.id).exists()):
+            raise PermissionDenied("소속된 팀 또는 본인 일정의 comments만 조회 가능합니다.")
+
         if comments.count() == 0:
             return Response(
                 {"message": "작성된 댓글이 없습니다."},
