@@ -28,6 +28,7 @@ const ScheduleDetailBox = styled.div`
 
 const ScheduleDetailTitle = styled.div`
   white-space: nowrap;
+  word-wrap: break-word;
   text-align: center;
   width: 100%;
   color: grey;
@@ -57,16 +58,8 @@ const ScheduleDeleteBtn = styled.button`
 `;
 
 export default function Status({ selectedEvent }) {
-  // const [eventPick, setEventPick] = useState({
-  //   title: selectedEvent.title,
-  //   description: selectedEvent.location,
-  //   start: selectedEvent.start,
-  //   end: selectedEvent.end,
-  //   calendarName: selectedEvent.calendarId,
-  //   state: selectedEvent.state,
-  // });
-
   const [comments, setComments] = useState([]);
+  console.log(selectedEvent, '냐냐냐');
 
   useEffect(() => {
     const eventComments = comments.filter(
@@ -118,18 +111,18 @@ export default function Status({ selectedEvent }) {
 
   return (
     <ScheduleDetailBox>
-      <ScheduleDetailTitle>📌일정 상세 정보📌 </ScheduleDetailTitle>
+      <ScheduleDetailTitle>📌 일정 상세 정보 📌</ScheduleDetailTitle>
       <ButtonBox>
         <ScheduleEditBtn>편집</ScheduleEditBtn>
         <ScheduleDeleteBtn>삭제</ScheduleDeleteBtn>
       </ButtonBox>
       <p>♦️ {calendarId}</p>
       <p>♦️ {title}</p>
-      <p>♦️ {location}</p>
+      <p>{location ? location : ''}</p>
       <p>
-        ⏰시작일시⏰
+        ⏰ 시작일시 ⏰
         <br /> {startTime} <br />
-        ⏰종료일시⏰
+        ⏰ 종료일시 ⏰
         <br /> {endTime}
       </p>
       <p>{isAllday ? '하루종일' : ''}</p>

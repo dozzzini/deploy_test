@@ -5,15 +5,21 @@ import { useForm } from 'react-hook-form';
 import { createTeamApi } from '../../api';
 import { LuX } from 'react-icons/lu';
 
-const TeamAddContainer = styled.div`
-  padding-top: 200px;
+const TeamListContainer = styled.div`
+  overflow-y: scroll;
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: end;
   align-items: center;
+  justify-content: center;
 `;
-const Wrapper = styled.div``;
+
+const TeamListWrapper = styled.div`
+  height: 90%;
+`;
+const TeamBtnWrapper = styled.div``;
+
 const TeamAddBtn = styled.button`
   font-size: 30px;
   font-weight: 100;
@@ -21,6 +27,7 @@ const TeamAddBtn = styled.button`
   background-color: rgb(254, 250, 250);
   cursor: pointer;
   border: none;
+  border-radius: 30px;
   &&:hover {
     transform: translateY(1px);
     box-shadow: none;
@@ -30,19 +37,11 @@ const TeamAddBtn = styled.button`
     opacity: 0.5;
   }
 `;
-const TAddModal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(200, 200, 200, 0.2);
-  z-index: 1000;
-`;
-const CloseIcon = styled(LuX)`
+
+const TeamModalCloseBtn = styled(LuX)`
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
   cursor: pointer;
 
   &&:hover {
@@ -50,54 +49,63 @@ const CloseIcon = styled(LuX)`
     font-weight: bold;
   }
 `;
-const TModalWrapper = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-  width: 400px;
-  height: 410px;
-  background-color: white;
-  z-index: 1005;
-  top: 46%;
+
+const TeamInputModal = styled.div`
+  position: fixed;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 430px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+`;
+
+const TeamInputModalWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-size: 20px;
   font-weight: 100;
-  line-height: 1.5;
+  margin: 10px;
 `;
+
 const TMForm = styled.form`
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 89%;
   height: 78%;
-  justify-content: space-between;
-  padding-bottom: 14px;
+  justify-content: center;
+  padding-bottom: 18px;
   h2 {
-    font-size: 15px;
+    font-size: 18px;
     text-align: center;
+    margin: 18px 0;
   }
 `;
 
 const TAMinput = styled.input`
-  width: 98%;
-  padding: 3px 0 3px 10px;
+  padding: 7px 0 7px 10px;
+  margin: 10px 0;
   border: none;
-  outline: none;
-  border-radius: 6px;
+  border-radius: 10px;
   background-color: white;
   box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.1);
   transition: 300ms ease-in-out;
   font-size: 15px;
 `;
 
-const BtnColumn = styled.div`
+const ATMbuttonbox = styled.div`
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 `;
+
 const ATMbutton = styled.button`
+  margin-top: 20px;
   width: 48%;
   font-size: 21px;
   font-weight: 100;
@@ -158,55 +166,51 @@ function TeamAddModal() {
   };
 
   return (
-    <TeamAddContainer>
-      <Wrapper>
+    <TeamListContainer>
+      <TeamListWrapper>
+        {teamAddModalIsOpen && (
+          <TeamInputModal>
+            <TeamModalCloseBtn
+              onClick={() => {
+                setTeamAddModalIsOpen(false);
+              }}
+            />
+            <TeamInputModalWrapper>
+              <TMForm onSubmit={handleSubmit(handleFormSubmit)}>
+                <>
+                  <h2>ADD CALENDAR</h2>
+                  <TAMinput
+                    type="text"
+                    placeholder="teamname"
+                    {...register('teamname', {
+                      required: '팀명과 닉네임을 모두 입력해주세요',
+                    })}
+                  />
+                  <TAMinput
+                    type="text"
+                    placeholder="nickname"
+                    {...register('nickname', {
+                      required: '팀명과 닉네임을 모두 입력해주세요',
+                    })}
+                  />
+                  {errors.nickname && (
+                    <p style={{ fontSize: 12 }}>{errors.nickname.message}</p>
+                  )}
+                  <h2>SELECT TEAM COLOR</h2>
+                  <ColorPicker onSelectColor={setSelectedColor} />
+                  <ATMbuttonbox>
+                    <ATMbutton type="submit">팀 생성</ATMbutton>
+                  </ATMbuttonbox>
+                </>
+              </TMForm>
+            </TeamInputModalWrapper>
+          </TeamInputModal>
+        )}
+      </TeamListWrapper>
+      <TeamBtnWrapper>
         <TeamAddBtn onClick={toggleModal}>+</TeamAddBtn>
-      </Wrapper>
-      {teamAddModalIsOpen && (
-        <TAddModal>
-          <CloseIcon
-            onClick={() => {
-              setTeamAddModalIsOpen(false);
-            }}
-          />
-          <TModalWrapper>
-            <TMForm onSubmit={handleSubmit(handleFormSubmit)}>
-              <>
-                <h2>ADD CALENDAR</h2>
-                <TAMinput
-                  type="text"
-                  placeholder="teamname"
-                  {...register('teamname', {
-                    required: '팀명을 입력해주세요',
-                  })}
-                />
-                <TAMinput
-                  type="text"
-                  placeholder="nickname"
-                  {...register('nickname', {
-                    required: '닉네임을 입력해주세요',
-                  })}
-                />
-                {errors.nickname && <p>{errors.nickname.message}</p>}
-                select team color
-                <ColorPicker onSelectColor={setSelectedColor} />
-                <BtnColumn>
-                  {/* <ATMbutton
-                    type="button"
-                    onClick={() => {
-                      setTeamAddModalIsOpen(false);
-                    }}
-                  >
-                    <LuX />
-                  </ATMbutton> */}
-                  <ATMbutton type="submit">팀 생성</ATMbutton>
-                </BtnColumn>
-              </>
-            </TMForm>
-          </TModalWrapper>
-        </TAddModal>
-      )}
-    </TeamAddContainer>
+      </TeamBtnWrapper>
+    </TeamListContainer>
   );
 }
 export default TeamAddModal;

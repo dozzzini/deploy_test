@@ -22,7 +22,6 @@ instance.interceptors.request.use((config) => {
 
 // response interceptor
 let refresh = false;
-
 instance.interceptors.response.use(
   (resp) => resp,
   async (error) => {
@@ -45,15 +44,16 @@ instance.interceptors.response.use(
        ${response.data['access']}`;
         localStorage.setItem('access_token', response.data.access);
         localStorage.setItem('refresh_token', response.data.refresh);
-        // return instance(error.config);
         return instance(error.config);
       }
-      // refresh 만료됐을 때 로그아웃 => 로컬스토리지 클리어,상태변화
-      // 로그아웃 함수 여기저기 쓸거같으면 따로 빼자
-      // if (response.status === 400) {
-      // localStorage.clear()
-      //   return;
-      // }
+
+      if (
+        response.response?.status === 400 ||
+        response.response?.status === 401
+      ) {
+        localStorage.clear();
+        return;
+      }
     }
 
     refresh = false;
@@ -109,6 +109,11 @@ export const eventDetailEditApi = (data) => {
 };
 
 // 일정명 검색
-// export const scheduleSearchApi = (data) => {
-//   return instance.post(`/api/v1/schedules/search/`, data);
-// };
+export const scheduleSearchApi = (data) => {
+  return instance.post(`/api/v1/schedules/search/`, data);
+};
+
+// 로그아웃
+export const logoutApi = (data) => {
+  return instance.post(`/api/v1/users/logout/`, data);
+};
