@@ -2,30 +2,22 @@ import React, { useRef } from 'react';
 import { styled } from 'styled-components';
 
 const Overlay = styled.div`
-  border: 1px solid black;
+  /* border: 1px solid black; */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0);
-  // z-index: 1000;
 `;
 
 const SearchInfoContainer = styled.div`
-  border: 1px solid red;
-
-  position: fixed;
-  // display: flex;
-  right: 0;
-  top: 0;
-  border-radius: 6px;
-  width: 10vw;
-  background-color: rgb(249, 249, 249);
-  box-shadow:
-    -3px -3px 8px rgba(235, 245, 235, 1),
-    3px 3px 8px rgba(10, 50, 70, 0.3);
-  // z-index: 1005;
+  /* border: 1px solid red; */
+  position: absolute;
+  top: 140px;
+  right: 80px;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  width: auto;
 `;
 
 const Wrapper = styled.li`
@@ -47,8 +39,8 @@ const SearchTeam = styled.span`
   font-weight: 100;
 `;
 const NoMatchingData = styled.p`
-  color: lightgrey;
-  font-size: 14px;
+  color: black;
+  font-size: 10px;
 `;
 
 function SearchInfo({ onClose, matchingData, initialCalendars }) {
@@ -90,7 +82,7 @@ function SearchInfo({ onClose, matchingData, initialCalendars }) {
               })}
             </ul>
           ) : (
-            <NoMatchingData>No matching events</NoMatchingData>
+            <NoMatchingData>검색한 일정이 없습니다.</NoMatchingData>
           )}
         </Wrapper>
       </SearchInfoContainer>

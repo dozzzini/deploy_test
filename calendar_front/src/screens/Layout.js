@@ -44,7 +44,7 @@ function Layout() {
     getScheduleListApi()
       .then((response) => {
         console.log(response.data, 'dldldl');
-        setSchedules(response.data);
+        setSchedules(response.data.schedules);
       })
       .catch((error) => {
         console.error('스케줄 가져오기 실패:', error);
