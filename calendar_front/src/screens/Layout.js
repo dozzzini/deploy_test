@@ -33,6 +33,7 @@ function Layout() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [schedules, setSchedules] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [teams, setTeams] = useState([]); // 팀 데이터 상태 추가
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,7 +48,9 @@ function Layout() {
       .then((response) => {
         console.log(response.data, 'dldldl');
         setSchedules(response.data.schedules);
+        console.log(response.data.teams, 'teamData');
         setIsLoading(false);
+        setTeams(response.data.teams);
       })
       .catch((error) => {
         console.error('스케줄 가져오기 실패:', error);
@@ -76,8 +79,9 @@ function Layout() {
             setEvents={setEvents}
             view="month"
             setSelectedEvent={setSelectedEvent}
+            teams={teams}
           />
-          <RightBar selectedEvent={selectedEvent} />
+          <RightBar selectedEvent={selectedEvent} schedules={validSchedules} />
         </Wrapper>
       </Container>
     </RecoilRoot>

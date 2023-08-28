@@ -197,32 +197,37 @@ export default function TUICalendar({
   events,
   setEvents,
   setSelectedEvent,
+  teams,
 }) {
   const calendarRef = useRef(null);
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
   const [selectedView, setSelectedView] = useState(view);
+  const initialCalendars = teams?.map((team) => ({
+    id: team.id,
+    name: team.teamname,
+    backgroundColor: team.color,
+    borderColor: team.color,
+    dragBackgroundColor: team.color,
+    isChecked: true,
+  }));
+  // const initialCalendars = schedules?.reduce((uniqueCalendars, schedule) => {
+  //   const existingCalendar = uniqueCalendars.find(
+  //     (calendar) => calendar.id === schedule?.team.id,
+  //   );
 
-  console.log(schedules);
-  console.log(schedules[0]?.team);
+  //   if (!existingCalendar) {
+  //     uniqueCalendars.push({
+  //       id: schedule?.team.id,
+  //       name: schedule?.team.teamname,
+  //       backgroundColor: schedule?.team.color,
+  //       borderColor: schedule?.team.color,
+  //       dragBackgroundColor: schedule?.team.color,
+  //       isChecked: true,
+  //     });
+  //   }
 
-  const initialCalendars = schedules?.reduce((uniqueCalendars, schedule) => {
-    const existingCalendar = uniqueCalendars.find(
-      (calendar) => calendar.id === schedule?.team.id,
-    );
-
-    if (!existingCalendar) {
-      uniqueCalendars.push({
-        id: schedule?.team.id,
-        name: schedule?.team.teamname,
-        backgroundColor: schedule?.team.color,
-        borderColor: schedule?.team.color,
-        dragBackgroundColor: schedule?.team.color,
-        isChecked: true,
-      });
-    }
-
-    return uniqueCalendars;
-  }, []);
+  //   return uniqueCalendars;
+  // }, []);
   const initialEvents = schedules?.map((schedule) => ({
     id: schedule.id,
     calendarId: schedule.team.id,
@@ -365,20 +370,6 @@ export default function TUICalendar({
     console.group('onBeforeUpdateEvent');
     console.log('Event Info: ', updateData);
     console.groupEnd();
-
-    // 서버에 보낼 이벤트 데이터 준비
-    // const eventForUpdate = {
-    //   id: eventData.id,
-    //   team: eventData.calendarId,
-    //   title: eventData.title,
-    //   description: eventData.location,
-    //   start_date: eventData.start,
-    //   end_date: eventData.end,
-    //   state: eventData.state,
-    // };
-
-    // 업데이트 API 호출 예
-    // axios.put(`url/${eventData.id}`, eventForUpdate);
 
     const targetEvent = updateData.event;
     const changes = { ...updateData.changes };
