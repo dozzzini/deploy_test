@@ -109,6 +109,6 @@ export const eventDetailEditApi = (data) => {
 };
 
 // 일정명 검색
-export const scheduleSearchApi = (data) => {
-  return instance.post(`/api/v1/schedules/search/`, data);
-};
+// export const scheduleSearchApi = (data) => {
+//   return instance.post(`/api/v1/schedules/search/`, data);
+// };

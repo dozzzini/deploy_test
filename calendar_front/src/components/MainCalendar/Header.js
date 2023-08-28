@@ -80,8 +80,15 @@ const CloseIcon = styled.button`
   background-color: transparent;
   border: none;
 `;
-
-function Header({ data, initialCalendars, initialEvents }) {
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+`;
+function Header({ schedules }) {
   const [searchIsOpen, setSearchIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -94,22 +101,15 @@ function Header({ data, initialCalendars, initialEvents }) {
     setInputValue(value);
     if (value.length >= 1) {
       setSearchIsOpen(true);
+      const filteredSchedules = schedules.filter((schedule) =>
+        schedule.title.includes(value),
+      );
+      setSearchResults(filteredSchedules);
     } else {
       setSearchIsOpen(false);
-    }
-  };
-  const handleSearch = (event) => {
-    event.preventDefault(); // 기본 제출 동작 방지
-
-    if (inputValue.length >= 1) {
-      scheduleSearchApi({ search: inputValue })
-        .then((data) => setSearchResults(data))
-        .catch((error) => console.error(error));
-    } else {
       setSearchResults([]);
     }
   };
-
   const openModal = (modalType) => {
     setActiveModal(modalType);
   };
@@ -133,7 +133,9 @@ function Header({ data, initialCalendars, initialEvents }) {
     setIsLogin(false);
     navigate('/login', { replace: true });
   };
-
+  const handleOverlayClick = () => {
+    setSearchIsOpen(false);
+  };
   return (
     <HeaderContainer>
       <IconBox>
@@ -146,8 +148,8 @@ function Header({ data, initialCalendars, initialEvents }) {
             <Logout onClick={handleLogout}>로그아웃</Logout>
           </Content>
         </Modal>
-      )}{' '}
-      <Form onSubmit={handleSearch}>
+      )}
+      <Form>
         <SearchBox
           type="text"
           value={inputValue}
@@ -155,14 +157,9 @@ function Header({ data, initialCalendars, initialEvents }) {
           placeholder="search"
         />
       </Form>
-      {searchIsOpen ? (
-        <SearchInfo
-          onClose={() => setSearchIsOpen(false)}
-          matchingData={searchResults}
-          initialCalendars={initialCalendars}
-          initialEvents={initialEvents}
-        />
-      ) : null}
+      {searchIsOpen ? <SearchInfo matchingData={searchResults} /> : null}
+
+      {searchIsOpen && <Overlay onClick={handleOverlayClick} />}
     </HeaderContainer>
   );
 }
