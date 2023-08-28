@@ -52,7 +52,6 @@ function Layout() {
       .catch((error) => {
         console.error('스케줄 가져오기 실패:', error);
         if (!(access_token && refresh_token)) {
-          console.log('거의 다 했다');
           navigate('/login', { replace: true });
         }
       });

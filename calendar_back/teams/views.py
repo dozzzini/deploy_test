@@ -105,21 +105,21 @@ class Teams(APIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class AddMembers(APIView):
     permission_classes = [IsAuthenticated]
+
     def get_team(self, team_id):
         try:
             return Team.objects.get(id=team_id)
         except Team.DoesNotExist:
             raise NotFound("해당 팀이 없습니다.")
-        
-        
-    def post(self,request,team_id):
+
+    def post(self, request, team_id):
         team = self.get_team(team_id)
 
         if team.members.filter(id=request.user.id).exists():
-            raise ParseError('이미 가입한 팀입니다.')
-        
+            raise ParseError("이미 가입한 팀입니다.")
         team.members.add(request.user.id)
 
-        return Response(TeamSerializer(team).data,status=status.HTTP_202_ACCEPTED)
+        return Response(TeamSerializer(team).data, status=status.HTTP_202_ACCEPTED)
