@@ -192,81 +192,7 @@ const DateViewSelectBox = styled.div`
     color: grey;
   }
 `;
-//initialEvent/Calendar>> get받는 데이터 형식에 맞춰 합친 목데이터
-// const schedulesData = [
-//   {
-//     id: 0,
-//     user: {
-//       username: 't38X07',
-//       name: 'string',
-//     },
-//     team: {
-//       id: 0,
-//       teamname: 'MY',
-//       color: '#F44336',
-//       team_leader: 0,
-//       members: [0],
-//     },
-//     title: 'TOAST UI Calendar Study',
-//     description: 'TOAST UI Calendar Test',
-//     start_date: today,
-//     end_date: addHours(today, 3),
-//   },
-//   {
-//     id: 1,
-//     user: {
-//       username: 't38X07',
-//       name: 'string',
-//     },
-//     team: {
-//       id: 1,
-//       teamname: 'team1',
-//       color: 'blue',
-//       team_leader: 0,
-//       members: [0],
-//     },
-//     title: 'event1',
-//     description: 'TOAST UI event1 Test',
-//     start_date: today,
-//     end_date: addHours(today, 3),
-//   },
-//   {
-//     id: 2,
-//     user: {
-//       username: 't38X07',
-//       name: 'string',
-//     },
-//     team: {
-//       id: 2,
-//       teamname: 'team2',
-//       color: 'green',
-//       team_leader: 0,
-//       members: [0],
-//     },
-//     title: 'event2',
-//     description: 'TOAST UI event2 Test',
-//     start_date: today,
-//     end_date: addHours(today, 3),
-//   },
-//   {
-//     id: 3,
-//     user: {
-//       username: 't38X07',
-//       name: 'string',
-//     },
-//     team: {
-//       id: 2,
-//       teamname: 'team2',
-//       color: '#F44336',
-//       team_leader: 0,
-//       members: [0],
-//     },
-//     title: 'event2-2',
-//     description: 'TOAST UI event2-2 Test',
-//     start_date: today,
-//     end_date: addHours(today, 3),
-//   },
-// ];
+
 export default function TUICalendar({
   schedules,
   view,
@@ -277,34 +203,28 @@ export default function TUICalendar({
   const calendarRef = useRef(null);
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
   const [selectedView, setSelectedView] = useState(view);
-  // const [eventCounter, setEventCounter] = useState(5);
-
-  // const schedulesData = schedules?.map((schedule) => ({
-  //   id: schedule.id,
-  //   team: {
-  //     id: 0,
-  //     teamname: 'MY',
-  //     color: '#F44336',
-  //     team_leader: 0,
-  //     members: [0],
-  //   },
-  //   title: 'TOAST UI Calendar Study',
-  //   description: 'TOAST UI Calendar Test',
-  //   start_date: today,
-  //   end_date: addHours(today, 3),
-  // }));
 
   console.log(schedules);
   console.log(schedules[0]?.team);
-  const initialCalendars = schedules?.map((schedule) => ({
-    id: schedule?.team.id,
-    name: schedule?.team.teamname,
-    backgroundColor: schedule?.team.color,
-    borderColor: schedule?.team.color,
-    dragBackgroundColor: schedule?.team.color,
-    isChecked: true,
-  }));
 
+  const initialCalendars = schedules?.reduce((uniqueCalendars, schedule) => {
+    const existingCalendar = uniqueCalendars.find(
+      (calendar) => calendar.id === schedule?.team.id,
+    );
+
+    if (!existingCalendar) {
+      uniqueCalendars.push({
+        id: schedule?.team.id,
+        name: schedule?.team.teamname,
+        backgroundColor: schedule?.team.color,
+        borderColor: schedule?.team.color,
+        dragBackgroundColor: schedule?.team.color,
+        isChecked: true,
+      });
+    }
+
+    return uniqueCalendars;
+  }, []);
   const initialEvents = schedules?.map((schedule) => ({
     id: schedule.id,
     calendarId: schedule.team.id,
@@ -312,7 +232,6 @@ export default function TUICalendar({
     start: new TZDate(schedule.start_date),
     end: new TZDate(schedule.end_date),
   }));
-
   const [selectedCalendars, setSelectedCalendars] = useState(
     initialCalendars.map((calendar) => ({
       ...calendar,
@@ -536,11 +455,6 @@ export default function TUICalendar({
         <TeamAddModal />
       </ShowMenuBar>
       <MIDContainer>
-        {/* <Header
-          data={initialEvents}
-          initialCalendars={initialCalendars}
-          initialEvents={initialEvents}
-        /> */}
         <CalendarBox>
           <CalendarHeader>
             <DateControlBox>

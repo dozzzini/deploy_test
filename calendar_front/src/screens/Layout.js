@@ -33,6 +33,7 @@ function Layout() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [schedules, setSchedules] = useState([]);
   const [isLogin, setIsLogin] = useRecoilState(loggedIn);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,7 +45,8 @@ function Layout() {
     getScheduleListApi()
       .then((response) => {
         console.log(response.data, 'dldldl');
-        setSchedules(response.data);
+        setSchedules(response.data.schedules);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error('스케줄 가져오기 실패:', error);
@@ -55,8 +57,7 @@ function Layout() {
   // schedules가 배열인지 확인하고, 아니면 빈 배열로 대체합니다.
   const validSchedules = Array.isArray(schedules) ? schedules : [];
 
-  if (!schedules || schedules.length === 0) {
-    // 스케줄 배열이 배열이 아닐 경우 처리
+  if (isLoading) {
     return <div>Loading or Error Message</div>;
   }
 
