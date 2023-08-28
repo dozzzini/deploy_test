@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.exceptions import NotFound, PermissionDenied, ParseError
 
 from .serializers import TeamSerializer
 from users.models import User
@@ -104,3 +104,21 @@ class Teams(APIView):
         team.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AddMembers(APIView):
+    def get_team(self, team_id):
+        try:
+            return Team.objects.get(id=team_id)
+        except Team.DoesNotExist:
+            raise NotFound("해당 팀이 없습니다.")
+        
+        
+    def post(self,request,team_id):
+        team = self.get_team(team_id)
+
+        if team.members.filter(id=request.user.id).exists():
+            raise ParseError('이미 가입한 팀입니다.')
+        
+        team.members.add(request.user.id)
+
+        return Response('success')
