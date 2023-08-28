@@ -4,7 +4,7 @@ from rest_framework.exceptions import NotFound, PermissionDenied, ParseError
 from rest_framework.response import Response
 from rest_framework import status
 
-from .serializers import CommentSerializer
+from .serializers import CommentSerializer, ScheduleCommentSerializer
 from schedules.models import Schedule
 from .models import Comment
 
@@ -29,17 +29,45 @@ class NewComment(APIView):
             return Response(serializer.errors)
 
 
+class GetComments(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_schedule(self, schedule_id):
+        try:
+            return Schedule.objects.get(id=schedule_id)
+        except Schedule.DoesNotExist:
+            raise NotFound("존재하지 않는 일정입니다.")
+
+    def get(self, request, schedule_id):
+        schedule = self.get_schedule(schedule_id)
+        comments = schedule.comments.all()
+
+        if comments.count() == 0:
+            return Response(
+                {"message": "작성된 댓글이 없습니다."},
+                status=status.HTTP_204_NO_CONTENT,
+            )
+
+        serializer = ScheduleCommentSerializer(
+            comments,
+            context={"request": request},
+            many=True,
+        )
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class Comments(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get_object(self, pk):
+    def get_comment(self, pk):
         try:
             return Comment.objects.get(id=pk)
         except Comment.DoesNotExist:
             raise NotFound("존재하지 않는 댓글입니다.")
 
     def delete(self, request, comment_id):
-        comment = self.get_object(comment_id)
+        comment = self.get_comment(comment_id)
 
         if (comment.author != request.user) and (
             comment.schedule.team.team_leader != request.user
@@ -50,7 +78,7 @@ class Comments(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def put(self, request, comment_id):
-        comment = self.get_object(comment_id)
+        comment = self.get_comment(comment_id)
 
         serializer = CommentSerializer(
             comment,
