@@ -9,12 +9,10 @@ import '@toast-ui/calendar/dist/toastui-calendar.min.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import { theme } from './theme';
-import { addDate, addHours, subtractDate } from './utils';
 
 import moment from 'moment';
 import instance from '../../api';
 
-const today = new TZDate();
 const viewModeOptions = [
   {
     title: 'MONTHLY',
@@ -192,81 +190,7 @@ const DateViewSelectBox = styled.div`
     color: grey;
   }
 `;
-//initialEvent/Calendar>> get받는 데이터 형식에 맞춰 합친 목데이터
-// const schedulesData = [
-//   {
-//     id: 0,
-//     user: {
-//       username: 't38X07',
-//       name: 'string',
-//     },
-//     team: {
-//       id: 0,
-//       teamname: 'MY',
-//       color: '#F44336',
-//       team_leader: 0,
-//       members: [0],
-//     },
-//     title: 'TOAST UI Calendar Study',
-//     description: 'TOAST UI Calendar Test',
-//     start_date: today,
-//     end_date: addHours(today, 3),
-//   },
-//   {
-//     id: 1,
-//     user: {
-//       username: 't38X07',
-//       name: 'string',
-//     },
-//     team: {
-//       id: 1,
-//       teamname: 'team1',
-//       color: 'blue',
-//       team_leader: 0,
-//       members: [0],
-//     },
-//     title: 'event1',
-//     description: 'TOAST UI event1 Test',
-//     start_date: today,
-//     end_date: addHours(today, 3),
-//   },
-//   {
-//     id: 2,
-//     user: {
-//       username: 't38X07',
-//       name: 'string',
-//     },
-//     team: {
-//       id: 2,
-//       teamname: 'team2',
-//       color: 'green',
-//       team_leader: 0,
-//       members: [0],
-//     },
-//     title: 'event2',
-//     description: 'TOAST UI event2 Test',
-//     start_date: today,
-//     end_date: addHours(today, 3),
-//   },
-//   {
-//     id: 3,
-//     user: {
-//       username: 't38X07',
-//       name: 'string',
-//     },
-//     team: {
-//       id: 2,
-//       teamname: 'team2',
-//       color: '#F44336',
-//       team_leader: 0,
-//       members: [0],
-//     },
-//     title: 'event2-2',
-//     description: 'TOAST UI event2-2 Test',
-//     start_date: today,
-//     end_date: addHours(today, 3),
-//   },
-// ];
+
 export default function TUICalendar({
   schedules,
   view,
@@ -277,22 +201,6 @@ export default function TUICalendar({
   const calendarRef = useRef(null);
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
   const [selectedView, setSelectedView] = useState(view);
-  // const [eventCounter, setEventCounter] = useState(5);
-
-  // const schedulesData = schedules?.map((schedule) => ({
-  //   id: schedule.id,
-  //   team: {
-  //     id: 0,
-  //     teamname: 'MY',
-  //     color: '#F44336',
-  //     team_leader: 0,
-  //     members: [0],
-  //   },
-  //   title: 'TOAST UI Calendar Study',
-  //   description: 'TOAST UI Calendar Test',
-  //   start_date: today,
-  //   end_date: addHours(today, 3),
-  // }));
 
   console.log(schedules);
   console.log(schedules[0]?.team);
@@ -476,6 +384,7 @@ export default function TUICalendar({
   };
 
   const onBeforeCreateEvent = async (eventData) => {
+    console.log(eventData, '이벤트 데이터에 제발 팀이름 있어라');
     const start_date = moment(eventData.start.d.d).format('YYYY-MM-DD HH:mm');
     const end_date = moment(eventData.end.d.d).format('YYYY-MM-DD HH:mm');
     try {
@@ -490,6 +399,7 @@ export default function TUICalendar({
 
       const event = {
         calendarId: eventData.calendarId || '',
+        calendarName: eventData.teamname,
         id: eventForBack.id,
         title: eventData.title,
         isAllday: eventData.isAllday,
