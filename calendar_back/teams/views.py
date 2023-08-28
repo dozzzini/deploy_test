@@ -106,6 +106,7 @@ class Teams(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class AddMembers(APIView):
+    permission_classes = [IsAuthenticated]
     def get_team(self, team_id):
         try:
             return Team.objects.get(id=team_id)
