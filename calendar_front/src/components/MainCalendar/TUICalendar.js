@@ -9,12 +9,10 @@ import '@toast-ui/calendar/dist/toastui-calendar.min.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import { theme } from './theme';
-import { addDate, addHours, subtractDate } from './utils';
 
 import moment from 'moment';
 import instance from '../../api';
 
-const today = new TZDate();
 const viewModeOptions = [
   {
     title: 'MONTHLY',
@@ -395,6 +393,7 @@ export default function TUICalendar({
   };
 
   const onBeforeCreateEvent = async (eventData) => {
+    console.log(eventData, '이벤트 데이터에 제발 팀이름 있어라');
     const start_date = moment(eventData.start.d.d).format('YYYY-MM-DD HH:mm');
     const end_date = moment(eventData.end.d.d).format('YYYY-MM-DD HH:mm');
     try {
@@ -409,6 +408,7 @@ export default function TUICalendar({
 
       const event = {
         calendarId: eventData.calendarId || '',
+        calendarName: eventData.teamname,
         id: eventForBack.id,
         title: eventData.title,
         isAllday: eventData.isAllday,
