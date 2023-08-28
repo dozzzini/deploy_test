@@ -10,13 +10,15 @@ import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import { theme } from './theme';
 import { addDate, addHours, subtractDate } from './utils';
-
+import ColorPicker from '../MainCalendar/ColorPicker';
 import moment from 'moment';
 import instance from '../../api';
 
 import { MdOutlineEdit, MdOutlineDelete } from 'react-icons/md';
 
 import { teamDeleteApi } from '../../api';
+import { teamEditApi } from '../../api';
+
 const viewModeOptions = [
   {
     title: 'MONTHLY',
@@ -230,6 +232,7 @@ export default function TUICalendar({
   setEvents,
   setSelectedEvent,
   teams,
+  setTeams,
 }) {
   const calendarRef = useRef(null);
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
@@ -472,8 +475,32 @@ export default function TUICalendar({
     }
   };
 
-  const onClickDeleteButton = (calendarId) => {
-    showConfirmDialog(calendarId);
+  const onClickDeleteButton = (teamId) => {
+    showConfirmDialog(teamId);
+  };
+  //수정 작업 수행 함수
+  const handleEditEvent = async (teamId, newName, newColor) => {
+    console.log('teamId:', teamId);
+    console.log('newName:', newName);
+    console.log('newColor:', newColor);
+    try {
+      // 수정할 팀 정보를 요청 데이터에 포함합니다.
+      const eventData = { teamname: newName, color: newColor };
+
+      const updatedTeamResponse = await teamEditApi(teamId, eventData);
+
+      // 수정이 성공하면 해당 팀 정보를 업데이트합니다.
+      const updatedTeams = teams.map((team) =>
+        team.id === teamId
+          ? { ...team, name: updatedTeamResponse.data.name }
+          : team,
+      );
+
+      // 업데이트된 팀 목록을 적용합니다.
+      setTeams(updatedTeams);
+    } catch (error) {
+      console.error('팀 정보 수정 중 오류 발생:', error);
+    }
   };
   return (
     <CalendarContainer>
@@ -497,8 +524,20 @@ export default function TUICalendar({
               />
               <CalendarButtonBox>
                 <CalendarName>{calendar.name}</CalendarName>
-                <CalendarEditButton>
-                  {' '}
+                <CalendarEditButton
+                  onClick={() => {
+                    // 수정할 팀명을 사용자 입력 또는 다른 방법으로 얻어옵니다.
+                    const newName = prompt('새로운 팀명을 입력하세요');
+
+                    if (newName) {
+                      handleEditEvent(
+                        calendar.id,
+                        newName,
+                        calendar.backgroundColor,
+                      );
+                    }
+                  }}
+                >
                   <MdOutlineEdit />
                 </CalendarEditButton>
                 <CalendarDeleteButton
