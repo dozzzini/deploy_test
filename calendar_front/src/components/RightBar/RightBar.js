@@ -15,13 +15,15 @@ function RightBar({ selectedEvent, schedules }) {
 }
 
 const Container = styled.div`
+  border-left: 1px solid rgb(226, 226, 226);
   position: relative;
-  width: 10vw;
+  width: 300px;
 `;
 
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+  overflow-y: scroll;
 `;
 
 export default RightBar;

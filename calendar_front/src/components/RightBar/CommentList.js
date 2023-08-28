@@ -14,7 +14,7 @@ const CommentDetailBox = styled.div`
 `;
 const CommentItem = styled.div`
   width: 100%;
-  height: auto;
+  height: 100%;
 `;
 
 const CommentAuthor = styled.div`
@@ -88,7 +88,13 @@ const CommentList = ({ comment, removeComment, editComment }) => {
       }
     }
   };
-
+  const inputStyle = {
+    border: 'none',
+    outline: 'none',
+    fontSize: '12px',
+    width: '100%',
+    marginTop: '30px',
+  };
   return (
     <CommentDetailBox>
       <CommentItem>

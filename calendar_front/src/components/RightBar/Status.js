@@ -170,6 +170,14 @@ export default function Status({ selectedEvent }) {
         console.error('일정 삭제 실패:', error);
       });
   };
+  const inputStyle = {
+    border: 'none',
+    outline: 'none',
+    backgroundColor: 'transparent',
+    fontSize: '10px',
+    width: '100%',
+    // marginTop: '30px',
+  };
 
   return (
     <ScheduleDetailBox>
@@ -181,29 +189,35 @@ export default function Status({ selectedEvent }) {
         <ScheduleDeleteBtn onClick={handleDeleteEvent}>삭제</ScheduleDeleteBtn>
       </ButtonBox>
       <div>
-        <input value={`♦️ ${calendarName}`} readOnly />
+        <input style={inputStyle} value={`📝${calendarName}`} readOnly />
         <input
-          value={isEditMode ? editedTitle : title}
+          style={inputStyle}
+          value={isEditMode ? `📝${editedTitle}` : `📝${title}`}
           onChange={(e) => setEditedTitle(e.target.value)}
           readOnly={!isEditMode}
         />
         <input
-          value={isEditMode ? editedLocation : location ? location : ''}
+          style={inputStyle}
+          value={
+            isEditMode ? `📝${editedLocation}` : `📝${location ? location : ''}`
+          }
           onChange={(e) => setEditedLocation(e.target.value)}
           readOnly={!isEditMode}
         />
         ⏰ 시작일시 ⏰
         <input
+          style={inputStyle}
           value={isEditMode ? editedStartTime : startTime}
           onChange={(e) => setEditedStartTime(e.target.value)}
-          style={{ whiteSpace: 'pre-line' }}
+          // style={{ whiteSpace: 'pre-line' }}
           readOnly={!isEditMode}
         />
         ⏰ 종료일시 ⏰
         <input
+          style={inputStyle}
           value={isEditMode ? editedEndTime : endTime}
           onChange={(e) => setEditedEndTime(e.target.value)}
-          style={{ whiteSpace: 'pre-line' }}
+          // style={{ whiteSpace: 'pre-line' }}
           readOnly={!isEditMode}
         />
         <label>
@@ -244,13 +258,40 @@ export default function Status({ selectedEvent }) {
       )}
       <MemoList>
         {memoList &&
-          memoList.map((memoItem, index) => (
-            <div key={index}>
-              <p>{memoItem.description}</p>
-              <p>{memoItem.author.username}</p>
-              <p>{memoItem.created_at}</p>
-            </div>
-          ))}
+          memoList.map((memoItem, index) => {
+            // created_at 값을 Date 객체로 파싱합니다.
+            const createdAtDate = new Date(memoItem.created_at);
+
+            // 날짜 포맷을 설정합니다. 원하는 형식으로 조정 가능합니다.
+            const dateFormat = new Intl.DateTimeFormat('ko-KR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            });
+
+            // 날짜를 원하는 형식으로 포맷합니다.
+            const formattedDate = dateFormat.format(createdAtDate);
+            const dateStyle = {
+              fontSize: '5px',
+              color: 'grey',
+              fontWeight: '300',
+              marginTop: '-10px',
+            };
+            const memoStyle = {
+              marginTop: '-5px',
+              borderBottom: '1px solid rgb(226,226,226)',
+            };
+            return (
+              <div key={index}>
+                <p>{memoItem.author.username}</p>
+                <p style={dateStyle}>{formattedDate}</p>{' '}
+                <p style={memoStyle}>{memoItem.description}</p>
+                {/* 포맷된 날짜 표시 */}
+              </div>
+            );
+          })}
       </MemoList>
       {/* <div>{memoList ? memoList[0]?.description : ''}</div> */}
     </ScheduleDetailBox>
