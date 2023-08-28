@@ -3,11 +3,11 @@ import { styled } from 'styled-components';
 import Status from './Status';
 import Header from '../MainCalendar/Header';
 
-function RightBar({ selectedEvent }) {
+function RightBar({ selectedEvent, schedules }) {
   return (
     <Container>
       <Wrapper>
-        <Header />
+        <Header schedules={schedules} />
         <Status selectedEvent={selectedEvent} />
       </Wrapper>
     </Container>
