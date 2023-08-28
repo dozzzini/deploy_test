@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
+
 import CommentList from './CommentList';
 import CommentEdit from './CommentEdit';
-import { eventDetailEditApi, eventDetailDeleteApi } from '../../api';
+import {
+  eventDetailEditApi,
+  eventDetailDeleteApi,
+  getEventCommentsApi,
+} from '../../api';
 import { styled } from 'styled-components';
 
 const StatusContent = styled.div`
@@ -57,6 +62,8 @@ const ScheduleDeleteBtn = styled.button`
   margin-right: -10px;
 `;
 
+const MemoList = styled.div``;
+
 export default function Status({ selectedEvent }) {
   const [comments, setComments] = useState([]);
   const [editedTitle, setEditedTitle] = useState('');
@@ -66,33 +73,24 @@ export default function Status({ selectedEvent }) {
   const [editedIsAllday, setEditedIsAllday] = useState(false);
   const [editedState, setEditedState] = useState('To do');
   const [isEditMode, setIsEditMode] = useState(false);
-
+  const [memoList, setMemoList] = useState([]);
   console.log(selectedEvent, '냐냐냐');
 
   useEffect(() => {
-    const eventComments = comments.filter(
-      (comment) => comment.schedule === selectedEvent?.id,
-    );
-    setComments(eventComments);
+    if (selectedEvent) {
+      try {
+        getEventCommentsApi(selectedEvent.id)
+          .then((res) => {
+            console.log(res.data, 'gmldms');
+            setMemoList(res.data);
+            console.log('memoList', memoList);
+          })
+          .catch((err) => console.log('gmldms err', err));
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    }
   }, [selectedEvent]);
-
-  // // Set initial values for editedStartTime and editedEndTime
-  // useEffect(() => {
-  //   setEditedStartTime(
-  //     startDate.toLocaleTimeString('ko-KR', {
-  //       hour: 'numeric',
-  //       minute: 'numeric',
-  //       hour12: true,
-  //     }),
-  //   );
-  //   setEditedEndTime(
-  //     endDate.toLocaleTimeString('ko-KR', {
-  //       hour: 'numeric',
-  //       minute: 'numeric',
-  //       hour12: true,
-  //     }),
-  //   );
-  // }, [selectedEvent]);
 
   const addComment = (newComment) => {
     setComments([...comments, newComment]);
@@ -101,10 +99,6 @@ export default function Status({ selectedEvent }) {
   if (!selectedEvent) {
     return <StatusContent>일정 없음</StatusContent>;
   }
-
-  // const toggleEditMode = () => {
-  //   setIsEditMode(!isEditMode);
-  // };
 
   const { calendarName, title, location, start, end, isAllday, state } =
     selectedEvent;
@@ -140,13 +134,13 @@ export default function Status({ selectedEvent }) {
       eventDetailEditApi(selectedEvent.id, updatedEvent)
         .then((response) => {
           console.log('일정 수정 성공:', response);
-          setIsEditMode(false); // Save 버튼 누른 후에는 편집 모드 종료
+          setIsEditMode(false);
         })
         .catch((error) => {
           console.error('일정 수정 실패:', error);
         });
     } else {
-      setIsEditMode(true); // 편집 버튼 누르면 편집 모드 시작
+      setIsEditMode(true);
     }
   };
 
@@ -248,6 +242,17 @@ export default function Status({ selectedEvent }) {
           addComment={addComment}
         />
       )}
+      <MemoList>
+        {memoList &&
+          memoList.map((memoItem, index) => (
+            <div key={index}>
+              <p>{memoItem.description}</p>
+              <p>{memoItem.author.username}</p>
+              <p>{memoItem.created_at}</p>
+            </div>
+          ))}
+      </MemoList>
+      {/* <div>{memoList ? memoList[0]?.description : ''}</div> */}
     </ScheduleDetailBox>
   );
 }

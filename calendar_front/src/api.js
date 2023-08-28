@@ -113,6 +113,11 @@ export const eventDetailDeleteApi = (data) => {
   return instance.delete(`/api/v1/schedules/${data}/`, data);
 };
 
+// // 댓글 조회
+export const getEventCommentsApi = (scheduleId) => {
+  return instance.get(`/api/v1/comments/all/${scheduleId}/`);
+};
+
 // 댓글 생성
 export const createCommentApi = (data) => {
   return instance.post('/api/v1/comments/newcomment/', data);
