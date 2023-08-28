@@ -104,8 +104,29 @@ export const nicknameCheckApi = (data) => {
 };
 
 // 상세 일정 수정
-export const eventDetailEditApi = (data) => {
-  return instance.put(`/api/v1/schedules/${data.id}/`, data);
+export const eventDetailEditApi = (schedule_id, data) => {
+  return instance.put(`/api/v1/schedules/${schedule_id}/`, data);
+};
+
+// 상세 일정 삭제
+export const eventDetailDeleteApi = (data) => {
+  return instance.delete(`/api/v1/schedules/${data}/`, data);
+};
+
+// 댓글 생성
+export const createCommentApi = (data) => {
+  return instance.post('/api/v1/comments/newcomment/', data);
+};
+
+// 댓글 수정
+export const editCommentApi = (commentId, updatedDescription) => {
+  const data = { description: updatedDescription };
+  return instance.put(`/api/v1/comments/${commentId}/`, data);
+};
+
+// 댓글 삭제
+export const deleteCommentApi = (data) => {
+  return instance.delete(`/api/v1/schedules/${data}/`, data);
 };
 
 // 일정명 검색

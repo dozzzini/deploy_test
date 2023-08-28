@@ -9,10 +9,12 @@ import '@toast-ui/calendar/dist/toastui-calendar.min.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import { theme } from './theme';
+import { addDate, addHours, subtractDate } from './utils';
 
 import moment from 'moment';
 import instance from '../../api';
 
+const today = new TZDate();
 const viewModeOptions = [
   {
     title: 'MONTHLY',
@@ -202,27 +204,15 @@ export default function TUICalendar({
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
   const [selectedView, setSelectedView] = useState(view);
 
-  console.log(schedules);
-  console.log(schedules[0]?.team);
+  const initialCalendars = schedules?.map((schedule) => ({
+    id: schedule?.team.id,
+    name: schedule?.team.teamname,
+    backgroundColor: schedule?.team.color,
+    borderColor: schedule?.team.color,
+    dragBackgroundColor: schedule?.team.color,
+    isChecked: true,
+  }));
 
-  const initialCalendars = schedules?.reduce((uniqueCalendars, schedule) => {
-    const existingCalendar = uniqueCalendars.find(
-      (calendar) => calendar.id === schedule?.team.id,
-    );
-
-    if (!existingCalendar) {
-      uniqueCalendars.push({
-        id: schedule?.team.id,
-        name: schedule?.team.teamname,
-        backgroundColor: schedule?.team.color,
-        borderColor: schedule?.team.color,
-        dragBackgroundColor: schedule?.team.color,
-        isChecked: true,
-      });
-    }
-
-    return uniqueCalendars;
-  }, []);
   const initialEvents = schedules?.map((schedule) => ({
     id: schedule.id,
     calendarId: schedule.team.id,
@@ -230,21 +220,19 @@ export default function TUICalendar({
     start: new TZDate(schedule.start_date),
     end: new TZDate(schedule.end_date),
   }));
+
   const [selectedCalendars, setSelectedCalendars] = useState(
     initialCalendars.map((calendar) => ({
       ...calendar,
-      isChecked: true, // 선택 상태를 초기화합니다.
+      isChecked: true,
     })),
   );
-  console.log('selectedCalendars', selectedCalendars);
-  console.log('initialCalendars', initialCalendars);
 
   const filteredEvents = initialEvents.filter(
     (event) =>
       selectedCalendars.find((calendar) => calendar.id === event.calendarId)
         ?.isChecked,
   );
-  console.log('filteredEvents', filteredEvents);
   const getCalInstance = useCallback(
     () => calendarRef.current?.getInstance?.(),
     [],
@@ -345,7 +333,16 @@ export default function TUICalendar({
     console.log('Event Info : ', res.event);
     console.groupEnd();
 
-    setSelectedEvent(res.event);
+    const selectedCalendar = initialCalendars.find(
+      (calendar) => calendar.id === res.event.calendarId,
+    );
+
+    const updatedEvent = {
+      ...res.event,
+      calendarName: selectedCalendar ? selectedCalendar.name : '',
+    };
+
+    setSelectedEvent(updatedEvent);
   };
 
   const onClickTimezonesCollapseBtn = (timezoneCollapsed) => {
@@ -393,7 +390,6 @@ export default function TUICalendar({
   };
 
   const onBeforeCreateEvent = async (eventData) => {
-    console.log(eventData, '이벤트 데이터에 제발 팀이름 있어라');
     const start_date = moment(eventData.start.d.d).format('YYYY-MM-DD HH:mm');
     const end_date = moment(eventData.end.d.d).format('YYYY-MM-DD HH:mm');
     try {
@@ -406,9 +402,13 @@ export default function TUICalendar({
         team: eventData.calendarId,
       });
 
+      const selectedCalendar = initialCalendars.find(
+        (calendar) => calendar.id === eventData.calendarId,
+      );
+
       const event = {
         calendarId: eventData.calendarId || '',
-        calendarName: eventData.teamname,
+        calendarName: selectedCalendar ? selectedCalendar.name : '',
         id: eventForBack.id,
         title: eventData.title,
         isAllday: eventData.isAllday,
@@ -433,7 +433,6 @@ export default function TUICalendar({
   return (
     <CalendarContainer>
       <ShowMenuBar>
-        <ShowMenuBarHeader></ShowMenuBarHeader>
         {selectedCalendars.map((calendar) => (
           <TeamList key={calendar.id}>
             <Input
@@ -455,6 +454,11 @@ export default function TUICalendar({
         <TeamAddModal />
       </ShowMenuBar>
       <MIDContainer>
+        {/* <Header
+          data={initialEvents}
+          initialCalendars={initialCalendars}
+          initialEvents={initialEvents}
+        /> */}
         <CalendarBox>
           <CalendarHeader>
             <DateControlBox>

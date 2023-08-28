@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CommentList from './CommentList';
 import CommentEdit from './CommentEdit';
-import { eventDetailEditApi } from '../../api';
+import { eventDetailEditApi, eventDetailDeleteApi } from '../../api';
 import { styled } from 'styled-components';
 
 const StatusContent = styled.div`
@@ -59,6 +59,14 @@ const ScheduleDeleteBtn = styled.button`
 
 export default function Status({ selectedEvent }) {
   const [comments, setComments] = useState([]);
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editedLocation, setEditedLocation] = useState('');
+  const [editedStartTime, setEditedStartTime] = useState('');
+  const [editedEndTime, setEditedEndTime] = useState('');
+  const [editedIsAllday, setEditedIsAllday] = useState(false);
+  const [editedState, setEditedState] = useState('Todo');
+  const [isEditMode, setIsEditMode] = useState(false);
+
   console.log(selectedEvent, '냐냐냐');
 
   useEffect(() => {
@@ -68,6 +76,24 @@ export default function Status({ selectedEvent }) {
     setComments(eventComments);
   }, [selectedEvent]);
 
+  // // Set initial values for editedStartTime and editedEndTime
+  // useEffect(() => {
+  //   setEditedStartTime(
+  //     startDate.toLocaleTimeString('ko-KR', {
+  //       hour: 'numeric',
+  //       minute: 'numeric',
+  //       hour12: true,
+  //     }),
+  //   );
+  //   setEditedEndTime(
+  //     endDate.toLocaleTimeString('ko-KR', {
+  //       hour: 'numeric',
+  //       minute: 'numeric',
+  //       hour12: true,
+  //     }),
+  //   );
+  // }, [selectedEvent]);
+
   const addComment = (newComment) => {
     setComments([...comments, newComment]);
   };
@@ -76,24 +102,14 @@ export default function Status({ selectedEvent }) {
     return <StatusContent>일정 없음</StatusContent>;
   }
 
-  const { calendarId, title, location, start, end, isAllday, state } =
-    selectedEvent;
+  // const toggleEditMode = () => {
+  //   setIsEditMode(!isEditMode);
+  // };
 
-  console.log(selectedEvent);
+  const { calendarName, title, location, start, end, isAllday, state } =
+    selectedEvent;
   const startDate = new Date(start);
   const endDate = new Date(end);
-
-  const startTime = startDate.toLocaleTimeString('ko-KR', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  });
-
-  const endTime = endDate.toLocaleTimeString('ko-KR', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  });
 
   const removeComment = (commentId) => {
     setComments(comments.filter((comment) => comment.id !== commentId));
@@ -109,24 +125,113 @@ export default function Status({ selectedEvent }) {
     );
   };
 
+  const handleEditEvent = () => {
+    if (isEditMode) {
+      const updatedEvent = {
+        ...selectedEvent,
+        title: editedTitle,
+        location: editedLocation,
+        start: editedStartTime,
+        end: editedEndTime,
+        isAllday: editedIsAllday,
+        state: editedState,
+      };
+
+      eventDetailEditApi(selectedEvent.id, updatedEvent)
+        .then((response) => {
+          console.log('일정 수정 성공:', response);
+          setIsEditMode(false); // Save 버튼 누른 후에는 편집 모드 종료
+        })
+        .catch((error) => {
+          console.error('일정 수정 실패:', error);
+        });
+    } else {
+      setIsEditMode(true); // 편집 버튼 누르면 편집 모드 시작
+    }
+  };
+
+  const startTime = isEditMode
+    ? editedStartTime
+    : startDate.toLocaleTimeString('ko-KR', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+      });
+
+  const endTime = isEditMode
+    ? editedEndTime
+    : endDate.toLocaleTimeString('ko-KR', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+      });
+
+  const handleDeleteEvent = () => {
+    eventDetailDeleteApi(selectedEvent.id)
+      .then((response) => {
+        console.log('일정 삭제 성공:', response);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error('일정 삭제 실패:', error);
+      });
+  };
+
   return (
     <ScheduleDetailBox>
       <ScheduleDetailTitle>📌 일정 상세 정보 📌</ScheduleDetailTitle>
       <ButtonBox>
-        <ScheduleEditBtn>편집</ScheduleEditBtn>
-        <ScheduleDeleteBtn>삭제</ScheduleDeleteBtn>
+        <ScheduleEditBtn onClick={handleEditEvent}>
+          {isEditMode ? '저장' : '편집'}
+        </ScheduleEditBtn>
+        <ScheduleDeleteBtn onClick={handleDeleteEvent}>삭제</ScheduleDeleteBtn>
       </ButtonBox>
-      <p>♦️ {calendarId}</p>
-      <p>♦️ {title}</p>
-      <p>{location ? location : ''}</p>
-      <p>
+      <div>
+        <input value={`♦️ ${calendarName}`} readOnly />
+        <input
+          value={isEditMode ? editedTitle : title}
+          onChange={(e) => setEditedTitle(e.target.value)}
+          readOnly={!isEditMode}
+        />
+        <input
+          value={isEditMode ? editedLocation : location ? location : ''}
+          onChange={(e) => setEditedLocation(e.target.value)}
+          readOnly={!isEditMode}
+        />
         ⏰ 시작일시 ⏰
-        <br /> {startTime} <br />
+        <input
+          value={isEditMode ? editedStartTime : startTime}
+          onChange={(e) => setEditedStartTime(e.target.value)}
+          style={{ whiteSpace: 'pre-line' }}
+          readOnly={!isEditMode}
+        />
         ⏰ 종료일시 ⏰
-        <br /> {endTime}
-      </p>
-      <p>{isAllday ? '하루종일' : ''}</p>
-      <p>✔️{state === 'Free' ? 'Done' : 'Todo'}✔️</p>
+        <input
+          value={isEditMode ? editedEndTime : endTime}
+          onChange={(e) => setEditedEndTime(e.target.value)}
+          style={{ whiteSpace: 'pre-line' }}
+          readOnly={!isEditMode}
+        />
+        <label>
+          <input
+            type="checkbox"
+            checked={editedIsAllday}
+            onChange={() => setEditedIsAllday(!editedIsAllday)}
+            disabled={!isEditMode}
+          />
+          하루종일
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={editedState === 'Done'}
+            onChange={() =>
+              setEditedState(editedState === 'Todo' ? 'Done' : 'Todo')
+            }
+          />
+          {editedState === 'Done' ? 'Done' : 'Todo'}
+        </label>
+      </div>
 
       {comments.map((comment) => (
         <CommentList
@@ -136,11 +241,13 @@ export default function Status({ selectedEvent }) {
           editComment={editComment}
         />
       ))}
-      <CommentEdit
-        schedule={selectedEvent.id}
-        author="nickname"
-        addComment={addComment}
-      />
+      {selectedEvent && (
+        <CommentEdit
+          schedule={selectedEvent.id}
+          author="nickname"
+          addComment={addComment}
+        />
+      )}
     </ScheduleDetailBox>
   );
 }

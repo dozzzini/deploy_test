@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-// import { MdOutlineInsertComment } from 'react-icons/md';
-import { styled } from 'styled-components';
+import { createCommentApi } from '../../api';
 
 const CommentEdit = ({ schedule, author, addComment }) => {
   const [description, setDescription] = useState('');
   const inputRef = React.useRef(null);
 
   const inputStyle = {
-    // border: '1px solid blue',
     border: 'none',
     outline: 'none',
     fontSize: '12px',
@@ -15,21 +13,25 @@ const CommentEdit = ({ schedule, author, addComment }) => {
     marginTop: '30px',
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (description.trim() === '') {
       inputRef.current.focus();
       return;
     }
 
-    addComment({
-      schedule,
-      author,
-      description,
-      createdTime: new Date(),
-    });
+    try {
+      const response = await createCommentApi({
+        schedule_id: schedule,
+        description: description,
+      });
 
-    setDescription('');
+      const newComment = response.data;
+      addComment(newComment);
+      setDescription('');
+    } catch (error) {
+      console.error('댓글 생성 중 오류:', error);
+    }
   };
 
   return (
@@ -42,9 +44,6 @@ const CommentEdit = ({ schedule, author, addComment }) => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      {/* <button type="submit">
-        <MdOutlineInsertComment />
-      </button> */}
     </form>
   );
 };
