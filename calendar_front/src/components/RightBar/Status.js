@@ -64,7 +64,7 @@ export default function Status({ selectedEvent }) {
   const [editedStartTime, setEditedStartTime] = useState('');
   const [editedEndTime, setEditedEndTime] = useState('');
   const [editedIsAllday, setEditedIsAllday] = useState(false);
-  const [editedState, setEditedState] = useState('Todo');
+  const [editedState, setEditedState] = useState('To do');
   const [isEditMode, setIsEditMode] = useState(false);
 
   console.log(selectedEvent, '냐냐냐');
@@ -226,10 +226,10 @@ export default function Status({ selectedEvent }) {
             type="checkbox"
             checked={editedState === 'Done'}
             onChange={() =>
-              setEditedState(editedState === 'Todo' ? 'Done' : 'Todo')
+              setEditedState(editedState === 'To do' ? 'Done' : 'To do')
             }
           />
-          {editedState === 'Done' ? 'Done' : 'Todo'}
+          {editedState === 'Done' ? 'Done' : 'To do'}
         </label>
       </div>
 
