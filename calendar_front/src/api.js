@@ -143,3 +143,8 @@ export const logoutApi = (data) => {
 export const teamDeleteApi = (teamId) => {
   return instance.delete(`/api/v1/teams/${teamId}/`);
 };
+
+// 팀 수정
+export const teamEditApi = (teamId, newData) => {
+  return instance.put(`/api/v1/teams/${teamId}/`, newData);
+};

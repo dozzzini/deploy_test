@@ -78,6 +78,7 @@ function Layout() {
             view="month"
             setSelectedEvent={setSelectedEvent}
             teams={teams}
+            setTeams={setTeams}
           />
           <RightBar selectedEvent={selectedEvent} schedules={validSchedules} />
         </Wrapper>

@@ -17,6 +17,8 @@ import instance from '../../api';
 import { MdOutlineEdit, MdOutlineDelete } from 'react-icons/md';
 
 import { teamDeleteApi } from '../../api';
+import { teamEditApi } from '../../api';
+
 const viewModeOptions = [
   {
     title: 'MONTHLY',
@@ -472,8 +474,31 @@ export default function TUICalendar({
     }
   };
 
-  const onClickDeleteButton = (calendarId) => {
-    showConfirmDialog(calendarId);
+  const onClickDeleteButton = (teamId) => {
+    showConfirmDialog(teamId);
+  };
+
+  const handleEditEvent = async (teamId, newName) => {
+    try {
+      // 수정할 팀 정보를 요청 데이터에 포함합니다.
+      const eventData = { name: newName };
+
+      await teamEditApi(teamId, eventData);
+
+      // 수정이 성공하면 해당 팀 정보를 업데이트합니다.
+      const updatedTeams = teams.map((team) =>
+        team.id === teamId ? { ...team, name: newName } : team,
+      );
+
+      // 업데이트된 팀 목록을 적용합니다.
+      const setTeams = (updatedTeams) => {
+        // setTeams 함수의 구현 내용
+
+        setTeams(updatedTeams);
+      };
+    } catch (error) {
+      console.error('팀 정보 수정 중 오류 발생:', error);
+    }
   };
   return (
     <CalendarContainer>
@@ -497,8 +522,17 @@ export default function TUICalendar({
               />
               <CalendarButtonBox>
                 <CalendarName>{calendar.name}</CalendarName>
-                <CalendarEditButton>
-                  {' '}
+                <CalendarEditButton
+                  onClick={() => {
+                    // 수정할 팀명을 사용자 입력 또는 다른 방법으로 얻어옵니다.
+                    const newName = prompt('새로운 팀명을 입력하세요:');
+
+                    if (newName) {
+                      // 수정할 팀명이 입력된 경우에만 수정 함수 호출
+                      handleEditEvent(calendar.id, newName);
+                    }
+                  }}
+                >
                   <MdOutlineEdit />
                 </CalendarEditButton>
                 <CalendarDeleteButton
