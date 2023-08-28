@@ -138,3 +138,8 @@ export const deleteCommentApi = (data) => {
 export const logoutApi = (data) => {
   return instance.post(`/api/v1/users/logout/`, data);
 };
+
+// 팀 삭제
+export const teamDeleteApi = (teamId) => {
+  return instance.delete(`/api/v1/teams/${teamId}/`);
+};

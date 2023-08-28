@@ -14,7 +14,9 @@ import { addDate, addHours, subtractDate } from './utils';
 import moment from 'moment';
 import instance from '../../api';
 
-const today = new TZDate();
+import { MdOutlineEdit, MdOutlineDelete } from 'react-icons/md';
+
+import { teamDeleteApi } from '../../api';
 const viewModeOptions = [
   {
     title: 'MONTHLY',
@@ -35,38 +37,38 @@ const CalendarContainer = styled.div`
   height: 90vh;
 `;
 const ShowMenuBar = styled.div`
+  border-right: 1px solid rgb(235, 237, 239);
+
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgb(235, 237, 239);
   width: 8vw;
 `;
-const ShowMenuBarHeader = styled.div`
-  height: 3vh;
-  color: grey;
-  text-align: center;
-  font-weight: 100;
-  font-size: 22px;
-  padding: 8px;
-  // border-bottom: 1px solid rgb(235, 237, 239);
-  margin-bottom: 22px;
-`;
 
+const TeamBox = styled.div`
+  overflow-y: auto;
+  height: 450px;
+  width: 100%;
+`;
 const TeamList = styled.label`
+  /* border: 3px solid black; */
+
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-weight: 100;
   text-align: center;
-  font-size: 20px;
-  padding: 2px;
+  font-size: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `;
+
 const Input = styled.input`
   opacity: 1;
   -webkit-appearance: none;
   cursor: pointer;
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   box-shadow:
     -10px -10px 10px rgba(255, 255, 255, 0.8),
     10px 10px 10px rgba(0, 0, 70, 0.18);
@@ -84,6 +86,34 @@ const Input = styled.input`
     background-color: ${(props) => props.bgColor};
   }
 `;
+
+const CalendarName = styled.div`
+  /* border: 1px solid rebeccapurple; */
+  margin-top: 20px;
+  margin-left: 30px;
+  width: 80%;
+  overflow-wrap: break-word;
+`;
+const CalendarButtonBox = styled.div`
+  /* border: 1px solid red; */
+
+  display: flex;
+  justify-content: end;
+  width: 100%;
+`;
+const CalendarEditButton = styled.button`
+  border: none;
+  transform: scale(0.8);
+  background-color: transparent;
+  padding-inline: unset;
+`;
+const CalendarDeleteButton = styled.button`
+  border: none;
+  transform: scale(0.8);
+  background-color: transparent;
+  padding-inline: unset;
+`;
+
 const MIDContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -417,28 +447,71 @@ export default function TUICalendar({
     }
   };
 
+  const showConfirmDialog = (teamId) => {
+    const result = window.confirm('일정을 삭제하시겠습니까?');
+    if (result) {
+      // 확인을 선택한 경우 삭제 작업 수행
+      handleDeleteEvent(teamId);
+    }
+  };
+
+  // 삭제 작업 수행 함수
+  const handleDeleteEvent = async (teamId) => {
+    try {
+      await teamDeleteApi(teamId);
+      // 삭제가 완료되면 캘린더에서 해당 일정을 제거하도록 업데이트합니다.
+      const updatedCalendars = selectedCalendars.map((item) =>
+        item.id === teamId ? { ...item, isChecked: false } : item,
+      );
+      console.log(teamId, '삭제되는 teamId');
+      setSelectedCalendars(updatedCalendars);
+      // 이후 다시 렌더링이 필요한 경우 캘린더를 업데이트하십시오.
+      // getCalInstance().render();
+    } catch (error) {
+      console.error('삭제 중 오류 발생:', error);
+    }
+  };
+
+  const onClickDeleteButton = (calendarId) => {
+    showConfirmDialog(calendarId);
+  };
   return (
     <CalendarContainer>
       <ShowMenuBar>
-        {selectedCalendars.map((calendar) => (
-          <TeamList key={calendar.id}>
-            <Input
-              type="checkbox"
-              checked={calendar.isChecked}
-              bgColor={calendar.backgroundColor} //
-              onChange={() => {
-                const updatedCalendars = selectedCalendars.map((item) =>
-                  item.id === calendar.id
-                    ? { ...item, isChecked: !item.isChecked }
-                    : item,
-                );
-                setSelectedCalendars(updatedCalendars);
-              }}
-            />
-            {calendar.name}
-          </TeamList>
-        ))}
-        <TeamAddModal />
+        {' '}
+        <TeamBox>
+          {selectedCalendars.map((calendar) => (
+            <TeamList key={calendar.id}>
+              <Input
+                type="checkbox"
+                checked={calendar.isChecked}
+                bgColor={calendar.backgroundColor}
+                onChange={() => {
+                  const updatedCalendars = selectedCalendars.map((item) =>
+                    item.id === calendar.id
+                      ? { ...item, isChecked: !item.isChecked }
+                      : item,
+                  );
+                  setSelectedCalendars(updatedCalendars);
+                }}
+              />
+              <CalendarButtonBox>
+                <CalendarName>{calendar.name}</CalendarName>
+                <CalendarEditButton>
+                  {' '}
+                  <MdOutlineEdit />
+                </CalendarEditButton>
+                <CalendarDeleteButton
+                  selectedCalendars={selectedCalendars}
+                  onClick={() => onClickDeleteButton(calendar.id)}
+                >
+                  <MdOutlineDelete />
+                </CalendarDeleteButton>
+              </CalendarButtonBox>
+            </TeamList>
+          ))}
+        </TeamBox>
+        <TeamAddModal></TeamAddModal>
       </ShowMenuBar>
       <MIDContainer>
         {/* <Header
