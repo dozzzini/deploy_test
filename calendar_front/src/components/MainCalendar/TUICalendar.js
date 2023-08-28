@@ -205,12 +205,12 @@ export default function TUICalendar({
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
   const [selectedView, setSelectedView] = useState(view);
 
-  const initialCalendars = schedules?.map((schedule) => ({
-    id: schedule?.team.id,
-    name: schedule?.team.teamname,
-    backgroundColor: schedule?.team.color,
-    borderColor: schedule?.team.color,
-    dragBackgroundColor: schedule?.team.color,
+  const initialCalendars = teams?.map((team) => ({
+    id: team.id,
+    name: team.teamname,
+    backgroundColor: team.color,
+    borderColor: team.color,
+    dragBackgroundColor: team.color,
     isChecked: true,
   }));
 
