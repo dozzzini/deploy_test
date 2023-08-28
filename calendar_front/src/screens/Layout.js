@@ -37,14 +37,14 @@ function Layout() {
 
   useEffect(() => {
     console.log('layout', isLogin);
-    if (isLogin) {
+    if (!isLogin) {
       navigate('/login', { replace: true });
     }
 
     getScheduleListApi()
       .then((response) => {
         console.log(response.data, 'dldldl');
-        setSchedules(response.data);
+        setSchedules(response.data.schedules);
       })
       .catch((error) => {
         console.error('스케줄 가져오기 실패:', error);
