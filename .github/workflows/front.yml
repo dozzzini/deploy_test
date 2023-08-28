@@ -19,6 +19,7 @@ jobs:
           password: ${{secrets.REMOTE_SSH_KEY}}
           port: ${{secrets.REMOTE_SSH_PORT}}
           script: |
+            docker compose -f compose_front.yaml down
             cd calendar_test
             git pull origin main
             cd calendar_front
