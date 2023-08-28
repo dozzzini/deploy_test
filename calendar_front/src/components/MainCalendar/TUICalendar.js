@@ -10,7 +10,7 @@ import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import { theme } from './theme';
 import { addDate, addHours, subtractDate } from './utils';
-
+import ColorPicker from '../MainCalendar/ColorPicker';
 import moment from 'moment';
 import instance from '../../api';
 
@@ -232,6 +232,7 @@ export default function TUICalendar({
   setEvents,
   setSelectedEvent,
   teams,
+  setTeams,
 }) {
   const calendarRef = useRef(null);
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
@@ -477,25 +478,26 @@ export default function TUICalendar({
   const onClickDeleteButton = (teamId) => {
     showConfirmDialog(teamId);
   };
-
-  const handleEditEvent = async (teamId, newName) => {
+  //수정 작업 수행 함수
+  const handleEditEvent = async (teamId, newName, newColor) => {
+    console.log('teamId:', teamId);
+    console.log('newName:', newName);
+    console.log('newColor:', newColor);
     try {
       // 수정할 팀 정보를 요청 데이터에 포함합니다.
-      const eventData = { name: newName };
+      const eventData = { teamname: newName, color: newColor };
 
-      await teamEditApi(teamId, eventData);
+      const updatedTeamResponse = await teamEditApi(teamId, eventData);
 
       // 수정이 성공하면 해당 팀 정보를 업데이트합니다.
       const updatedTeams = teams.map((team) =>
-        team.id === teamId ? { ...team, name: newName } : team,
+        team.id === teamId
+          ? { ...team, name: updatedTeamResponse.data.name }
+          : team,
       );
 
       // 업데이트된 팀 목록을 적용합니다.
-      const setTeams = (updatedTeams) => {
-        // setTeams 함수의 구현 내용
-
-        setTeams(updatedTeams);
-      };
+      setTeams(updatedTeams);
     } catch (error) {
       console.error('팀 정보 수정 중 오류 발생:', error);
     }
@@ -525,11 +527,14 @@ export default function TUICalendar({
                 <CalendarEditButton
                   onClick={() => {
                     // 수정할 팀명을 사용자 입력 또는 다른 방법으로 얻어옵니다.
-                    const newName = prompt('새로운 팀명을 입력하세요:');
+                    const newName = prompt('새로운 팀명을 입력하세요');
 
                     if (newName) {
-                      // 수정할 팀명이 입력된 경우에만 수정 함수 호출
-                      handleEditEvent(calendar.id, newName);
+                      handleEditEvent(
+                        calendar.id,
+                        newName,
+                        calendar.backgroundColor,
+                      );
                     }
                   }}
                 >
