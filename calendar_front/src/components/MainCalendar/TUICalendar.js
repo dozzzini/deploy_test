@@ -13,6 +13,9 @@ import { theme } from './theme';
 import moment from 'moment';
 import instance from '../../api';
 
+import { MdOutlineEdit, MdOutlineDelete } from 'react-icons/md';
+
+import { teamDeleteApi } from '../../api';
 const viewModeOptions = [
   {
     title: 'MONTHLY',
@@ -39,22 +42,11 @@ const ShowMenuBar = styled.div`
   flex-direction: column;
   width: 8vw;
 `;
-// const ShowMenuBarHeader = styled.div`
-//   border: 1px solid red;
-
-//   height: 3vh;
-//   color: grey;
-//   text-align: center;
-//   font-weight: 100;
-//   font-size: 22px;
-//   padding: 8px;
-//   // border-bottom: 1px solid rgb(235, 237, 239);
-//   margin-bottom: 22px;
-// `;
 
 const TeamBox = styled.div`
   overflow-y: auto;
   height: 450px;
+  width: 100%;
 `;
 const TeamList = styled.label`
   /* border: 3px solid black; */
@@ -94,7 +86,33 @@ const Input = styled.input`
   }
 `;
 
-const CalendarName = styled.div``;
+const CalendarName = styled.div`
+  /* border: 1px solid rebeccapurple; */
+  margin-top: 20px;
+  margin-left: 30px;
+  width: 80%;
+  overflow-wrap: break-word;
+`;
+const CalendarButtonBox = styled.div`
+  /* border: 1px solid red; */
+
+  display: flex;
+  justify-content: end;
+  width: 100%;
+`;
+const CalendarEditButton = styled.button`
+  border: none;
+  transform: scale(0.8);
+  background-color: transparent;
+  padding-inline: unset;
+`;
+const CalendarDeleteButton = styled.button`
+  border: none;
+  transform: scale(0.8);
+  background-color: transparent;
+  padding-inline: unset;
+`;
+
 const MIDContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -246,7 +264,7 @@ export default function TUICalendar({
   const [selectedCalendars, setSelectedCalendars] = useState(
     initialCalendars.map((calendar) => ({
       ...calendar,
-      isChecked: true, // 선택 상태를 초기화합니다.
+      isChecked: false, // 선택 상태를 초기화합니다.
     })),
   );
   console.log('selectedCalendars', selectedCalendars);
@@ -443,18 +461,45 @@ export default function TUICalendar({
     }
   };
 
+  const showConfirmDialog = (teamId) => {
+    const result = window.confirm('일정을 삭제하시겠습니까?');
+    if (result) {
+      // 확인을 선택한 경우 삭제 작업 수행
+      handleDeleteEvent(teamId);
+    }
+  };
+
+  // 삭제 작업 수행 함수
+  const handleDeleteEvent = async (teamId) => {
+    try {
+      await teamDeleteApi(teamId);
+      // 삭제가 완료되면 캘린더에서 해당 일정을 제거하도록 업데이트합니다.
+      const updatedCalendars = selectedCalendars.map((item) =>
+        item.id === teamId ? { ...item, isChecked: false } : item,
+      );
+      console.log(teamId, '삭제되는 teamId');
+      setSelectedCalendars(updatedCalendars);
+      // 이후 다시 렌더링이 필요한 경우 캘린더를 업데이트하십시오.
+      // getCalInstance().render();
+    } catch (error) {
+      console.error('삭제 중 오류 발생:', error);
+    }
+  };
+
+  const onClickDeleteButton = (calendarId) => {
+    showConfirmDialog(calendarId);
+  };
   return (
     <CalendarContainer>
       <ShowMenuBar>
         {' '}
         <TeamBox>
-          {/* <ShowMenuBarHeader></ShowMenuBarHeader> */}
           {selectedCalendars.map((calendar) => (
             <TeamList key={calendar.id}>
               <Input
                 type="checkbox"
                 checked={calendar.isChecked}
-                bgColor={calendar.backgroundColor} //
+                bgColor={calendar.backgroundColor}
                 onChange={() => {
                   const updatedCalendars = selectedCalendars.map((item) =>
                     item.id === calendar.id
@@ -464,11 +509,23 @@ export default function TUICalendar({
                   setSelectedCalendars(updatedCalendars);
                 }}
               />
-              <CalendarName>{calendar.name}</CalendarName>
+              <CalendarButtonBox>
+                <CalendarName>{calendar.name}</CalendarName>
+                <CalendarEditButton>
+                  {' '}
+                  <MdOutlineEdit />
+                </CalendarEditButton>
+                <CalendarDeleteButton
+                  selectedCalendars={selectedCalendars}
+                  onClick={() => onClickDeleteButton(calendar.id)}
+                >
+                  <MdOutlineDelete />
+                </CalendarDeleteButton>
+              </CalendarButtonBox>
             </TeamList>
           ))}
-          <TeamAddModal />{' '}
         </TeamBox>
+        <TeamAddModal></TeamAddModal>
       </ShowMenuBar>
       <MIDContainer>
         <CalendarBox>

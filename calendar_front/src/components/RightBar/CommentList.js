@@ -18,13 +18,6 @@ const CommentItem = styled.div`
   height: auto;
 `;
 
-// const MemoBox = styled.div`
-//   /* border: 1px solid darkblue; */
-
-//   text-align: center;
-//   font-weight: 900;
-// `;
-
 const CommentAuthor = styled.div`
   /* border: 1px solid purple; */
   font-size: 10px;

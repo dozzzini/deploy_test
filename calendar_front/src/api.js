@@ -112,3 +112,8 @@ export const eventDetailEditApi = (data) => {
 export const scheduleSearchApi = (data) => {
   return instance.post(`/api/v1/schedules/search/`, data);
 };
+
+// 팀 삭제
+export const teamDeleteApi = (teamId) => {
+  return instance.delete(`/api/v1/teams/${teamId}/`);
+};

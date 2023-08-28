@@ -16,13 +16,14 @@ const TeamListContainer = styled.div`
 
 const TeamListWrapper = styled.div`
   /* border: 1px solid red; */
+  position: relative;
 `;
 
 const TeamBtnWrapper = styled.div`
   /* border: 1px solid greenyellow; */
 
-  width: 100%;
-  margin-top: 600px;
+  width: auto;
+  margin-top: 200px;
   display: flex;
   justify-content: center;
   position: absolute;
