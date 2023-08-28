@@ -60,7 +60,6 @@ function Layout() {
       });
   }, []);
 
-  console.log(schedules);
   // schedules가 배열인지 확인하고, 아니면 빈 배열로 대체합니다.
   const validSchedules = Array.isArray(schedules) ? schedules : [];
 

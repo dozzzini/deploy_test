@@ -137,6 +137,7 @@ function TeamAddModal() {
   } = useForm();
   const [teamAddModalIsOpen, setTeamAddModalIsOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState('#F44E3B');
+  const [nickname, setNickname] = useState('');
 
   const toggleModal = () => {
     setTeamAddModalIsOpen(!teamAddModalIsOpen);
@@ -158,6 +159,7 @@ function TeamAddModal() {
       });
       console.log('팀 생성 성공:', response.data);
       setTeamAddModalIsOpen(false);
+      setNickname(data.nickname);
       reset();
     } catch (error) {
       console.error('팀 생성 실패:', error);

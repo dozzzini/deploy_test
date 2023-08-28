@@ -1,46 +1,33 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
+import moment from 'moment';
+import { deleteCommentApi, editCommentApi } from '../../api';
 
 import {
-  //...
-  MdOutlineEdit, // 수정 아이콘
-  MdOutlineDelete, // 삭제 아이콘
+  MdOutlineEdit,
+  MdOutlineDelete,
+  MdOutlineCancel,
 } from 'react-icons/md';
 
 const CommentDetailBox = styled.div`
-  /* border: 3px solid pink; */
   margin-top: 10px;
 `;
 const CommentItem = styled.div`
-  /* border: 2px solid palegreen; */
-
   width: 100%;
   height: auto;
 `;
 
-// const MemoBox = styled.div`
-//   /* border: 1px solid darkblue; */
-
-//   text-align: center;
-//   font-weight: 900;
-// `;
-
 const CommentAuthor = styled.div`
-  /* border: 1px solid purple; */
   font-size: 10px;
   color: black;
 `;
 
 const CommentBox = styled.div`
-  /* border: 3px solid yellow; */
-
   border-bottom: 1px solid rgb(235, 237, 239);
   display: flex;
 `;
 
 const CommentContent = styled.div`
-  /* border: 1px solid red; */
-
   width: 70%;
   height: auto;
   background-color: transparent;
@@ -50,7 +37,6 @@ const CommentContent = styled.div`
 `;
 
 const CommentDate = styled.div`
-  /* border: 1px solid blue; */
   width: 100%;
   font-size: 5px;
   white-space: nowrap;
@@ -58,8 +44,6 @@ const CommentDate = styled.div`
 `;
 
 const CommentBtnGroup = styled.div`
-  /* border: 1px solid black; */
-
   display: flex;
   justify-content: end;
   width: 30%;
@@ -82,33 +66,35 @@ const CommentList = ({ comment, removeComment, editComment }) => {
   const [editMode, setEditMode] = useState(false);
   const [editedComment, setEditedComment] = useState(comment.description);
 
-  const handleEdit = () => {
-    if (editMode) {
+  const handleEdit = async () => {
+    try {
+      await editCommentApi(comment.id, editedComment);
+
       editComment(comment.id, editedComment);
+      setEditMode(false);
+    } catch (error) {
+      console.error('댓글 수정 중 오류:', error);
     }
-    setEditMode(!editMode);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (window.confirm('댓글을 삭제하시겠습니까?')) {
-      removeComment(comment.id);
+      try {
+        await deleteCommentApi(comment.id);
+
+        removeComment(comment.id);
+      } catch (error) {
+        console.error('댓글 삭제 중 오류:', error);
+      }
     }
   };
 
   return (
     <CommentDetailBox>
-      {/* <MemoBox>MEMO</MemoBox> */}
-
       <CommentItem>
-        <CommentAuthor>{comment.author} </CommentAuthor>
+        <CommentAuthor>{comment.author.username} </CommentAuthor>
         <CommentDate>
-          {new Date(comment.createdTime).toISOString().slice(0, 10) +
-            ' ' +
-            new Date(comment.createdTime).toLocaleString('ko-KR', {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: true,
-            })}{' '}
+          {moment(comment.createdTime).format('YYYY-MM-DD HH:mm')}{' '}
         </CommentDate>
 
         <CommentBox>
@@ -117,13 +103,19 @@ const CommentList = ({ comment, removeComment, editComment }) => {
               type="text"
               value={editedComment}
               onChange={(e) => setEditedComment(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleEdit();
+                }
+              }}
             />
           ) : (
-            <CommentContent>{comment.description} </CommentContent>
+            <CommentContent>{editedComment} </CommentContent>
           )}{' '}
           <CommentBtnGroup>
-            <CommentEditButton onClick={handleEdit}>
-              <MdOutlineEdit />
+            <CommentEditButton onClick={() => setEditMode(!editMode)}>
+              {editMode ? <MdOutlineCancel /> : <MdOutlineEdit />}
             </CommentEditButton>
             <CommentDeleteButton onClick={handleDelete}>
               <MdOutlineDelete />
