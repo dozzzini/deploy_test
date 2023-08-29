@@ -3,8 +3,8 @@ const routes = {
   welcome: '/welcome',
   mypage: '/mypage/:username',
   landing: '/',
-  signup: '/signup',
-  login: '/login',
+  // signup: '/signup',
+  login: '/loginsignup',
 };
 
 export default routes;
