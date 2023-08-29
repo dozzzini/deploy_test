@@ -26,13 +26,13 @@ function App() {
       <GlobalStyle />
       <Routes>
         <Route path={routes.layout} element={<Layout />} />
-        {/* <Route path={routes.login} element={<LoginSignup />} /> */}
-        <Route
+        <Route path={routes.login} element={<LoginSignup />} />
+        {/* <Route
           path={routes.login}
           element={
             checkUserAuth() ? <Navigate to={routes.layout} /> : <LoginSignup />
           }
-        />
+        /> */}
         <Route path={routes.welcome} element={<Welcome />} />
         <Route path={routes.landing} element={<Landing />} />
       </Routes>
