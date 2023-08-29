@@ -1,9 +1,11 @@
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 import ColorPicker from './ColorPicker';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { createTeamApi } from '../../api';
 import { LuX } from 'react-icons/lu';
+import routes from '../../routes';
+import { FaCopy } from 'react-icons/fa';
 
 const TeamListContainer = styled.div`
   /* border: 1px solid blue; */
@@ -137,6 +139,22 @@ const ATMbutton = styled.button`
   }
 `;
 
+const TeamLinkModal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: ${(props) =>
+    props.isOpen ? '50%' : '-100%'}; /* 왼쪽으로 슬라이드되는 효과 */
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 430px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  transition: left 0.3s ease-in-out; /* 애니메이션 효과 설정 */
+`;
+
 function TeamAddModal() {
   const {
     register,
@@ -147,6 +165,7 @@ function TeamAddModal() {
   const [teamAddModalIsOpen, setTeamAddModalIsOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState('#F44E3B');
   const [nickname, setNickname] = useState('');
+  const [teamId, setTeamId] = useState(null);
 
   const toggleModal = () => {
     setTeamAddModalIsOpen(!teamAddModalIsOpen);
@@ -168,11 +187,31 @@ function TeamAddModal() {
       });
       console.log('팀 생성 성공:', response.data);
       setTeamAddModalIsOpen(false);
+      setTeamId(response.data.team.id);
       setNickname(data.nickname);
       reset();
     } catch (error) {
       console.error('팀 생성 실패:', error);
       reset();
+    }
+  };
+
+  const handleCopyClick = () => {
+    if (teamId) {
+      const link = `http://localhost:8000/api/v1/teams/members/${btoa(
+        teamId + '',
+      )}/`;
+      navigator.clipboard
+        .writeText(link)
+        .then(() => {
+          alert('링크가 복사되었습니다.');
+        })
+        .catch((error) => {
+          console.error('링크 복사 실패:', error);
+          alert('링크 복사에 실패했습니다.');
+        });
+    } else {
+      alert('복사할 링크가 없습니다.');
     }
   };
 
@@ -221,6 +260,18 @@ function TeamAddModal() {
       <TeamBtnWrapper>
         <TeamAddBtn onClick={toggleModal}>+</TeamAddBtn>
       </TeamBtnWrapper>
+      {teamId && (
+        <TeamLinkModal isOpen={!!teamId}>
+          <h2>Your new team link</h2>
+          <p>{`http://localhost:8000/api/v1/teams/members/${btoa(
+            teamId + '',
+          )}/`}</p>
+
+          <button onClick={handleCopyClick}>링크 복사</button>
+
+          <button onClick={() => setTeamId(null)}>닫기</button>
+        </TeamLinkModal>
+      )}
     </TeamListContainer>
   );
 }
