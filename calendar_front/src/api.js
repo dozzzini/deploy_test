@@ -153,3 +153,12 @@ export const teamDeleteApi = (teamId) => {
 export const teamEditApi = (teamId, newData) => {
   return instance.put(`/api/v1/teams/${teamId}/`, newData);
 };
+
+export const updateUserInfoApi = (username, data) => {
+  return instance.put(`/api/v1/users/myinfo/${username}/`, data);
+};
+
+// 회원 탈퇴
+export const deleteAccountApi = (username) => {
+  return instance.delete(`/api/v1/users/myinfo/${username}/`);
+};

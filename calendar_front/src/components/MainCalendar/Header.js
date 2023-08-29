@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import { LuSettings } from 'react-icons/lu';
 import SearchInfo from './SearchInfo';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { deleteAccountApi, updateUserInfoApi } from '../../api';
 import { scheduleSearchApi, logoutApi } from '../../api';
@@ -101,9 +101,66 @@ function Header({ schedules }) {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
-
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    // schedules를 가져오는 비동기 작업이 완료되면 username을 설정합니다.
+    if (schedules && schedules.user) {
+      setUsername(schedules.user.username);
+    }
+  }, [schedules]);
+
+  if (!schedules) {
+    return <div>Loading...</div>; // 혹은 로딩 표시 UI를 보여줄 수 있습니다.
+  }
+  const handleUserInfoUpdate = (newPassword, confirmPassword) => {
+    console.log('handleUserInfoUpdate 함수 시작');
+
+    if (newPassword === confirmPassword) {
+      console.log('새 비밀번호와 확인 비밀번호가 일치합니다.');
+
+      updateUserInfoApi(username, {
+        new_password: newPassword,
+        confirm_password: confirmPassword,
+      })
+        .then((response) => {
+          console.log('비밀번호가 성공적으로 변경되었습니다.', response);
+          setNewPassword('');
+          setConfirmPassword('');
+          // 모달 닫기
+          closeUserInfo();
+        })
+        .catch((error) => {
+          console.error('비밀번호 변경 오류:', error);
+        });
+    } else {
+      console.error('새 비밀번호와 확인 비밀번호가 일치하지 않습니다.');
+    }
+    console.log('handleUserInfoUpdate 함수 종료');
+  };
+  const handleAccountDeletion = () => {
+    console.log('handleAccountDeletion 함수 시작');
+    console.log('schedules:', schedules); // 확인용 로그
+    console.log('username:', schedules.user.username);
+    if (window.confirm('정말로 회원탈퇴하시겠습니까?')) {
+      deleteAccountApi(schedules.user.username, {
+        refresh_token: localStorage.getItem('refresh_token'),
+      })
+        .then(() => {
+          closeModal();
+          localStorage.clear();
+          navigate('/login', { replace: true });
+        })
+        .catch((error) => {
+          console.error('회원탈퇴 오류:', error);
+        });
+    }
+    console.log('handleAccountDeletion 함수 종료');
+  };
   const handleInputChange = (event) => {
     const value = event.target.value;
     setInputValue(value);
