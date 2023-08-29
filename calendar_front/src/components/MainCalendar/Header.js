@@ -3,8 +3,8 @@ import { LuSettings } from 'react-icons/lu';
 import SearchInfo from './SearchInfo';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { deleteAccountApi, updateUserInfoApi } from '../../api';
 import { scheduleSearchApi, logoutApi } from '../../api';
+import UserInfoContent from '../RightBar/UserInfo';
 const HeaderContainer = styled.div`
   width: 100%;
   padding: 10px;
@@ -62,17 +62,7 @@ const Content = styled.div`
   background-color: none;
   width: 100%;
 `;
-const UserInfoContent = styled.div`
-  position: absolute;
-  top: 0%;
-  right: 0%;
-  background-color: white;
-  border-radius: 10px;
-  width: 200px;
-  height: 200px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  max-width: 200px; /* 모달 최대 너비 조정 */
-`;
+
 const OptionBtn = styled.button`
   margin-top: 10px;
   font-size: 12px;
@@ -218,18 +208,10 @@ function Header({ schedules }) {
             <OptionBtn onClick={openUserInfo}>회원정보수정</OptionBtn>
           </Content>
           {UserInfoIsOpen && (
-            <UserInfoContent>
+            <div>
               <CloseIcon onClick={closeUserInfo}>&times;</CloseIcon>
-              <form>
-                {/* <input placeholder="email@email.com"></input>
-                <input placeholder="name"></input> */}
-                <input type="password" placeholder="new password" />
-                <input type="password" placeholder="confirm new password" />
-                <button onClick={''}>비밀번호 변경</button>
-                <br />
-                <button onClick={''}>회원탈퇴</button>
-              </form>
-            </UserInfoContent>
+              <UserInfoContent />
+            </div>
           )}
         </Modal>
       )}

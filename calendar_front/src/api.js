@@ -6,6 +6,8 @@ const instance = axios.create({
   },
   // baseURL: process.env.API_URL, //장고 서버 주소
   baseURL: 'http://localhost:8000', //로컬
+  baseURL: process.env.API_URL, //장고 서버 주소
+  // baseURL: 'http://localhost:8000', //로컬
   withCredentials: true, // 쿠키를 포함시키기 위한 설정 추가
 });
 
@@ -154,11 +156,15 @@ export const teamEditApi = (teamId, newData) => {
   return instance.put(`/api/v1/teams/${teamId}/`, newData);
 };
 
-export const updateUserInfoApi = (username, data) => {
-  return instance.put(`/api/v1/users/myinfo/${username}/`, data);
+// 유저 정보 수정
+export const myInfoUpdateAPi = (data) => {
+  return instance.put(`/api/v1/users/myinfo/`, data);
 };
-
-// 회원 탈퇴
-export const deleteAccountApi = (username) => {
-  return instance.delete(`/api/v1/users/myinfo/${username}/`);
+// 유저 삭제
+export const myInfoDeleteApi = () => {
+  return instance.delete(`/api/v1/users/myinfo/`);
+};
+// 유저 정보 가져오기
+export const getMyInfo = (data) => {
+  return instance.get(`/api/v1/users/myinfo/ `, data);
 };

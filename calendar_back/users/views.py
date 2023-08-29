@@ -91,8 +91,8 @@ class UserInfo(APIView):
         except User.DoesNotExist:
             raise NotFound("존재하지 않는 유저입니다.")
 
-    def get(self, request, username):
-        user = self.get_object(username)
+    def get(self, request):
+        user = self.get_object(request.user)
 
         if user != request.user:
             raise PermissionDenied("타인 정보 조회는 불가합니다.")
@@ -101,8 +101,18 @@ class UserInfo(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, username):
-        user = self.get_object(username)
+    # def get(self, request, username):
+    #     user = self.get_object(username)
+
+    #     if user != request.user:
+    #         raise PermissionDenied("타인 정보 조회는 불가합니다.")
+
+    #     serializer = UserInfoSerializer(user)
+
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        user = self.get_object(request.user)
 
         if user != request.user:
             raise PermissionDenied("비밀번호 변경 권한이 없습니다.")
@@ -114,8 +124,8 @@ class UserInfo(APIView):
             UserInfoSerializer(updated_user).data, status=status.HTTP_202_ACCEPTED
         )
 
-    def delete(self, request, username):
-        user = self.get_object(username)
+    def delete(self, request):
+        user = self.get_object(request.user)
 
         if user != request.user:
             raise PermissionDenied("권한이 없습니다.")
@@ -131,13 +141,15 @@ class UserInfo(APIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class Logout(APIView):
-     permission_classes = (IsAuthenticated,)
-     def post(self, request):
-          try:
-               refresh_token = request.data["refresh_token"]
-               token = RefreshToken(refresh_token)
-               token.blacklist()
-               return Response(status=status.HTTP_205_RESET_CONTENT)
-          except Exception as e:
-               return Response(status=status.HTTP_400_BAD_REQUEST)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

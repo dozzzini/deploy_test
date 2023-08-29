@@ -3,7 +3,7 @@ const routes = {
   welcome: '/welcome',
   mypage: '/mypage/:username',
   landing: '/',
-  signup: '/signup',
+  // signup: '/signup',
   login: '/login',
 };
 
