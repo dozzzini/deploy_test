@@ -6,8 +6,6 @@ const instance = axios.create({
   },
   // baseURL: process.env.API_URL, //장고 서버 주소
   baseURL: 'http://localhost:8000', //로컬
-  baseURL: process.env.API_URL, //장고 서버 주소
-  // baseURL: 'http://localhost:8000', //로컬
   withCredentials: true, // 쿠키를 포함시키기 위한 설정 추가
 });
 

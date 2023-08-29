@@ -189,23 +189,34 @@ export default function Status({ selectedEvent }) {
         <ScheduleDeleteBtn onClick={handleDeleteEvent}>삭제</ScheduleDeleteBtn>
       </ButtonBox>
       <div>
-        <input style={inputStyle} value={`📝${calendarName}`} readOnly />
+        <input style={inputStyle} value={calendarName} readOnly />
         <input
+          placeholder={
+            isEditMode ? '일정명을 수정하세요' : '일정명이 없습니다.'
+          }
           style={inputStyle}
-          value={isEditMode ? `📝${editedTitle}` : `📝${title}`}
+          value={isEditMode ? `${editedTitle}` : title}
           onChange={(e) => setEditedTitle(e.target.value)}
           readOnly={!isEditMode}
         />
         <input
-          style={inputStyle}
-          value={
-            isEditMode ? `📝${editedLocation}` : `📝${location ? location : ''}`
+          placeholder={
+            isEditMode
+              ? '일정의 세부내용을 수정하세요'
+              : '일정의 세부내용이 없습니다'
           }
+          style={inputStyle}
+          value={isEditMode ? editedLocation : location ? location : ''}
           onChange={(e) => setEditedLocation(e.target.value)}
           readOnly={!isEditMode}
         />
         ⏰ 시작일시 ⏰
         <input
+          placeholder={
+            isEditMode
+              ? '일정의 시작일시를 수정하세요'
+              : '일정의 시작일시를 입력하세요'
+          }
           style={inputStyle}
           value={isEditMode ? editedStartTime : startTime}
           onChange={(e) => setEditedStartTime(e.target.value)}
@@ -214,6 +225,11 @@ export default function Status({ selectedEvent }) {
         />
         ⏰ 종료일시 ⏰
         <input
+          placeholder={
+            isEditMode
+              ? '일정의 종료일시를 수정하세요'
+              : '일정의 종료일시를 입력하세요'
+          }
           style={inputStyle}
           value={isEditMode ? editedEndTime : endTime}
           onChange={(e) => setEditedEndTime(e.target.value)}
