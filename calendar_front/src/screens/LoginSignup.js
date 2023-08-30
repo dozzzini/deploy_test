@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { styled } from 'styled-components';
 
 import classes from './LoginSignup.module.css';
 import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
@@ -8,6 +9,7 @@ import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
 function LoginSignup() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isIdAvailable, setIsIdAvailable] = useState(0);
+  const [loginIsFault, setLoginIsFault] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,6 +58,9 @@ function LoginSignup() {
     }
   };
 
+  const LoginFault = () => {
+    setLoginIsFault(true);
+  };
   const onLogInSubmit = async (data) => {
     try {
       const response = await loginApi({
@@ -69,6 +74,7 @@ function LoginSignup() {
       navigate('/calendar', { replace: true });
     } catch (error) {
       console.error('로그인 실패:', error);
+      LoginFault();
     }
   };
 
@@ -287,6 +293,11 @@ function LoginSignup() {
               <small role="alert" className={classes.error_message}>
                 {loginErrors.password.message}
               </small>
+            )}
+            {loginIsFault && (
+              <p className={classes.error_message}>
+                '아이디 혹은 비밀번호를 잘못 입력하셨습니다.'
+              </p>
             )}
             <button className={classes.form_btn}>Login</button>
           </form>
