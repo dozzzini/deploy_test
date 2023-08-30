@@ -74,7 +74,6 @@ export default function Status({ selectedEvent }) {
   const [editedState, setEditedState] = useState('To do');
   const [isEditMode, setIsEditMode] = useState(false);
   const [memoList, setMemoList] = useState([]);
-  console.log(selectedEvent, '냐냐냐');
 
   useEffect(() => {
     if (selectedEvent) {
