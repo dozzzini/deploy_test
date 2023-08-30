@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { styled } from 'styled-components';
 
-import classes from './LoginSignup.module.css';
-import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
+import classes from '../../screens/LoginSignup.module.css';
+import { signupApi, checkIdAvailabilityApi, loginApi } from '../../api';
 
-function LoginSignup() {
+function TeamLogin() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isIdAvailable, setIsIdAvailable] = useState(0);
-  const [loginIsFault, setLoginIsFault] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,9 +55,6 @@ function LoginSignup() {
     }
   };
 
-  const LoginFault = () => {
-    setLoginIsFault(true);
-  };
   const onLogInSubmit = async (data) => {
     try {
       const response = await loginApi({
@@ -69,17 +64,16 @@ function LoginSignup() {
 
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
+      const localTeamId = localStorage.getItem('TeamId');
 
-      navigate('/calendar', { replace: true });
+      navigate(`/api/v1/teams/members/${localTeamId}`, { replace: true });
     } catch (error) {
       console.error('로그인 실패:', error);
-      LoginFault();
     }
   };
 
   const checkIdAvailability = async () => {
     const id = getValues('id');
-    // 아이디 중복 확인을 위한 서버 요청을 보냅니다.
     try {
       const response = await checkIdAvailabilityApi({ username: id });
 
@@ -293,11 +287,6 @@ function LoginSignup() {
                 {loginErrors.password.message}
               </small>
             )}
-            {loginIsFault && (
-              <p className={classes.error_message}>
-                '아이디 혹은 비밀번호를 잘못 입력하셨습니다.'
-              </p>
-            )}
             <button className={classes.form_btn}>Login</button>
           </form>
         </div>
@@ -333,4 +322,4 @@ function LoginSignup() {
   );
 }
 
-export default LoginSignup;
+export default TeamLogin;

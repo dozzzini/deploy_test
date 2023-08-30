@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 import ColorPicker from './ColorPicker';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { createTeamApi } from '../../api';
+import instance, { createTeamApi } from '../../api';
 import { LuX } from 'react-icons/lu';
-import routes from '../../routes';
-import { FaCopy } from 'react-icons/fa';
 
 const TeamListContainer = styled.div`
   /* border: 1px solid blue; */
@@ -20,7 +18,6 @@ const TeamListWrapper = styled.div`
   /* border: 1px solid red; */
   position: relative;
 `;
-
 const TeamBtnWrapper = styled.div`
   /* border: 1px solid greenyellow; */
 
@@ -30,7 +27,6 @@ const TeamBtnWrapper = styled.div`
   justify-content: center;
   position: absolute;
 `;
-
 const TeamAddBtn = styled.button`
   font-size: 30px;
   font-weight: 100;
@@ -48,7 +44,6 @@ const TeamAddBtn = styled.button`
     opacity: 0.5;
   }
 `;
-
 const TeamModalCloseBtn = styled(LuX)`
   position: absolute;
   top: 20px;
@@ -60,7 +55,6 @@ const TeamModalCloseBtn = styled(LuX)`
     font-weight: bold;
   }
 `;
-
 const TeamInputModal = styled.div`
   position: fixed;
   top: 50%;
@@ -74,7 +68,6 @@ const TeamInputModal = styled.div`
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   z-index: 10;
 `;
-
 const TeamInputModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -83,7 +76,6 @@ const TeamInputModalWrapper = styled.div`
   font-weight: 100;
   margin: 10px;
 `;
-
 const TMForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -98,7 +90,6 @@ const TMForm = styled.form`
     margin: 18px 0;
   }
 `;
-
 const TAMinput = styled.input`
   padding: 7px 0 7px 10px;
   margin: 10px 0;
@@ -110,13 +101,11 @@ const TAMinput = styled.input`
   transition: 300ms ease-in-out;
   font-size: 15px;
 `;
-
 const ATMbuttonbox = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
 `;
-
 const ATMbutton = styled.button`
   margin-top: 20px;
   width: 30%;
@@ -142,22 +131,6 @@ const ATMbutton = styled.button`
   }
 `;
 
-const TeamLinkModal = styled.div`
-  position: fixed;
-  top: 50%;
-  left: ${(props) =>
-    props.isOpen ? '50%' : '-100%'}; /* 왼쪽으로 슬라이드되는 효과 */
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 430px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  z-index: 10;
-  transition: left 0.3s ease-in-out; /* 애니메이션 효과 설정 */
-`;
-
 function TeamAddModal() {
   const {
     register,
@@ -173,16 +146,12 @@ function TeamAddModal() {
   const toggleModal = () => {
     setTeamAddModalIsOpen(!teamAddModalIsOpen);
     if (!teamAddModalIsOpen) {
-      reset(); // react-hook-form의 reset 함수 호출
-      setSelectedColor('#F44E3B'); // 색상도 초기 상태로 설정
+      reset();
+      setSelectedColor('#F44E3B');
     }
   };
 
   const handleFormSubmit = async (data) => {
-    console.log({
-      team: { teamname: data.teamname, color: selectedColor },
-      nickname: { nickname: data.nickname },
-    });
     try {
       const response = await createTeamApi({
         team: { teamname: data.teamname, color: selectedColor },
@@ -190,8 +159,8 @@ function TeamAddModal() {
       });
       console.log('팀 생성 성공:', response.data);
       setTeamAddModalIsOpen(false);
-      setTeamId(response.data.team.id);
       setNickname(data.nickname);
+      setTeamId(response.data.team.id);
       reset();
     } catch (error) {
       console.error('팀 생성 실패:', error);
@@ -201,9 +170,11 @@ function TeamAddModal() {
 
   const handleCopyClick = () => {
     if (teamId) {
-      const link = `http://localhost:8000/api/v1/teams/members/${btoa(
-        teamId + '',
-      )}/`;
+      console.log('생성된 팀의 아이디:', teamId);
+      const link = `http://localhost:3000/api/v1/teams/members/${teamId}/`;
+      // const link = `http://localhost:3000/api/v1/teams/members/${btoa(
+      //   teamId + '',
+      // )}/`;
       navigator.clipboard
         .writeText(link)
         .then(() => {
@@ -267,11 +238,16 @@ function TeamAddModal() {
       </TeamBtnWrapper>
       {teamId && (
         <TeamLinkModal isOpen={!!teamId}>
-          <h2>Your new team link</h2>
-          <p>{`http://localhost:8000/api/v1/teams/members/${btoa(
+          <h2>링크로 팀원 초대하기</h2>
+          <LinkBox>{`http://localhost:3000/api/v1/teams/members/${teamId}/`}</LinkBox>
+          {/* <LinkBox>{`http://localhost:3000/api/v1/teams/members/${btoa(
             teamId + '',
-          )}/`}</p>
+          )}/`}</LinkBox> */}
+          <CopyBtn onClick={handleCopyClick}>링크 복사</CopyBtn>
 
+          <CloseBtn onClick={() => setTeamId(null)}>
+            <LuX />
+          </CloseBtn>
           <button onClick={handleCopyClick}>링크 복사</button>
 
           <button
@@ -288,3 +264,62 @@ function TeamAddModal() {
   );
 }
 export default TeamAddModal;
+
+const TeamLinkModal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 220px;
+  width: 100%;
+  max-width: 430px;
+  background-color: #f9f3f4;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h2 {
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    margin: 20px 0 10px;
+  }
+`;
+const CopyBtn = styled.button`
+  width: 90px;
+  padding: 10px 10px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 30px;
+  background-color: #c1355a;
+  box-shadow:
+    -5px -5px 10px #f9f3f4,
+    5px 5px 8px #babebc;
+  color: rgb(253, 250, 250);
+  font-weight: bold;
+`;
+const CloseBtn = styled.button`
+  border: none;
+  background-color: #f9f3f4;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+`;
+const LinkBox = styled.div`
+  text-align: center;
+  padding: 15px;
+  margin: 15px;
+  max-width: 320px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 30px;
+  background-color: #fdf8f9;
+  box-shadow:
+    inset 7px 2px 10px #d6b5bf,
+    inset -5px -5px 12px #fff;
+  overflow: hidden;
+`;

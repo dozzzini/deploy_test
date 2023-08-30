@@ -13,6 +13,8 @@ import Welcome from './screens/Welcome';
 import LoginSignup from './screens/LoginSignup';
 
 import Landing from './screens/Landing';
+import LinkEntry from './components/MainCalendar/LinkEntry';
+import TeamLogin from './components/MainCalendar/TeamLogin';
 
 function App() {
   const checkUserAuth = () => {
@@ -27,12 +29,8 @@ function App() {
       <Routes>
         <Route path={routes.layout} element={<Layout />} />
         <Route path={routes.login} element={<LoginSignup />} />
-        {/* <Route
-          path={routes.login}
-          element={
-            checkUserAuth() ? <Navigate to={routes.layout} /> : <LoginSignup />
-          }
-        /> */}
+        <Route path="/api/v1/teams/members/:teamId" element={<LinkEntry />} />
+        <Route path={routes.teamlogin} element={<TeamLogin />} />
         <Route path={routes.welcome} element={<Welcome />} />
         <Route path={routes.landing} element={<Landing />} />
       </Routes>
