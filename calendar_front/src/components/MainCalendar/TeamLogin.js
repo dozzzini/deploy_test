@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
-import classes from './LoginSignup.module.css';
-import { signupApi, checkIdAvailabilityApi, loginApi } from '../api';
+import classes from '../../screens/LoginSignup.module.css';
+import { signupApi, checkIdAvailabilityApi, loginApi } from '../../api';
 
-function LoginSignup() {
+function TeamLogin() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isIdAvailable, setIsIdAvailable] = useState(0);
   const navigate = useNavigate();
@@ -64,8 +64,9 @@ function LoginSignup() {
 
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
+      const localTeamId = localStorage.getItem('TeamId');
 
-      navigate('/calendar', { replace: true });
+      navigate(`/api/v1/teams/members/${localTeamId}`, { replace: true });
     } catch (error) {
       console.error('로그인 실패:', error);
     }
@@ -73,7 +74,6 @@ function LoginSignup() {
 
   const checkIdAvailability = async () => {
     const id = getValues('id');
-    // 아이디 중복 확인을 위한 서버 요청을 보냅니다.
     try {
       const response = await checkIdAvailabilityApi({ username: id });
 
@@ -322,4 +322,4 @@ function LoginSignup() {
   );
 }
 
-export default LoginSignup;
+export default TeamLogin;

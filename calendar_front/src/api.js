@@ -5,7 +5,7 @@ const instance = axios.create({
     'Content-Type': 'application/json',
   },
   baseURL: process.env.API_URL, //장고 서버 주소
-  // baseURL: 'http://localhost:8000', //로컬
+  //baseURL: 'http://localhost:8000', //로컬
   withCredentials: true, // 쿠키를 포함시키기 위한 설정 추가
 });
 
@@ -165,4 +165,9 @@ export const myInfoDeleteApi = () => {
 // 유저 정보 가져오기
 export const getMyInfo = (data) => {
   return instance.get(`/api/v1/users/myinfo/ `, data);
+};
+
+// 링크를 통한 팀 입장 API 함수
+export const joinTeamApi = (teamId) => {
+  return instance.post(`/api/v1/teams/members/${teamId}/`);
 };

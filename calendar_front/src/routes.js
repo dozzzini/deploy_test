@@ -5,6 +5,7 @@ const routes = {
   landing: '/',
   // signup: '/signup',
   login: '/login',
+  teamlogin: '/teamlogin',
 };
 
 export default routes;
