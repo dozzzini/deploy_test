@@ -101,16 +101,6 @@ class UserInfo(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # def get(self, request, username):
-    #     user = self.get_object(username)
-
-    #     if user != request.user:
-    #         raise PermissionDenied("타인 정보 조회는 불가합니다.")
-
-    #     serializer = UserInfoSerializer(user)
-
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-
     def put(self, request):
         user = self.get_object(request.user)
 
@@ -124,7 +114,15 @@ class UserInfo(APIView):
             UserInfoSerializer(updated_user).data, status=status.HTTP_202_ACCEPTED
         )
 
-    def delete(self, request):
+
+class UserDelete(APIView):
+    def get_object(self, username):
+        try:
+            return User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise NotFound("존재하지 않는 유저입니다.")
+
+    def post(self, request):
         user = self.get_object(request.user)
 
         if user != request.user:
@@ -133,8 +131,8 @@ class UserInfo(APIView):
             refresh_token = request.data["refresh"]
             token = RefreshToken(refresh_token)
             token.blacklist()
-        except Exception:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(e, status=status.HTTP_400_BAD_REQUEST)
 
         user.is_active = False
         user.save()

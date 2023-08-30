@@ -33,8 +33,10 @@ const UserInfoContent = () => {
 
   const handleAccountDeletion = async () => {
     try {
-      await myInfoDeleteApi();
+      await myInfoDeleteApi({ refresh: localStorage.getItem('refresh_token') });
       alert('계정이 성공적으로 삭제되었습니다.');
+      localStorage.clear();
+      navigate('/login', { replace: true });
       // TODO: 로그아웃 또는 홈페이지 이동 로직을 추가하세요.
     } catch (error) {
       console.error('Error deleting account:', error);

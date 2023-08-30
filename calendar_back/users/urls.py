@@ -9,4 +9,5 @@ urlpatterns = [
     path("idcheck/", views.CheckUsername.as_view()),
     # path("myinfo/<str:username>/", views.UserInfo.as_view()),
     path("myinfo/", views.UserInfo.as_view()),
+    path("secession/", views.UserDelete.as_view()),
 ]

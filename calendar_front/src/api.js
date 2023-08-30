@@ -5,7 +5,7 @@ const instance = axios.create({
     'Content-Type': 'application/json',
   },
   baseURL: process.env.API_URL, //장고 서버 주소
-  // baseURL: 'http://localhost:8000', //로컬
+  baseURL: 'http://localhost:8000', //로컬
   withCredentials: true, // 쿠키를 포함시키기 위한 설정 추가
 });
 
@@ -159,8 +159,8 @@ export const myInfoUpdateAPi = (data) => {
   return instance.put(`/api/v1/users/myinfo/`, data);
 };
 // 유저 삭제
-export const myInfoDeleteApi = () => {
-  return instance.delete(`/api/v1/users/myinfo/`);
+export const myInfoDeleteApi = (data) => {
+  return instance.post(`/api/v1/users/secession/`, data);
 };
 // 유저 정보 가져오기
 export const getMyInfo = (data) => {
