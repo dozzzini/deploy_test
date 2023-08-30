@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fdf8f9;
+  background: #f9f3f4;
   overflow: hidden;
 }
 .container_login {
@@ -65,11 +65,11 @@
     inset -1px -1px 2px #fff;
 }
 .overlay_btn {
-  background-color: #8c2641;
+  background-color: #e64772;
   color: #fff;
   box-shadow:
-    -5px -5px 10px #a72d4d,
-    5px 5px 8px #641b2e;
+    -5px -5px 10px #e66386,
+    5px 5px 8px #b02147;
 }
 .sign_In_container {
   position: absolute;
@@ -97,7 +97,7 @@
   width: 50%;
   height: 100%;
   opacity: 0;
-  background-color: #8c2641;
+  background-color: #e64772;
   color: #fff;
   transition: all 0.5s;
 }
@@ -111,7 +111,7 @@
   right: 0;
   width: 50%;
   height: 100%;
-  background-color: #8c2641;
+  background-color: #e64772;
   color: #fff;
   transition: all 0.5s;
 }

@@ -20,15 +20,27 @@ const StatusContent = styled.div`
 `;
 
 const ScheduleDetailBox = styled.div`
-  /* border: 2px solid black; */
+  // border: 2px solid black;
   width: 100%;
-  height: auto;
+  height: 80%;
   margin-top: 15px;
   padding-left: 5px;
   padding-right: 5px;
   font-size: 10px;
   font-weight: 600;
   line-height: 2;
+  box-shadow: inset 1px 3px 10px rgba(200, 200, 200, 0.1);
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+  }
 `;
 
 const ScheduleDetailTitle = styled.div`

@@ -21,11 +21,11 @@ const Wrapper = styled.div`
   display: flex;
   max-width: 90vw;
   height: 90vh;
-  background-color: rgb(254, 250, 250);
+  background-color: rgb(246 246, 246);
   border-radius: 30px;
   box-shadow:
-    12px 12px 13px #c8c4c4,
-    -12px -12px 13px #fff;
+    12px 12px 16px rgb(226 226, 222),
+    -12px -12px 16px #fff;
 `;
 
 function Layout() {

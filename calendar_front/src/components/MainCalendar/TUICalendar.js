@@ -50,10 +50,9 @@ const TeamBox = styled.div`
   overflow-y: auto;
   height: 450px;
   width: 100%;
+  margin-top: 30px;
 `;
 const TeamList = styled.label`
-  /* border: 3px solid black; */
-
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -61,7 +60,6 @@ const TeamList = styled.label`
   align-items: center;
   text-align: center;
   font-size: 15px;
-  margin-top: 20px;
   margin-bottom: 20px;
 `;
 
@@ -69,8 +67,8 @@ const Input = styled.input`
   opacity: 1;
   -webkit-appearance: none;
   cursor: pointer;
-  height: 20px;
-  width: 20px;
+  height: 26px;
+  width: 26px;
   box-shadow:
     -10px -10px 10px rgba(255, 255, 255, 0.8),
     10px 10px 10px rgba(0, 0, 70, 0.18);
@@ -91,10 +89,12 @@ const Input = styled.input`
 
 const CalendarName = styled.div`
   /* border: 1px solid rebeccapurple; */
-  margin-top: 20px;
+  margin-top: 5px;
   margin-left: 30px;
   width: 80%;
+  font-weight: 500;
   overflow-wrap: break-word;
+  font-size: 18px;
 `;
 const CalendarButtonBox = styled.div`
   /* border: 1px solid red; */
@@ -468,7 +468,8 @@ export default function TUICalendar({
       );
       console.log(teamId, '삭제되는 teamId');
       setSelectedCalendars(updatedCalendars);
-      // 이후 다시 렌더링이 필요한 경우 캘린더를 업데이트하십시오.
+      window.location.replace('/calendar');
+
       // getCalInstance().render();
     } catch (error) {
       console.error('삭제 중 오류 발생:', error);
@@ -498,6 +499,7 @@ export default function TUICalendar({
 
       // 업데이트된 팀 목록을 적용합니다.
       setTeams(updatedTeams);
+      window.location.replace('/calendar');
     } catch (error) {
       console.error('팀 정보 수정 중 오류 발생:', error);
     }
@@ -505,7 +507,6 @@ export default function TUICalendar({
   return (
     <CalendarContainer>
       <ShowMenuBar>
-        {' '}
         <TeamBox>
           {selectedCalendars.map((calendar) => (
             <TeamList key={calendar.id}>

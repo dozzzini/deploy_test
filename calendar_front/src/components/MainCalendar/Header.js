@@ -7,7 +7,7 @@ import { scheduleSearchApi, logoutApi } from '../../api';
 import UserInfoContent from '../RightBar/UserInfo';
 const HeaderContainer = styled.div`
   width: 100%;
-  padding: 10px;
+  padding: 8px 10px;
   position: relative;
 `;
 
@@ -17,20 +17,20 @@ const Form = styled.form`
 
 //검색어 입력하는 곳
 const SearchBox = styled.input`
-  margin-top: 45px;
-  font-size: 11px;
+  margin-top: 35px;
+  font-size: 14px;
   text-align: center;
   border: none;
   border-radius: 6px;
   background-color: white;
-  box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 2px 5px 10px rgba(100, 100, 100, 0.1);
   transition: 300ms ease-in-out;
   width: 100%;
   &&:focus {
     outline: none;
     box-shadow:
       -3px -3px 8px rgba(235, 245, 235, 1),
-      3px 3px 8px rgba(0, 0, 70, 0.3);
+      3px 3px 8px rgba(100, 100, 100, 0.1);
   }
 `;
 
@@ -65,10 +65,11 @@ const Content = styled.div`
 
 const OptionBtn = styled.button`
   margin-top: 10px;
-  font-size: 12px;
+  font-size: 14px;
   border: none;
+  font-weight: 100;
   background-color: white;
-  margin-left: 70px;
+  margin-left: 55px;
 `;
 
 const CloseIcon = styled.button`
@@ -76,6 +77,7 @@ const CloseIcon = styled.button`
   text-align: end;
   background-color: transparent;
   border: none;
+  z-index: 2001;
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -85,13 +87,21 @@ const Overlay = styled.div`
   height: 100%;
   background-color: transparent;
 `;
+const UserInfoContainer = styled.div`
+  position: absolute;
+  top: 0%;
+  background-color: white;
+  width: 200px;
+  border-radius: 10px;
+  background-color: white;
+  padding: 10px;
+`;
 function Header({ schedules }) {
   const [searchIsOpen, setSearchIsOpen] = useState(false);
-  const [UserInfoIsOpen, setUserInfoIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
-
+  const [isEditingUserInfo, setIsEditingUserInfo] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
@@ -115,14 +125,10 @@ function Header({ schedules }) {
   const closeModal = () => {
     setActiveModal(null);
   };
-  const openUserInfo = () => {
-    setUserInfoIsOpen(true);
-  };
-  const closeUserInfo = () => {
-    setUserInfoIsOpen(false);
+  const closeUserIfo = () => {
     setActiveModal(null);
+    setIsEditingUserInfo(false);
   };
-
   const handleLogout = () => {
     logoutApi({ refresh_token: localStorage.getItem('refresh_token') })
       .then(() => {
@@ -148,16 +154,22 @@ function Header({ schedules }) {
           <Content>
             <CloseIcon onClick={closeModal}>&times;</CloseIcon>
             <OptionBtn onClick={handleLogout}>로그아웃</OptionBtn>
-            <OptionBtn onClick={openUserInfo}>회원정보수정</OptionBtn>
+            <OptionBtn onClick={() => setIsEditingUserInfo(true)}>
+              회원정보수정
+            </OptionBtn>
           </Content>
-          {UserInfoIsOpen && (
-            <div>
-              <CloseIcon onClick={closeUserInfo}>&times;</CloseIcon>
-              <UserInfoContent />
-            </div>
-          )}
+
+          {isEditingUserInfo ? (
+            <UserInfoContainer>
+              <Content>
+                <CloseIcon onClick={closeUserIfo}>&times;</CloseIcon>
+                <UserInfoContent />
+              </Content>{' '}
+            </UserInfoContainer>
+          ) : null}
         </Modal>
       )}
+
       <Form>
         <SearchBox
           type="text"

@@ -94,6 +94,7 @@ const TMForm = styled.form`
   h2 {
     font-size: 18px;
     text-align: center;
+    font-weight: 100;
     margin: 18px 0;
   }
 `;
@@ -102,6 +103,7 @@ const TAMinput = styled.input`
   padding: 7px 0 7px 10px;
   margin: 10px 0;
   border: none;
+  font-weight: 100;
   border-radius: 10px;
   background-color: white;
   box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.1);
@@ -121,6 +123,7 @@ const ATMbutton = styled.button`
   font-size: 15px;
   /* font-weight: 100; */
   color: grey;
+  font-weight: 100;
   border-radius: 15px;
   background-color: rgb(254, 250, 250);
   box-shadow:
@@ -214,7 +217,9 @@ function TeamAddModal() {
       alert('복사할 링크가 없습니다.');
     }
   };
-
+  const redirectToCalendar = () => {
+    window.location.replace('/calendar');
+  };
   return (
     <TeamListContainer>
       <TeamListWrapper>
@@ -269,7 +274,14 @@ function TeamAddModal() {
 
           <button onClick={handleCopyClick}>링크 복사</button>
 
-          <button onClick={() => setTeamId(null)}>닫기</button>
+          <button
+            onClick={() => {
+              setTeamId(null);
+              redirectToCalendar();
+            }}
+          >
+            닫기
+          </button>
         </TeamLinkModal>
       )}
     </TeamListContainer>
