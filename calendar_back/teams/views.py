@@ -21,6 +21,12 @@ class NewTeam(APIView):
 
     def post(self, request):
         team_serializer = TeamSerializer(data=request.data["team"])
+
+        if request.data["team"]["teamname"] == "My":
+            return Response(
+                {"message": "사용할 수 없는 팀명입니다."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
         if team_serializer.is_valid():
             team = team_serializer.save(team_leader=request.user)
             team.members.add(request.user)
@@ -97,6 +103,11 @@ class Teams(APIView):
 
     def delete(self, request, team_id):
         team = self.get_team(team_id)
+
+        if team.teamname == "My":
+            return Response(
+                {"message": "개인 캘린더는 삭제할 수 없습니다."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         if team.team_leader != request.user:
             raise PermissionDenied("팀 삭제는 팀장만 가능합니다.")
