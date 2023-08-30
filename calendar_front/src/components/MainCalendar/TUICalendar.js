@@ -15,7 +15,7 @@ import moment from 'moment';
 import instance from '../../api';
 
 import { MdOutlineEdit, MdOutlineDelete } from 'react-icons/md';
-
+import { BiShareAlt } from 'react-icons/bi';
 import { teamDeleteApi } from '../../api';
 import { teamEditApi } from '../../api';
 
@@ -547,6 +547,7 @@ export default function TUICalendar({
                 >
                   <MdOutlineDelete />
                 </CalendarDeleteButton>
+                <BiShareAlt />
               </CalendarButtonBox>
             </TeamList>
           ))}

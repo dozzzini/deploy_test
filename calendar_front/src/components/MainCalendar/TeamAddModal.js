@@ -245,19 +245,14 @@ function TeamAddModal() {
           )}/`}</LinkBox> */}
           <CopyBtn onClick={handleCopyClick}>링크 복사</CopyBtn>
 
-          <CloseBtn onClick={() => setTeamId(null)}>
-            <LuX />
-          </CloseBtn>
-          <button onClick={handleCopyClick}>링크 복사</button>
-
-          <button
+          <CloseBtn
             onClick={() => {
               setTeamId(null);
               redirectToCalendar();
             }}
           >
-            닫기
-          </button>
+            <LuX />
+          </CloseBtn>
         </TeamLinkModal>
       )}
     </TeamListContainer>
@@ -302,6 +297,7 @@ const CopyBtn = styled.button`
     5px 5px 8px #babebc;
   color: rgb(253, 250, 250);
   font-weight: bold;
+  cursor: pointer;
 `;
 const CloseBtn = styled.button`
   border: none;
@@ -309,6 +305,7 @@ const CloseBtn = styled.button`
   position: absolute;
   top: 20px;
   right: 20px;
+  cursor: pointer;
 `;
 const LinkBox = styled.div`
   text-align: center;

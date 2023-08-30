@@ -49,7 +49,9 @@ function TeamLogin() {
       localStorage.setItem('access_token', response.data.access_token);
       localStorage.setItem('refresh_token', response.data.refresh_token);
 
-      navigate('/calendar', { replace: true });
+      const localTeamId = localStorage.getItem('TeamId');
+
+      navigate(`/api/v1/teams/members/${localTeamId}`, { replace: true });
     } catch (error) {
       console.error('회원가입 실패:', error);
     }
