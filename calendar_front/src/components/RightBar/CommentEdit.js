@@ -11,6 +11,8 @@ const CommentEdit = ({ schedule, author, addComment }) => {
     fontSize: '12px',
     width: '100%',
     marginTop: '30px',
+    paddingLeft: '6px',
+    borderRadius: '10px',
   };
 
   const handleSubmit = async (e) => {

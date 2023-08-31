@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-
-import CommentList from './CommentList';
+import React, { useState, useEffect, memo } from 'react';
+import Comment from './Comment';
 import CommentEdit from './CommentEdit';
 import {
   eventDetailEditApi,
@@ -20,9 +19,10 @@ const StatusContent = styled.div`
 `;
 
 const ScheduleDetailBox = styled.div`
-  // border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 100%;
-  height: 80%;
   margin-top: 15px;
   padding-left: 5px;
   padding-right: 5px;
@@ -30,17 +30,6 @@ const ScheduleDetailBox = styled.div`
   font-weight: 600;
   line-height: 2;
   box-shadow: inset 1px 3px 10px rgba(200, 200, 200, 0.1);
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-    width: 6px;
-    height: 8px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1);
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
-  }
 `;
 
 const ScheduleDetailTitle = styled.div`
@@ -73,7 +62,7 @@ const ScheduleDeleteBtn = styled.button`
   color: grey;
   margin-right: -10px;
 `;
-
+const CommentBox = styled.div``;
 const MemoList = styled.div``;
 
 export default function Status({ selectedEvent }) {
@@ -265,59 +254,16 @@ export default function Status({ selectedEvent }) {
           {editedState === 'Done' ? 'Done' : 'To do'}
         </label>
       </div>
-
-      {comments.map((comment) => (
-        <CommentList
-          key={comment.id}
-          comment={comment}
-          removeComment={removeComment}
-          editComment={editComment}
-        />
-      ))}
-      {selectedEvent && (
-        <CommentEdit
-          schedule={selectedEvent.id}
-          author="nickname"
-          addComment={addComment}
-        />
-      )}
-      <MemoList>
-        {memoList &&
-          memoList.map((memoItem, index) => {
-            // created_at 값을 Date 객체로 파싱합니다.
-            const createdAtDate = new Date(memoItem.created_at);
-
-            // 날짜 포맷을 설정합니다. 원하는 형식으로 조정 가능합니다.
-            const dateFormat = new Intl.DateTimeFormat('ko-KR', {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-            });
-
-            // 날짜를 원하는 형식으로 포맷합니다.
-            const formattedDate = dateFormat.format(createdAtDate);
-            const dateStyle = {
-              fontSize: '5px',
-              color: 'grey',
-              fontWeight: '300',
-              marginTop: '-10px',
-            };
-            const memoStyle = {
-              marginTop: '-5px',
-              borderBottom: '1px solid rgb(226,226,226)',
-            };
-            return (
-              <div key={index}>
-                <p>{memoItem.author.username}</p>
-                <p style={dateStyle}>{formattedDate}</p>{' '}
-                <p style={memoStyle}>{memoItem.description}</p>
-                {/* 포맷된 날짜 표시 */}
-              </div>
-            );
-          })}
-      </MemoList>
+      <Comment selectedEvent={selectedEvent} />
+      <CommentBox>
+        {selectedEvent && (
+          <CommentEdit
+            schedule={selectedEvent.id}
+            author="nickname"
+            addComment={addComment}
+          />
+        )}
+      </CommentBox>
     </ScheduleDetailBox>
   );
 }

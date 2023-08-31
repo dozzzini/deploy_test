@@ -129,7 +129,7 @@ export const editCommentApi = (commentId, updatedDescription) => {
 
 // 댓글 삭제
 export const deleteCommentApi = (data) => {
-  return instance.delete(`/api/v1/schedules/${data}/`, data);
+  return instance.delete(`/api/v1/comments/${data}/`, data);
 };
 
 // 일정명 검색
