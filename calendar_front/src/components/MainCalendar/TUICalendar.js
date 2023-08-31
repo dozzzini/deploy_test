@@ -88,16 +88,17 @@ const Input = styled.input`
 `;
 
 const CalendarName = styled.div`
-  /* border: 1px solid rebeccapurple; */
-  margin-top: 5px;
-  margin-left: 30px;
-  width: 80%;
+  width: 100%;
   font-weight: 500;
   overflow-wrap: break-word;
   font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  color: grey;
 `;
 const CalendarButtonBox = styled.div`
-  border: 1px solid red;
+  /* border: 1px solid red; */
+  margin-top: 5px;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -107,18 +108,36 @@ const CalendarEditButton = styled.button`
   transform: scale(0.8);
   background-color: transparent;
   padding-inline: unset;
+  opacity: 0.1; /* 초기 투명도 설정 */
+  transition: opacity 0.3s ease; /* 호버 시 투명도 변화를 부드럽게 적용 */
+
+  &:hover {
+    opacity: 1; /* 호버 시 투명도 증가 */
+  }
 `;
 const CalendarDeleteButton = styled.button`
   border: none;
   transform: scale(0.8);
   background-color: transparent;
   padding-inline: unset;
+  opacity: 0.1; /* 초기 투명도 설정 */
+  transition: opacity 0.3s ease; /* 호버 시 투명도 변화를 부드럽게 적용 */
+
+  &:hover {
+    opacity: 1; /* 호버 시 투명도 증가 */
+  }
 `;
 const CalendarInviteButton = styled.button`
   border: none;
   transform: scale(0.8);
   background-color: transparent;
   padding-inline: unset;
+  opacity: 0.1; /* 초기 투명도 설정 */
+  transition: opacity 0.3s ease; /* 호버 시 투명도 변화를 부드럽게 적용 */
+
+  &:hover {
+    opacity: 1; /* 호버 시 투명도 증가 */
+  }
 `;
 
 const MIDContainer = styled.div`
@@ -528,9 +547,8 @@ export default function TUICalendar({
                   );
                   setSelectedCalendars(updatedCalendars);
                 }}
-              />
+              />{' '}
               <CalendarButtonBox>
-                <CalendarName>{calendar.name}</CalendarName>
                 <CalendarEditButton
                   onClick={() => {
                     // 수정할 팀명을 사용자 입력 또는 다른 방법으로 얻어옵니다.
@@ -560,6 +578,7 @@ export default function TUICalendar({
                   <BiShareAlt />
                 </CalendarInviteButton>
               </CalendarButtonBox>
+              <CalendarName>{calendar.name}</CalendarName>
             </TeamList>
           ))}
         </TeamBox>

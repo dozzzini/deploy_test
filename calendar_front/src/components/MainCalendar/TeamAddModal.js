@@ -32,7 +32,7 @@ const TeamAddBtn = styled.button`
   font-size: 30px;
   font-weight: 100;
   color: grey;
-  background-color: rgb(254, 250, 250);
+  background-color: transparent;
   cursor: pointer;
   border: none;
   border-radius: 30px;

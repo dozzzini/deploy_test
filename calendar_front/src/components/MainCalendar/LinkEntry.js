@@ -13,7 +13,7 @@ const EntryPage = styled.div`
   width: 100%;
   max-width: 430px;
   background-color: #f9f3f4;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   z-index: 10;
@@ -26,6 +26,7 @@ const EntryPage = styled.div`
 const EntryConfirm = styled.div``;
 
 const EntryButton = styled.button`
+  margin-left: 10px;
   background-color: #c1355a;
   color: white;
   border: none;
@@ -34,36 +35,36 @@ const EntryButton = styled.button`
   transition: background 0.3s ease;
 `;
 const RejectButton = styled.button`
-  margin-left: 20px;
-  background-color: #c1355a;
-  color: white;
+  background-color: none;
   border: none;
+  color: #c1355a;
+  background-color: transparent;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease;
-`;
-const ButtonBox = styled.div`
+  width: 100%;
   display: flex;
-  margin-top: 20px;
+  justify-content: end;
+  margin-top: -80px;
+  font-weight: 800;
 `;
+const FormBox = styled.div``;
 const PutNickname = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  color: #c1355a;
+  font-weight: 600;
   margin-top: 30px;
   margin-bottom: 20px;
 `;
-const NicknameConfirmBtn = styled.button`
-  background-color: #c1355a;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  margin-left: 10px;
-`;
+
 const NicknameInput = styled.input`
-  /* padding: 10px 20px; */
   width: 230px;
+  margin-top: 10px;
   border: 1px solid #c1355a;
   outline: none;
+  border-radius: 5px;
 `;
 
 function LinkEntry() {
@@ -118,12 +119,14 @@ function LinkEntry() {
 
   return (
     <EntryPage>
-      <EntryConfirm>초대된 팀에 입장하시겠습니까?</EntryConfirm>
-      <ButtonBox>
+      <RejectButton onClick={() => navigate(-1)}>X</RejectButton>
+
+      {/* <EntryConfirm>초대된 팀에 입장하시겠습니까?</EntryConfirm> */}
+      <FormBox>
         <form onSubmit={handleSubmit(handleOnClick)}>
           {showNicknameInput && (
             <>
-              <PutNickname>팀에서 사용할 닉네임을 입력해주세요.</PutNickname>
+              <PutNickname>닉네임 설정</PutNickname>
               <NicknameInput
                 type="text"
                 placeholder="팀에서 사용할 닉네임을 입력하세요."
@@ -146,8 +149,7 @@ function LinkEntry() {
           )} */}
           <EntryButton type="submit">입장</EntryButton>
         </form>
-        <RejectButton onClick={() => navigate(-1)}>거부</RejectButton>
-      </ButtonBox>
+      </FormBox>
     </EntryPage>
   );
 }
