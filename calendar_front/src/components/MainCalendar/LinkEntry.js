@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { joinTeamApi, nicknameCreateApi } from '../../api';
+import { enterTeamApi } from '../../api';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
@@ -40,7 +40,7 @@ function LinkEntry() {
     if (redirectToLoginIfNoToken()) {
       try {
         const teamId = atob(encodedTeamId);
-        const response = await joinTeamApi(teamId);
+        const response = await enterTeamApi(teamId);
         if (response.request.status === 202) {
           navigate('/teamlogin');
           // setShowNicknameInput(true);
@@ -60,7 +60,7 @@ function LinkEntry() {
   const onSubmitNickname = async (data) => {
     try {
       const teamId = atob(encodedTeamId);
-      const response = await nicknameCreateApi(teamId, {
+      const response = await enterTeamApi(teamId, {
         nickname: data.nickname,
       });
       if (response.request.status === 400) {

@@ -3,7 +3,7 @@ import { LuSettings } from 'react-icons/lu';
 import SearchInfo from './SearchInfo';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { scheduleSearchApi, logoutApi } from '../../api';
+import { logoutApi } from '../../api';
 import UserInfoContent from '../RightBar/UserInfo';
 const HeaderContainer = styled.div`
   width: 100%;

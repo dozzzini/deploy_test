@@ -90,7 +90,7 @@ export const createTeamApi = (data) => {
 };
 
 // 닉네임 생성 API 함수
-export const nicknameCreateApi = (teamId, data) => {
+export const enterTeamApi = (teamId, data) => {
   return instance.post(`/api/v1/nicknames/${teamId}`, data);
 };
 
@@ -111,7 +111,7 @@ export const eventDetailDeleteApi = (data) => {
   return instance.delete(`/api/v1/schedules/${data}/`, data);
 };
 
-// // 댓글 조회
+// 댓글 조회
 export const getEventCommentsApi = (scheduleId) => {
   return instance.get(`/api/v1/comments/all/${scheduleId}/`);
 };
@@ -166,6 +166,6 @@ export const getMyInfo = (data) => {
 };
 
 // 링크를 통한 팀 입장 API 함수
-export const joinTeamApi = (teamId) => {
-  return instance.post(`/api/v1/teams/members/${teamId}/`);
-};
+// export const joinTeamApi = (teamId) => {
+//   return instance.post(`/api/v1/teams/members/${teamId}/`);
+// };

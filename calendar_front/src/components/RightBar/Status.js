@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import CommentList from './CommentList';
 import CommentEdit from './CommentEdit';
@@ -92,9 +92,7 @@ export default function Status({ selectedEvent }) {
       try {
         getEventCommentsApi(selectedEvent.id)
           .then((res) => {
-            console.log(res.data, 'gmldms');
             setMemoList(res.data);
-            console.log('memoList', memoList);
           })
           .catch((err) => console.log('gmldms err', err));
       } catch (error) {
@@ -320,7 +318,6 @@ export default function Status({ selectedEvent }) {
             );
           })}
       </MemoList>
-      {/* <div>{memoList ? memoList[0]?.description : ''}</div> */}
     </ScheduleDetailBox>
   );
 }

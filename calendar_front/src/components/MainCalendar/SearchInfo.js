@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
 
 const SearchInfoContainer = styled.div`
@@ -30,7 +30,7 @@ const NoMatchingData = styled.p`
   font-size: 14px;
 `;
 
-function SearchInfo({ matchingData, schedules }) {
+function SearchInfo({ matchingData }) {
   return (
     <SearchInfoContainer>
       <Wrapper>
@@ -42,9 +42,8 @@ function SearchInfo({ matchingData, schedules }) {
               <SearchList key={schedule.id}>
                 <SearchTeam>
                   title: {schedule.title}
-                  <p>Start Date: {schedule.start_date}</p>
-                  <p>End Date: {schedule.end_date}</p>
                   <p>Team: {schedule.team.teamname}</p>
+                  <p>schedule.start_date} ~ {schedule.end_date}</p>
                 </SearchTeam>
               </SearchList>
             ))
