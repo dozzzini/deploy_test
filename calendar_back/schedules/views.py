@@ -69,7 +69,6 @@ class Schedules(APIView):
     def get(self, request):
         try:
             user = request.user
-            print("1", user)
             if user.is_authenticated:  # 사용자가 로그인한 경우
                 if user.team_set.all().exists():
                     teams = user.team_set.all()
@@ -102,14 +101,13 @@ class Schedules(APIView):
                     )
             else:  # 익명 사용자인 경우
                 user = User(username="AnonymousUser")
-                print(user)
+                # print(user)
                 # user_schedules = Schedule.objects.filter(user=user)
                 # serializer = serializers.ScheduleSerializer(
                 #     user_schedules,
                 #     many=True,
                 # )
                 schedules_all = Schedule.objects.all()
-                print("test: ", schedules_all)
                 serializer = serializers.ScheduleSerializer(
                     schedules_all,
                     many=True,
