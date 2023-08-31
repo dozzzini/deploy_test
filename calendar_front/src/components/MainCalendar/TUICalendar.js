@@ -170,15 +170,12 @@ const DateBox = styled.div`
 `;
 const PrevBtn = styled.button`
   border-radius: 50px;
-  box-shadow:
-    -1px -1px 10px rgba(180, 180, 180, 0.1),
-    1px 1px 10px rgba(180, 180, 180, 0.1);
   outline: none;
   cursor: pointer;
   border: none;
   font-weight: 100;
   font-size: 14px;
-  background-color: transparent
+  background-color: transparent;
   color: grey;
   &&:hover {
     transform: translateY(1px);
@@ -197,14 +194,11 @@ const NumberBox = styled.div`
 `;
 const NextBtn = styled.button`
   border-radius: 50px;
-  box-shadow:
-    -1px -1px 10px rgba(180, 180, 180, 0.1),
-    1px 1px 10px rgba(180, 180, 180, 0.1);
   outline: none;
   cursor: pointer;
   border: none;
   font-size: 14px;
-  background-color: transparent
+  background-color: transparent;
   color: grey;
   &&:hover {
     transform: translateY(1px);

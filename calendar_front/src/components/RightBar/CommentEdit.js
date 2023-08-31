@@ -6,12 +6,12 @@ const CommentEdit = ({ schedule, author, addComment }) => {
   const inputRef = React.useRef(null);
 
   const inputStyle = {
-    border: 'none',
+    border: '#F2F2F2',
     outline: 'none',
     fontSize: '12px',
-    width: '100%',
-    marginTop: '30px',
-    paddingLeft: '6px',
+    width: '90%',
+    marginTop: '20px',
+    paddingLeft: '5px',
     borderRadius: '10px',
   };
 
@@ -31,6 +31,7 @@ const CommentEdit = ({ schedule, author, addComment }) => {
       const newComment = response.data;
       addComment(newComment);
       setDescription('');
+      window.location.replace('/calendar');
     } catch (error) {
       console.error('댓글 생성 중 오류:', error);
     }

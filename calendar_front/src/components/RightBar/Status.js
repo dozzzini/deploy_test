@@ -63,7 +63,6 @@ const ScheduleDeleteBtn = styled.button`
   margin-right: -10px;
 `;
 const CommentBox = styled.div``;
-const MemoList = styled.div``;
 
 export default function Status({ selectedEvent }) {
   const [comments, setComments] = useState([]);

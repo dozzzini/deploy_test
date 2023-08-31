@@ -16,8 +16,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  width: 96%;
+  /* align-items: center; */
+  margin-left: 5px;
+  width: 100%;
   height: 260px;
   overflow-y: auto;
   &::-webkit-scrollbar {
