@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 
 // import Header from './Header';
 import TeamAddModal from './TeamAddModal';
+import TeamLinkModal from './TeamLinkModal';
 import Calendar from '@toast-ui/react-calendar';
 import { TZDate } from '@toast-ui/calendar';
 import '@toast-ui/calendar/dist/toastui-calendar.min.css';
@@ -110,6 +111,12 @@ const CalendarEditButton = styled.button`
   padding-inline: unset;
 `;
 const CalendarDeleteButton = styled.button`
+  border: none;
+  transform: scale(0.8);
+  background-color: transparent;
+  padding-inline: unset;
+`;
+const CalendarInviteButton = styled.button`
   border: none;
   transform: scale(0.8);
   background-color: transparent;
@@ -237,6 +244,7 @@ export default function TUICalendar({
   const calendarRef = useRef(null);
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
   const [selectedView, setSelectedView] = useState(view);
+  const [selectedTeamId, setSelectedTeamId] = useState(null);
 
   const initialCalendars = teams?.map((team) => ({
     id: team.id,
@@ -547,7 +555,12 @@ export default function TUICalendar({
                 >
                   <MdOutlineDelete />
                 </CalendarDeleteButton>
-                <BiShareAlt />
+                <CalendarInviteButton
+                  selectedCalendars={selectedCalendars}
+                  onClick={() => setSelectedTeamId(calendar.id)}
+                >
+                  <BiShareAlt />
+                </CalendarInviteButton>
               </CalendarButtonBox>
             </TeamList>
           ))}
@@ -555,11 +568,6 @@ export default function TUICalendar({
         <TeamAddModal></TeamAddModal>
       </ShowMenuBar>
       <MIDContainer>
-        {/* <Header
-          data={initialEvents}
-          initialCalendars={initialCalendars}
-          initialEvents={initialEvents}
-        /> */}
         <CalendarBox>
           <CalendarHeader>
             <DateControlBox>
