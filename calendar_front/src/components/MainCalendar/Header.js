@@ -65,11 +65,17 @@ const Content = styled.div`
 
 const OptionBtn = styled.button`
   margin-top: 10px;
-  font-size: 14px;
+  font-size: 13px;
   border: none;
   font-weight: 100;
   background-color: white;
-  margin-left: 55px;
+  width: 100%;
+  cursor: pointer; /* 호버 시 포인터 스타일 추가 */
+  transition: background-color 0.3s ease; /* 호버 시 배경 색상 변화를 부드럽게 적용 */
+
+  &:hover {
+    background-color: #f0f0f0; /* 호버 시 배경 색상 변경 */
+  }
 `;
 
 const CloseIcon = styled.button`
