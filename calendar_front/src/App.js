@@ -29,7 +29,11 @@ function App() {
       <Routes>
         <Route path={routes.layout} element={<Layout />} />
         <Route path={routes.login} element={<LoginSignup />} />
-        <Route path="/api/v1/teams/members/:teamId" element={<LinkEntry />} />
+        {/* <Route path="/api/v1/teams/members/:teamId" element={<LinkEntry />} /> */}
+        <Route
+          path="/api/v1/teams/members/:encodedTeamId"
+          element={<LinkEntry />}
+        />
         <Route path={routes.teamlogin} element={<TeamLogin />} />
         <Route path={routes.welcome} element={<Welcome />} />
         <Route path={routes.landing} element={<Landing />} />

@@ -10,7 +10,9 @@ function LinkEntry() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { teamId } = useParams();
+  // const { teamId } = useParams();
+  const { encodedTeamId } = useParams();
+  // const teamId = atob(encodedTeamId);
   const navigate = useNavigate();
   const [showAlert, setShowAlert] = useState(false);
   const [showNicknameInput, setShowNicknameInput] = useState(false);
@@ -20,7 +22,7 @@ function LinkEntry() {
     const access_token = localStorage.getItem('access_token');
     const refresh_token = localStorage.getItem('refresh_token');
     if (!(access_token && refresh_token)) {
-      localStorage.setItem('TeamId', teamId);
+      localStorage.setItem('TeamId', encodedTeamId);
       navigate('/teamlogin', { replace: true });
       return false;
     }
@@ -37,6 +39,7 @@ function LinkEntry() {
   const handleOnClick = async () => {
     if (redirectToLoginIfNoToken()) {
       try {
+        const teamId = atob(encodedTeamId);
         const response = await joinTeamApi(teamId);
         if (response.request.status === 202) {
           navigate('/teamlogin');
@@ -56,13 +59,15 @@ function LinkEntry() {
 
   const onSubmitNickname = async (data) => {
     try {
+      const teamId = atob(encodedTeamId);
       const response = await nicknameCreateApi(teamId, {
         nickname: data.nickname,
       });
-      if (response.status === 400) {
-        // If the status code is 400, set the error message
+      if (response.request.status === 400) {
         setNicknameDuplicate('이미 존재하는 닉네임입니다.');
-      } else {
+      } else if (response.status === 200) {
+        setNicknameDuplicate('닉네임이 설정되었습니다.');
+        navigate('/calendar');
         console.log('링크 가입자 닉네임: ', response.data);
       }
     } catch (error) {
@@ -133,15 +138,11 @@ function LinkEntry() {
   `;
   return (
     <EntryPage>
-      <EntryConfirm>팀{teamId}에 입장하시겠습니까?</EntryConfirm>
+      <EntryConfirm>{encodedTeamId}에 입장하시겠습니까?</EntryConfirm>
       {showNicknameInput && (
         <>
-          <ButtonBox>
-            <EntryButton onClick={handleOnClick}>입장</EntryButton>
-            <RejectButton onClick={() => navigate(-1)}>거부</RejectButton>
-          </ButtonBox>
           <PutNickname>
-            팀 {teamId}에서 사용할 닉네임을 입력해주세요.
+            {encodedTeamId}에서 사용할 닉네임을 입력해주세요.
           </PutNickname>
           <form onSubmit={handleSubmit(onSubmitNickname)}>
             <NicknameInput
@@ -166,6 +167,10 @@ function LinkEntry() {
           이미 가입된 팀입니다. 나의 달력으로 이동합니다.
         </div>
       )}
+      <ButtonBox>
+        <EntryButton onClick={handleOnClick}>입장</EntryButton>
+        <RejectButton onClick={() => navigate(-1)}>거부</RejectButton>
+      </ButtonBox>
     </EntryPage>
   );
 }

@@ -79,7 +79,6 @@ function LoginSignup() {
 
   const checkIdAvailability = async () => {
     const id = getValues('id');
-    // 아이디 중복 확인을 위한 서버 요청을 보냅니다.
     try {
       const response = await checkIdAvailabilityApi({ username: id });
 

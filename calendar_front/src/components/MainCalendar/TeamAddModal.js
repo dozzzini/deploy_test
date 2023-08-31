@@ -171,10 +171,9 @@ function TeamAddModal() {
   const handleCopyClick = () => {
     if (teamId) {
       console.log('생성된 팀의 아이디:', teamId);
-      const link = `http://localhost:3000/api/v1/teams/members/${teamId}/`;
-      // const link = `http://localhost:3000/api/v1/teams/members/${btoa(
-      //   teamId + '',
-      // )}/`;
+      const link = `http://localhost:3000/api/v1/teams/members/${btoa(
+        teamId + '',
+      )}/`;
       navigator.clipboard
         .writeText(link)
         .then(() => {
@@ -239,10 +238,9 @@ function TeamAddModal() {
       {teamId && (
         <TeamLinkModal isOpen={!!teamId}>
           <h2>링크로 팀원 초대하기</h2>
-          <LinkBox>{`http://localhost:3000/api/v1/teams/members/${teamId}/`}</LinkBox>
-          {/* <LinkBox>{`http://localhost:3000/api/v1/teams/members/${btoa(
+          <LinkBox>{`http://localhost:3000/api/v1/teams/members/${btoa(
             teamId + '',
-          )}/`}</LinkBox> */}
+          )}/`}</LinkBox>
           <CopyBtn onClick={handleCopyClick}>링크 복사</CopyBtn>
 
           <CloseBtn
