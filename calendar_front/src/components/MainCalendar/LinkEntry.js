@@ -139,6 +139,10 @@ function LinkEntry() {
   return (
     <EntryPage>
       <EntryConfirm>{encodedTeamId}에 입장하시겠습니까?</EntryConfirm>
+      <ButtonBox>
+        <EntryButton onClick={handleOnClick}>입장</EntryButton>
+        <RejectButton onClick={() => navigate(-1)}>거부</RejectButton>
+      </ButtonBox>
       {showNicknameInput && (
         <>
           <PutNickname>
@@ -167,10 +171,6 @@ function LinkEntry() {
           이미 가입된 팀입니다. 나의 달력으로 이동합니다.
         </div>
       )}
-      <ButtonBox>
-        <EntryButton onClick={handleOnClick}>입장</EntryButton>
-        <RejectButton onClick={() => navigate(-1)}>거부</RejectButton>
-      </ButtonBox>
     </EntryPage>
   );
 }
