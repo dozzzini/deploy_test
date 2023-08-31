@@ -40,10 +40,9 @@ const CalendarContainer = styled.div`
 `;
 const ShowMenuBar = styled.div`
   border-right: 1px solid rgb(235, 237, 239);
-
   display: flex;
   flex-direction: column;
-  width: 8vw;
+  width: 200px;
 `;
 
 const TeamBox = styled.div`
@@ -97,10 +96,9 @@ const CalendarName = styled.div`
   font-size: 18px;
 `;
 const CalendarButtonBox = styled.div`
-  /* border: 1px solid red; */
-
+  border: 1px solid red;
   display: flex;
-  justify-content: end;
+  justify-content: center;
   width: 100%;
 `;
 const CalendarEditButton = styled.button`
