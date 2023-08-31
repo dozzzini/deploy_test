@@ -92,9 +92,8 @@ function LinkEntry() {
   const EntryConfirm = styled.div``;
 
   const EntryButton = styled.button`
-    background: linear-gradient(45deg, #a2c0c8, #e7a7c9);
-    color: #ffffff;
-    /* padding: 10px 20px; */
+    background-color: #c1355a;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -102,9 +101,8 @@ function LinkEntry() {
   `;
   const RejectButton = styled.button`
     margin-left: 20px;
-    background: linear-gradient(45deg, #a2c0c8, #e7a7c9);
-    color: #ffffff;
-    /* padding: 10px 20px; */
+    background-color: #c1355a;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -119,24 +117,19 @@ function LinkEntry() {
     margin-bottom: 20px;
   `;
   const NicknameConfirmBtn = styled.button`
-    background: linear-gradient(45deg, #a2c0c8, #e7a7c9);
-    color: #ffffff;
-    margin-left: 10px;
+    background-color: #c1355a;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s ease;
+    margin-left: 10px;
   `;
   const NicknameInput = styled.input`
     /* padding: 10px 20px; */
     width: 230px;
-    border: 3px solid transparent;
-    border-image: linear-gradient(45deg, #a2c0c8, #e7a7c9) 1;
-    border-image-slice: 1;
-    color: #ffffff;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: border-image 0.3s ease;
+    border: 1px solid #c1355a;
+    outline: none;
   `;
   return (
     <EntryPage>
@@ -169,7 +162,7 @@ function LinkEntry() {
         </>
       )}
       {showAlert && (
-        <div style={{ color: 'red' }}>
+        <div style={{ color: '#c1355a', marginTop: '10px' }}>
           이미 가입된 팀입니다. 나의 달력으로 이동합니다.
         </div>
       )}
