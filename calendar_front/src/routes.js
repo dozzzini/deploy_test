@@ -6,6 +6,7 @@ const routes = {
   // signup: '/signup',
   login: '/login',
   teamlogin: '/teamlogin',
+  link: '/members/:encodedTeamId',
 };
 
 export default routes;

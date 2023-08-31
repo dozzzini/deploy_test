@@ -85,7 +85,6 @@ function TeamLogin() {
       } else {
         setIsIdAvailable(-1);
       }
-      console.log('중복확인 성공:', response.status);
     } catch (error) {
       console.error('중복확인 실패:', error);
     }

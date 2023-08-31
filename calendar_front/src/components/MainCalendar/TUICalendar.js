@@ -117,6 +117,7 @@ const CalendarDeleteButton = styled.button`
   padding-inline: unset;
 `;
 const CalendarInviteButton = styled.button`
+  cursor: pointer;
   border: none;
   transform: scale(0.8);
   background-color: transparent;
@@ -245,6 +246,7 @@ export default function TUICalendar({
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
   const [selectedView, setSelectedView] = useState(view);
   const [selectedTeamId, setSelectedTeamId] = useState(null);
+  const [showTeamLinkModal, setShowTeamLinkModal] = useState(false);
 
   const initialCalendars = teams?.map((team) => ({
     id: team.id,
@@ -275,6 +277,33 @@ export default function TUICalendar({
       selectedCalendars.find((calendar) => calendar.id === event.calendarId)
         ?.isChecked,
   );
+
+  const toggleModal = (teamId) => {
+    setShowTeamLinkModal((prev) => !prev);
+    if (showTeamLinkModal) {
+      setSelectedTeamId(teamId);
+    }
+  };
+
+  const handleCopyClick = (selectedTeamId) => {
+    if (selectedTeamId) {
+      const link = `https://yourmodeuniljung.shop/members/${btoa(
+        selectedTeamId + '',
+      )}/`;
+      navigator.clipboard
+        .writeText(link)
+        .then(() => {
+          alert('링크가 복사되었습니다.');
+        })
+        .catch((error) => {
+          console.error('링크 복사 실패:', error);
+          alert('링크 복사에 실패했습니다.');
+        });
+    } else {
+      alert('복사할 링크가 없습니다.');
+    }
+  };
+
   const getCalInstance = useCallback(
     () => calendarRef.current?.getInstance?.(),
     [],
@@ -370,11 +399,6 @@ export default function TUICalendar({
   };
 
   const onClickEvent = (res) => {
-    console.group('onClickEvent');
-    console.log('MouseEvent : ', res.nativeEvent);
-    console.log('Event Info : ', res.event);
-    console.groupEnd();
-
     const selectedCalendar = initialCalendars.find(
       (calendar) => calendar.id === res.event.calendarId,
     );
@@ -388,10 +412,6 @@ export default function TUICalendar({
   };
 
   const onClickTimezonesCollapseBtn = (timezoneCollapsed) => {
-    console.group('onClickTimezonesCollapseBtn');
-    console.log('Is Timezone Collapsed?: ', timezoneCollapsed);
-    console.groupEnd();
-
     const newTheme = {
       'week.daygridLeft.width': '100px',
       'week.timegridLeft.width': '100px',
@@ -448,7 +468,6 @@ export default function TUICalendar({
         state: eventData.state,
         isPrivate: eventData.isPrivate,
       };
-      console.log('일정 생성 API 응답', eventForBack.data);
 
       getCalInstance().createEvents([event]);
       setEvents([...events, event]);
@@ -474,7 +493,6 @@ export default function TUICalendar({
       const updatedCalendars = selectedCalendars.map((item) =>
         item.id === teamId ? { ...item, isChecked: false } : item,
       );
-      console.log(teamId, '삭제되는 teamId');
       setSelectedCalendars(updatedCalendars);
       window.location.replace('/calendar');
 
@@ -489,9 +507,6 @@ export default function TUICalendar({
   };
   //수정 작업 수행 함수
   const handleEditEvent = async (teamId, newName, newColor) => {
-    console.log('teamId:', teamId);
-    console.log('newName:', newName);
-    console.log('newColor:', newColor);
     try {
       // 수정할 팀 정보를 요청 데이터에 포함합니다.
       const eventData = { teamname: newName, color: newColor };
@@ -557,15 +572,24 @@ export default function TUICalendar({
                 </CalendarDeleteButton>
                 <CalendarInviteButton
                   selectedCalendars={selectedCalendars}
-                  onClick={() => setSelectedTeamId(calendar.id)}
+                  onClick={() => toggleModal(calendar.id)}
                 >
                   <BiShareAlt />
                 </CalendarInviteButton>
+                {showTeamLinkModal && (
+                  <TeamLinkModal
+                    isOpen={showTeamLinkModal}
+                    teamId={selectedTeamId}
+                    setTeamId={setSelectedTeamId}
+                    handleCopyClick={handleCopyClick}
+                    // redirectToCalendar={redirectToCalendar}
+                  />
+                )}
               </CalendarButtonBox>
             </TeamList>
           ))}
         </TeamBox>
-        <TeamAddModal></TeamAddModal>
+        <TeamAddModal />
       </ShowMenuBar>
       <MIDContainer>
         <CalendarBox>
@@ -688,6 +712,12 @@ export default function TUICalendar({
             onBeforeCreateEvent={onBeforeCreateEvent}
           />{' '}
         </CalendarBox>
+        {showTeamLinkModal && (
+          <TeamLinkModal
+            teamId={selectedTeamId} // 선택된 팀 ID를 모달에 전달
+            onClose={() => setShowTeamLinkModal(false)} // 모달 닫기
+          />
+        )}
       </MIDContainer>
     </CalendarContainer>
   );

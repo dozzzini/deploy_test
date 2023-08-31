@@ -50,15 +50,7 @@ const PutNickname = styled.div`
   margin-top: 30px;
   margin-bottom: 20px;
 `;
-const NicknameConfirmBtn = styled.button`
-  background-color: #c1355a;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  margin-left: 10px;
-`;
+
 const NicknameInput = styled.input`
   /* padding: 10px 20px; */
   width: 230px;
@@ -74,7 +66,6 @@ function LinkEntry() {
   } = useForm();
   const { encodedTeamId } = useParams();
   const navigate = useNavigate();
-  // const [showAlert, setShowAlert] = useState(false);
   const [showNicknameInput, setShowNicknameInput] = useState(false);
   const [nicknameDuplicate, setNicknameDuplicate] = useState(null);
 
@@ -105,7 +96,6 @@ function LinkEntry() {
         });
         if (response.status === 200) {
           navigate('/calendar');
-          console.log('팀 입장 완료 :', response.data);
         } else if (response.request.status === 400) {
           setNicknameDuplicate('이미 존재하는 닉네임입니다.');
         }
@@ -139,11 +129,6 @@ function LinkEntry() {
               )}
             </>
           )}
-          {/* {showAlert && (
-            <div style={{ color: '#c1355a', marginTop: '10px' }}>
-              이미 가입된 팀입니다. 3초 후 나의 달력으로 이동됩니다.
-            </div>
-          )} */}
           <EntryButton type="submit">입장</EntryButton>
         </form>
         <RejectButton onClick={() => navigate(-1)}>거부</RejectButton>

@@ -94,7 +94,7 @@ export default function Status({ selectedEvent }) {
           .then((res) => {
             setMemoList(res.data);
           })
-          .catch((err) => console.log('gmldms err', err));
+          .catch((err) => console.log('err', err));
       } catch (error) {
         console.error('An error occurred:', error);
       }
@@ -142,7 +142,6 @@ export default function Status({ selectedEvent }) {
 
       eventDetailEditApi(selectedEvent.id, updatedEvent)
         .then((response) => {
-          console.log('일정 수정 성공:', response);
           setIsEditMode(false);
         })
         .catch((error) => {
@@ -172,7 +171,6 @@ export default function Status({ selectedEvent }) {
   const handleDeleteEvent = () => {
     eventDetailDeleteApi(selectedEvent.id)
       .then((response) => {
-        console.log('일정 삭제 성공:', response);
         window.location.reload();
       })
       .catch((error) => {

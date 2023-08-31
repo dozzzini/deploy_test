@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { LuX } from 'react-icons/lu';
 
 const TeamListContainer = styled.div`
-  /* border: 1px solid blue; */
   height: auto;
   display: flex;
   flex-direction: column;
@@ -76,6 +75,7 @@ const TeamLinkModal = ({
   isOpen,
   teamId,
   setTeamId,
+  selectedTeamId,
   handleCopyClick,
   redirectToCalendar,
 }) => {
@@ -87,7 +87,7 @@ const TeamLinkModal = ({
     <TeamListContainer>
       <LinkModal isOpen={!!teamId}>
         <h2>링크로 팀원 초대하기</h2>
-        <LinkBox>{`http://localhost:3000/api/v1/teams/members/${btoa(
+        <LinkBox>{`https://yourmodeuniljung.shop/members/${btoa(
           teamId + '',
         )}/`}</LinkBox>
         <CopyBtn onClick={handleCopyClick}>링크 복사</CopyBtn>
