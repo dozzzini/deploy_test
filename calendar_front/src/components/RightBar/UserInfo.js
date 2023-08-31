@@ -13,8 +13,11 @@ const Wrapper = styled.div`
 
 const Tag = styled.div`
   font-size: 14px;
+  font-weight: 800;
+  color: grey;
   padding: 3px 2px;
   border-bottom: 1px solid rgb(240, 230, 230);
+  margin-bottom: 5px;
 `;
 const UserNameTag = styled.span`
   padding: 6px;
@@ -26,8 +29,23 @@ const Input = styled.input`
   width: 100%;
   margin: 4px 0;
   font-weight: 100;
+  border: 1px solid #c1355a;
+  border-radius: 5px;
+  outline: none;
+  padding: 1px;
+  &::placeholder {
+    color: grey;
+    font-size: 12px;
+  }
 `;
 const Button = styled.button`
+  /* margin-left: 10px; */
+  background-color: #c1355a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
   width: 100%;
   margin: 4px 0;
 `;
@@ -85,7 +103,7 @@ const UserInfoContent = () => {
     <Wrapper>
       <Tag>사용자 정보</Tag>
       <Tag>
-        이름:<UserNameTag> {user.username || '사용자 이름 없음'}</UserNameTag>
+        아이디:<UserNameTag> {user.username || '사용자 이름 없음'}</UserNameTag>
       </Tag>
 
       <Tag>비밀번호 변경</Tag>
@@ -93,14 +111,14 @@ const UserInfoContent = () => {
         <Input
           type="password"
           value={newPassword}
-          placeholder={'new psaaword'}
+          placeholder={'새 비밀번호를 입력하세요.'}
           onChange={(e) => setNewPassword(e.target.value)}
         />
 
         <Input
           type="password"
           value={confirmPassword}
-          placeholder={'confirmPassword'}
+          placeholder={'비밀번호를 확인하세요.'}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
