@@ -19,7 +19,6 @@ const Login = () => {
       //   'https://port-0-calendar-backend-ac2nll4pdsc1.sel3.cloudtype.app/api/v1/users/login/',
       //   data,
       // );
-      console.log(response.data); // 서버 응답 데이터 출력
       // 로그인 성공 시 홈 화면으로 이동
       if (response.status === 200) {
         navigate('/', { replace: true });

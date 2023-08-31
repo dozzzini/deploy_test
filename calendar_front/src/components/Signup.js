@@ -24,7 +24,6 @@ const Signup = () => {
       //     email: data.email,
       //   },
       // );
-      console.log(response.data);
       // 회원가입 성공 시 홈 화면으로 이동
       if (response.status === 201) {
         navigate('/', { replace: true });
@@ -75,8 +74,6 @@ const Signup = () => {
     } catch (error) {
       console.error('중복확인 실패:', error);
     }
-
-    console.log(id);
   };
 
   return (

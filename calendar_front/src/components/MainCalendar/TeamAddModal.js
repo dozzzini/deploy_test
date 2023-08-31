@@ -158,7 +158,6 @@ function TeamAddModal() {
         team: { teamname: data.teamname, color: selectedColor },
         nickname: { nickname: data.nickname },
       });
-      console.log('팀 생성 성공:', response.data);
       setTeamAddModalIsOpen(false);
       setNickname(data.nickname);
       setTeamId(response.data.team.id);
@@ -171,8 +170,7 @@ function TeamAddModal() {
 
   const handleCopyClick = () => {
     if (teamId) {
-      console.log('생성된 팀의 아이디:', teamId);
-      const link = `http://localhost:3000/api/v1/teams/members/${btoa(
+      const link = `https://yourmodeuniljung.shop/members/${btoa(
         teamId + '',
       )}/`;
       navigator.clipboard

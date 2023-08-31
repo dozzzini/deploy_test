@@ -46,9 +46,7 @@ function Layout() {
 
     getScheduleListApi()
       .then((response) => {
-        console.log(response.data, 'dldldl');
         setSchedules(response.data.schedules);
-        console.log(response.data.teams, 'teamData');
         setIsLoading(false);
         setTeams(response.data.teams);
       })

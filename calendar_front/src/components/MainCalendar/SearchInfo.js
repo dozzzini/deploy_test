@@ -1,5 +1,6 @@
 import React from 'react';
 import { styled } from 'styled-components';
+import moment from 'moment';
 
 const SearchInfoContainer = styled.div`
   border: none;
@@ -46,9 +47,14 @@ function SearchInfo({ matchingData }) {
             matchingData.map((schedule) => (
               <SearchList key={schedule.id}>
                 <SearchTeam>
-                  title: {schedule.title}
-                  <p>Team: {schedule.team.teamname}</p>
-                  <p>schedule.start_date} ~ {schedule.end_date}</p>
+                  {schedule.title}
+                  <p>
+                    {schedule.color} {schedule.team.teamname}
+                  </p>
+                  <p>
+                    {moment(schedule.start_date).format('YYYY-MM-DD HH:mm')} ~{' '}
+                    {moment(schedule.end_date).format('YYYY-MM-DD HH:mm')}
+                  </p>
                 </SearchTeam>
               </SearchList>
             ))

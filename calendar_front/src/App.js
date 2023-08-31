@@ -17,11 +17,6 @@ import LinkEntry from './components/MainCalendar/LinkEntry';
 import TeamLogin from './components/MainCalendar/TeamLogin';
 
 function App() {
-  const checkUserAuth = () => {
-    const access_token = localStorage.getItem('access_token');
-    const refresh_token = localStorage.getItem('refresh_token');
-    return access_token && refresh_token;
-  };
   return (
     <Router>
       <Reset />
@@ -29,11 +24,7 @@ function App() {
       <Routes>
         <Route path={routes.layout} element={<Layout />} />
         <Route path={routes.login} element={<LoginSignup />} />
-        {/* <Route path="/api/v1/teams/members/:teamId" element={<LinkEntry />} /> */}
-        <Route
-          path="/api/v1/teams/members/:encodedTeamId"
-          element={<LinkEntry />}
-        />
+        <Route path={routes.link} element={<LinkEntry />} />
         <Route path={routes.teamlogin} element={<TeamLogin />} />
         <Route path={routes.welcome} element={<Welcome />} />
         <Route path={routes.landing} element={<Landing />} />
