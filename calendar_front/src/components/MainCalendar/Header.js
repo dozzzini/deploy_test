@@ -64,7 +64,7 @@ const Content = styled.div`
 `;
 
 const OptionBtn = styled.button`
-  margin-top: 10px;
+  margin-top: 5px;
   font-size: 13px;
   border: none;
   font-weight: 100;

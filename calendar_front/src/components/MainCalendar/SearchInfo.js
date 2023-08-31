@@ -25,9 +25,14 @@ const SearchTeam = styled.div`
   line-height: 1.4;
 `;
 const NoMatchingData = styled.p`
-  padding-top: 10px;
-  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
   font-size: 14px;
+  background-color: #c1355a;
+  padding: 3px;
+  border-radius: 5px;
 `;
 
 function SearchInfo({ matchingData }) {

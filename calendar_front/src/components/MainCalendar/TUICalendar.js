@@ -178,7 +178,7 @@ const PrevBtn = styled.button`
   border: none;
   font-weight: 100;
   font-size: 14px;
-  background-color: rgb(254, 250, 250);
+  background-color: transparent
   color: grey;
   &&:hover {
     transform: translateY(1px);
@@ -204,7 +204,7 @@ const NextBtn = styled.button`
   cursor: pointer;
   border: none;
   font-size: 14px;
-  background-color: rgb(254, 250, 250);
+  background-color: transparent
   color: grey;
   &&:hover {
     transform: translateY(1px);

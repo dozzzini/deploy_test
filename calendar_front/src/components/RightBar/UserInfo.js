@@ -106,7 +106,7 @@ const UserInfoContent = () => {
         아이디:<UserNameTag> {user.username || '사용자 이름 없음'}</UserNameTag>
       </Tag>
 
-      <Tag>비밀번호 변경</Tag>
+      {/* <Tag>비밀번호 변경</Tag> */}
       <Form>
         <Input
           type="password"
