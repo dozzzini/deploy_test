@@ -2,10 +2,16 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import NotFound, PermissionDenied, ParseError
+from rest_framework.exceptions import (
+    NotFound,
+    PermissionDenied,
+    ParseError,
+    ValidationError,
+)
 
 from .serializers import TeamSerializer
 from users.models import User
+from nicknames.models import Nickname
 from .models import Team
 from nicknames.serializers import AddNicknameSerializer
 
@@ -129,8 +135,36 @@ class AddMembers(APIView):
     def post(self, request, team_id):
         team = self.get_team(team_id)
 
+        try:
+            nickname = request.data["nickname"]
+        except:
+            raise ParseError("닉네임을 입력해주세요")
+
+        if Nickname.objects.filter(
+            team=team,
+            nickname=nickname,
+        ).exists():
+            raise ValidationError("중복된 닉네임입니다.")
+
+        nickname_serializer = AddNicknameSerializer(data=request.data)
+
+        if nickname_serializer.is_valid():
+            nickname = nickname_serializer.save(
+                user=request.user,
+                team=team,
+            )
+        else:
+            return Response(nickname_serializer.errors)
+
         if team.members.filter(id=request.user.id).exists():
             raise ParseError("이미 가입한 팀입니다.")
+
         team.members.add(request.user.id)
 
-        return Response(TeamSerializer(team).data, status=status.HTTP_202_ACCEPTED)
+        return Response(
+            {
+                "team": TeamSerializer(team).data,
+                "nickname": AddNicknameSerializer(nickname).data,
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
