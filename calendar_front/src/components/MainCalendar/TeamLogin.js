@@ -305,9 +305,7 @@ function TeamLogin() {
             </button>
           </div>
           <div className={classes.overlay_right}>
-            <p className={classes.p}>
-              나의 달력 너의 달력에 오신 것을 환영합니다!
-            </p>
+            <p className={classes.p}>너의 모든 일정에 오신 것을 환영합니다!</p>
             <h1>회원가입하고 일정을 효율적으로 관리해보세요.</h1>
             <button
               id="signUp"
