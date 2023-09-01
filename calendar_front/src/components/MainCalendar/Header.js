@@ -140,7 +140,7 @@ function Header({ schedules }) {
       .then(() => {
         closeModal();
         localStorage.clear();
-        navigate('/login', { replace: true });
+        navigate('/', { replace: true });
       })
       .catch((error) => {
         console.error('로그아웃 오류:', error);

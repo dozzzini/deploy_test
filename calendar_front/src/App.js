@@ -27,7 +27,6 @@ function App() {
         <Route path={routes.link} element={<LinkEntry />} />
         <Route path={routes.teamlogin} element={<TeamLogin />} />
         <Route path={routes.welcome} element={<Welcome />} />
-        <Route path={routes.landing} element={<Landing />} />
       </Routes>
     </Router>
   );

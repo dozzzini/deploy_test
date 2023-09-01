@@ -41,7 +41,7 @@ function Layout() {
     const refresh_token = localStorage.getItem('refresh_token');
 
     if (!(access_token && refresh_token)) {
-      navigate('/login', { replace: true });
+      navigate('/', { replace: true });
     }
 
     getScheduleListApi()
@@ -53,7 +53,7 @@ function Layout() {
       .catch((error) => {
         console.error('스케줄 가져오기 실패:', error);
         if (!(access_token && refresh_token)) {
-          navigate('/login', { replace: true });
+          navigate('/', { replace: true });
         }
       });
   }, []);

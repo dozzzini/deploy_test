@@ -75,7 +75,7 @@ const UserInfoContent = () => {
       await myInfoUpdateAPi({ password: newPassword });
       alert('비밀번호가 변경되었습니다. 다시 로그인해주세요.');
       localStorage.clear();
-      navigate('/login', { replace: true });
+      navigate('/', { replace: true });
     } catch (error) {
       console.error('Error changing password:', error);
     }
@@ -86,7 +86,7 @@ const UserInfoContent = () => {
       await myInfoDeleteApi({ refresh: localStorage.getItem('refresh_token') });
       alert('계정이 성공적으로 삭제되었습니다.');
       localStorage.clear();
-      navigate('/login', { replace: true });
+      navigate('/', { replace: true });
     } catch (error) {
       console.error('Error deleting account:', error);
     }
