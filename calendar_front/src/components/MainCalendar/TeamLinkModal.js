@@ -78,7 +78,7 @@ const TeamLinkModal = ({ isOpen, teamId, setTeamId, redirectToCalendar }) => {
 
   const handleCopyClick = () => {
     const link = `https://yourmodeuniljung.shop/members/${btoa(teamId + '')}/`;
-    navigator.clipboard
+    window.navigator.clipboard
       .writeText(link)
       .then(() => {
         alert('링크가 복사되었습니다.');
