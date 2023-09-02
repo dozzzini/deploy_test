@@ -140,11 +140,14 @@ class AddMembers(APIView):
         except:
             raise ParseError("닉네임을 입력해주세요")
 
+        if team.members.filter(id=request.user.id).exists():
+            raise ParseError("이미 가입한 팀입니다.")
+
         if Nickname.objects.filter(
             team=team,
             nickname=nickname,
         ).exists():
-            raise ValidationError("중복된 닉네임입니다.")
+            raise ParseError("중복된 닉네임입니다.")
 
         nickname_serializer = AddNicknameSerializer(data=request.data)
 
@@ -155,9 +158,6 @@ class AddMembers(APIView):
             )
         else:
             return Response(nickname_serializer.errors)
-
-        if team.members.filter(id=request.user.id).exists():
-            raise ParseError("이미 가입한 팀입니다.")
 
         team.members.add(request.user.id)
 

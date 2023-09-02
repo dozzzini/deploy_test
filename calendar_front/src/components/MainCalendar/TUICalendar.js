@@ -256,7 +256,7 @@ export default function TUICalendar({
   const calendarRef = useRef(null);
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
   const [selectedView, setSelectedView] = useState(view);
-  const [selectedTeamId, setSelectedTeamId] = useState(null);
+  const [selectedTeamId, setSelectedTeamId] = useState(teams[0].id);
   const [showTeamLinkModal, setShowTeamLinkModal] = useState(false);
 
   const initialCalendars = teams?.map((team) => ({
@@ -291,28 +291,11 @@ export default function TUICalendar({
 
   const toggleModal = (teamId) => {
     setShowTeamLinkModal((prev) => !prev);
-    if (showTeamLinkModal) {
-      setSelectedTeamId(teamId);
-    }
+    setSelectedTeamId(teamId);
   };
 
-  const handleCopyClick = (selectedTeamId) => {
-    if (selectedTeamId) {
-      const link = `https://yourmodeuniljung.shop/members/${btoa(
-        selectedTeamId + '',
-      )}/`;
-      navigator.clipboard
-        .writeText(link)
-        .then(() => {
-          alert('링크가 복사되었습니다.');
-        })
-        .catch((error) => {
-          console.error('링크 복사 실패:', error);
-          alert('링크 복사에 실패했습니다.');
-        });
-    } else {
-      alert('복사할 링크가 없습니다.');
-    }
+  const redirectToCalendar = () => {
+    setShowTeamLinkModal((prev) => !prev);
   };
 
   const getCalInstance = useCallback(
@@ -372,17 +355,7 @@ export default function TUICalendar({
     updateRenderRangeText();
   }, [selectedView, updateRenderRangeText]);
 
-  const onAfterRenderEvent = (res) => {
-    console.group('onAfterRenderEvent');
-    console.log('Event Info : ', res.title);
-    console.groupEnd();
-  };
-
   const onBeforeDeleteEvent = (res) => {
-    console.group('onBeforeDeleteEvent');
-    console.log('Event Info : ', res.title);
-    console.groupEnd();
-
     const { id, calendarId } = res;
 
     getCalInstance().deleteEvent(id, calendarId);
@@ -390,12 +363,6 @@ export default function TUICalendar({
 
   const onChangeSelect = (ev) => {
     setSelectedView(ev.target.value);
-  };
-
-  const onClickDayName = (res) => {
-    console.group('onClickDayName');
-    console.log('Date : ', res.date);
-    console.groupEnd();
   };
 
   const onClickNavi = (ev) => {
@@ -432,10 +399,6 @@ export default function TUICalendar({
   };
 
   const onBeforeUpdateEvent = (updateData) => {
-    console.group('onBeforeUpdateEvent');
-    console.log('Event Info: ', updateData);
-    console.groupEnd();
-
     const targetEvent = updateData.event;
     const changes = { ...updateData.changes };
 
@@ -586,15 +549,6 @@ export default function TUICalendar({
                 >
                   <BiShareAlt />
                 </CalendarInviteButton>
-                {showTeamLinkModal && (
-                  <TeamLinkModal
-                    isOpen={showTeamLinkModal}
-                    teamId={selectedTeamId}
-                    setTeamId={setSelectedTeamId}
-                    handleCopyClick={handleCopyClick}
-                    // redirectToCalendar={redirectToCalendar}
-                  />
-                )}
               </CalendarButtonBox>
               <CalendarName>{calendar.name}</CalendarName>
             </TeamList>
@@ -714,9 +668,7 @@ export default function TUICalendar({
               taskView: true,
             }}
             ref={calendarRef}
-            onAfterRenderEvent={onAfterRenderEvent}
             onBeforeDeleteEvent={onBeforeDeleteEvent}
-            onClickDayname={onClickDayName}
             onClickEvent={onClickEvent}
             onClickTimezonesCollapseBtn={onClickTimezonesCollapseBtn}
             onBeforeUpdateEvent={onBeforeUpdateEvent}
@@ -725,8 +677,10 @@ export default function TUICalendar({
         </CalendarBox>
         {showTeamLinkModal && (
           <TeamLinkModal
-            teamId={selectedTeamId} // 선택된 팀 ID를 모달에 전달
-            onClose={() => setShowTeamLinkModal(false)} // 모달 닫기
+            isOpen={showTeamLinkModal}
+            teamId={selectedTeamId}
+            setTeamId={setSelectedTeamId}
+            redirectToCalendar={redirectToCalendar}
           />
         )}
       </MIDContainer>

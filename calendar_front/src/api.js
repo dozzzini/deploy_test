@@ -91,7 +91,7 @@ export const createTeamApi = (data) => {
 
 // 닉네임 생성 API 함수
 export const enterTeamApi = (teamId, data) => {
-  return instance.post(`/api/v1/nicknames/${teamId}`, data);
+  return instance.post(`/api/v1/teams/members/${teamId}/`, data);
 };
 
 // 팀 생성 시 닉네임 중복 확인 API 함수

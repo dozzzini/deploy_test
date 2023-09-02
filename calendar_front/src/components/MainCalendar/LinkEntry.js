@@ -103,10 +103,10 @@ function LinkEntry() {
         const response = await enterTeamApi(teamId, {
           nickname: data.nickname,
         });
-        if (response.status === 200) {
+        if (response.status === 202) {
           navigate('/calendar');
         } else if (response.request.status === 400) {
-          setNicknameDuplicate('이미 존재하는 닉네임입니다.');
+          setNicknameDuplicate(response.response.data.detail);
         }
       } catch (error) {
         console.error('팀 가입 중 오류:', error);
