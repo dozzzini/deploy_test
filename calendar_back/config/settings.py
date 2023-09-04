@@ -33,7 +33,7 @@ def get_env_variable(var_name):
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
-DEBUG = get_env_variable("DEBUG")
+DEBUG = False
 
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
