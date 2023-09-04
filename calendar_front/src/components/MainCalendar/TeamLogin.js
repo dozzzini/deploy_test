@@ -51,7 +51,7 @@ function TeamLogin() {
 
       const localTeamId = localStorage.getItem('TeamId');
 
-      navigate(`/api/v1/teams/members/${localTeamId}`, { replace: true });
+      navigate(`/members/${localTeamId}`, { replace: true });
     } catch (error) {
       console.error('회원가입 실패:', error);
     }
@@ -68,7 +68,7 @@ function TeamLogin() {
       localStorage.setItem('refresh_token', response.data.refresh);
       const localTeamId = localStorage.getItem('TeamId');
 
-      navigate(`/api/v1/teams/members/${localTeamId}`, { replace: true });
+      navigate(`/members/${localTeamId}`, { replace: true });
     } catch (error) {
       console.error('로그인 실패:', error);
     }

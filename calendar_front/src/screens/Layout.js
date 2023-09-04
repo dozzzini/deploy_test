@@ -46,6 +46,9 @@ function Layout() {
 
     getScheduleListApi()
       .then((response) => {
+        if (!(access_token && refresh_token)) {
+          navigate('/', { replace: true });
+        }
         setSchedules(response.data.schedules);
         setIsLoading(false);
         setTeams(response.data.teams);
