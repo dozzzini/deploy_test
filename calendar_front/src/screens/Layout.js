@@ -46,16 +46,14 @@ function Layout() {
 
     getScheduleListApi()
       .then((response) => {
-        if (!(access_token && refresh_token)) {
-          navigate('/', { replace: true });
-        }
         setSchedules(response.data.schedules);
         setIsLoading(false);
         setTeams(response.data.teams);
       })
-      .catch((error) => {
-        console.error('스케줄 가져오기 실패:', error);
-        if (!(access_token && refresh_token)) {
+      .catch(() => {
+        const access = localStorage.getItem('access_token');
+        const refresh = localStorage.getItem('refresh_token');
+        if (!(access && refresh)) {
           navigate('/', { replace: true });
         }
       });
