@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
+from rest_framework.generics import CreateAPIView
 from .serializers import SignUpUserSerializer, UserInfoSerializer
 from .models import User
 from teams.serializers import TeamSerializer
